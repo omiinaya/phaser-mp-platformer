@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
@@ -7,7 +8,8 @@ module.exports = (env, argv) => {
   return {
     entry: './src/main.ts',
     output: {
-      filename: 'bundle.[contenthash].js',
+      filename: isProduction ? '[name].[contenthash].js' : '[name].js',
+      chunkFilename: isProduction ? '[name].[contenthash].chunk.js' : '[name].chunk.js',
       path: path.resolve(__dirname, 'dist'),
       clean: true,
     },
@@ -57,6 +59,31 @@ module.exports = (env, argv) => {
     devtool: isProduction ? 'source-map' : 'inline-source-map',
     optimization: {
       minimize: isProduction,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: isProduction, // remove console logs in production
+            },
+            format: {
+              comments: false,
+            },
+          },
+          extractComments: false,
+        }),
+      ],
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      },
+      moduleIds: 'deterministic',
+      runtimeChunk: 'single',
     },
   };
 };

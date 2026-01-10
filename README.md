@@ -71,11 +71,85 @@ Outputs:
 - `client/dist/` – Bundled static assets
 - `server/dist/` – Compiled Node.js server
 
-### Running Tests
+## Testing
+
+The project includes comprehensive test suites:
+
+### Unit Tests
+
+Unit tests are written with Jest and cover core modules, game entities, and server services.
+
+Run client unit tests:
 
 ```bash
-npm test
+cd client && npm test
 ```
+
+Run server unit tests:
+
+```bash
+cd server && npm test
+```
+
+Run all unit tests from root:
+
+```bash
+npm run test:unit
+```
+
+### Integration Tests
+
+Integration tests verify client‑server communication and database interactions using Supertest and a test SQLite database.
+
+Run integration tests:
+
+```bash
+npm run test:integration
+```
+
+### End‑to‑End Tests
+
+E2E tests simulate gameplay with Puppeteer.
+
+Run E2E tests:
+
+```bash
+npm run test:e2e
+```
+
+### Coverage Reports
+
+Jest is configured to collect code coverage. Generate coverage reports:
+
+```bash
+npm run test:coverage
+```
+
+Coverage thresholds are set to >80% for statements, branches, functions, and lines.
+
+## Documentation
+
+### API Documentation
+
+API documentation is automatically generated from TypeScript source using TypeDoc. To generate:
+
+```bash
+npm run docs
+```
+
+The output is placed in `docs/api/`. Open `docs/api/index.html` in a browser.
+
+### Developer Guides
+
+See `docs/developer/` for guides on extending the game, adding new entities, and integrating with the server.
+
+### Player Guides
+
+See `docs/player/` for gameplay instructions and controls.
+
+## Continuous Integration
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push, executing all tests and generating coverage reports.
 
 ## Architecture
 

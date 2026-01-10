@@ -18,13 +18,25 @@
     "test": "npm run test:client && npm run test:server",
     "test:client": "cd client && npm test",
     "test:server": "cd server && npm test",
+    "test:unit": "npm run test:client:unit && npm run test:server:unit",
+    "test:client:unit": "cd client && npm run test:unit",
+    "test:server:unit": "cd server && npm run test:unit",
+    "test:integration": "cd server && npm run test:integration",
+    "test:e2e": "cd client && npm run test:e2e",
+    "test:coverage": "npm run test:client:coverage && npm run test:server:coverage",
+    "test:client:coverage": "cd client && npm run test:coverage",
+    "test:server:coverage": "cd server && npm run test:coverage",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "docs": "typedoc --out docs/api client/src server/src shared"
   },
   "devDependencies": {
+    "@types/puppeteer": "^5.4.7",
     "concurrently": "^8.2.2",
     "eslint": "^8.0.0",
     "prettier": "^3.0.0",
+    "puppeteer": "^24.34.0",
+    "typedoc": "^0.28.15",
     "typescript": "^5.0.0"
   },
   "engines": {
