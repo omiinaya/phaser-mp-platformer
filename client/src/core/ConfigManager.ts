@@ -162,7 +162,7 @@ export class ConfigManager {
     try {
       localStorage.setItem(storageKey, JSON.stringify(config));
     } catch (e) {
-      console.warn('Failed to save config to localStorage:', e);
+      logger.warn('Failed to save config to localStorage:', e);
     }
   }
 
@@ -179,7 +179,7 @@ export class ConfigManager {
         this.configs.set(key, JSON.parse(data));
       }
     } catch (e) {
-      console.warn('Failed to load config from localStorage:', e);
+      logger.warn('Failed to load config from localStorage:', e);
     }
   }
 }

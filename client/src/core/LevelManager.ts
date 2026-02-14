@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 
 export interface LevelConfig {
@@ -84,7 +85,7 @@ export class LevelManager {
   public loadLevelByNumber(levelNumber: number): boolean {
     const config = LEVEL_CONFIGS[levelNumber];
     if (!config) {
-      console.warn(`Level ${levelNumber} not found`);
+      logger.warn(`Level ${levelNumber} not found`);
       return false;
     }
     this.currentLevelNumber = levelNumber;

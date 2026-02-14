@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import 'phaser';
 import { Character } from './Character';
 
@@ -129,7 +130,7 @@ export abstract class Skill {
      */
     public canActivate(): boolean {
         if (!this.owner) {
-            console.warn('Skill has no owner.');
+            logger.warn('Skill has no owner.');
             return false;
         }
         if (this.isOnCooldown) {

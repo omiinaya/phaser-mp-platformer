@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 import {
   Enemy,
@@ -68,7 +69,7 @@ export class EnemyPool {
     } else if (pool.length < this.maxPerType) {
       enemy = factory(this.scene, params.x, params.y, params.config || {});
     } else {
-      console.warn(`EnemyPool max size reached for type: ${type}`);
+      logger.warn(`EnemyPool max size reached for type: ${type}`);
       const oldestInactive = pool.find((e) => !e.active);
       if (oldestInactive) {
         enemy = oldestInactive;

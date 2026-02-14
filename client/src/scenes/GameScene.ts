@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 import { AssetManager } from "../core/AssetManager";
 import { InputManager, InputConfig } from "../core/InputManager";
@@ -205,7 +206,7 @@ export class GameScene extends Scene {
     this.levelManager = new LevelManager(this);
     const loaded = this.levelManager.loadLevelByNumber(this.currentLevel);
     if (!loaded) {
-      console.error(`Failed to load level ${this.currentLevel}`);
+      logger.error(`Failed to load level ${this.currentLevel}`);
       return;
     }
 
@@ -1121,11 +1122,11 @@ export class GameScene extends Scene {
     );
 
     this.events.on("inventory:add", (data: any) => {
-      console.log("Item added to inventory:", data);
+      logger.info("Item added to inventory:", data);
     });
 
     this.events.on("inventory:remove", (data: any) => {
-      console.log("Item removed from inventory:", data);
+      logger.info("Item removed from inventory:", data);
     });
 
     // Handle dropped items from inventory
@@ -1173,7 +1174,7 @@ export class GameScene extends Scene {
     this.networkService = new NetworkService();
 
     this.networkService.on("connected", (data: { playerId: string }) => {
-      console.log("Connected to server with ID:", data.playerId);
+      logger.info("Connected to server with ID:", data.playerId);
       this.playerIdText = this.add
         .text(
           this.cameras.main.width / 2,
@@ -1188,7 +1189,7 @@ export class GameScene extends Scene {
     this.networkService.on(
       "room_joined",
       (data: { roomId: string; players: any[] }) => {
-        console.log("Joined room:", data.roomId);
+        logger.info("Joined room:", data.roomId);
         this.remotePlayers.clear();
         data.players.forEach((playerData: any) => {
           if (playerData.playerId !== this.networkService?.getPlayerId()) {
@@ -1231,16 +1232,16 @@ export class GameScene extends Scene {
     );
 
     this.networkService.on("error", (error: { message: string }) => {
-      console.error("Network error:", error.message);
+      logger.error("Network error:", error.message);
     });
 
     // Handle disconnection with recovery
     this.networkService.on("disconnected", (data: { reason: string }) => {
-      console.warn("Disconnected from server:", data.reason);
+      logger.warn("Disconnected from server:", data.reason);
       showConnectionError(() => {
         // Retry connection
         this.networkService?.connect().catch((err) => {
-          console.error("Reconnection failed:", err);
+          logger.error("Reconnection failed:", err);
         });
       });
     });
@@ -1248,12 +1249,12 @@ export class GameScene extends Scene {
     this.networkService.on(
       "reconnect_attempt",
       (data: { attemptNumber: number }) => {
-        console.log(`Reconnection attempt ${data.attemptNumber}...`);
+        logger.info(`Reconnection attempt ${data.attemptNumber}...`);
       },
     );
 
     this.networkService.on("reconnected", (data: { attemptNumber: number }) => {
-      console.log(
+      logger.info(
         "Successfully reconnected after",
         data.attemptNumber,
         "attempts",
@@ -1263,14 +1264,14 @@ export class GameScene extends Scene {
     });
 
     this.networkService.on("reconnect_failed", () => {
-      console.error("Failed to reconnect to server");
+      logger.error("Failed to reconnect to server");
       showDisconnectionError(() => {
         this.returnToMainMenu();
       });
     });
 
     this.networkService.connect().catch((err) => {
-      console.error("Failed to connect to server:", err);
+      logger.error("Failed to connect to server:", err);
     });
   }
 
@@ -1562,7 +1563,7 @@ export class GameScene extends Scene {
     if (this.saveManager && this.levelManager) {
       const saveData = this.createSaveData();
       this.saveManager.saveAutoGame(saveData);
-      console.log("Auto-saved game");
+      logger.info("Auto-saved game");
     }
   }
 
@@ -1604,12 +1605,12 @@ export class GameScene extends Scene {
     }
 
     if (!saveData) {
-      console.error("Failed to load game: no save data found");
+      logger.error("Failed to load game: no save data found");
       return false;
     }
 
     this.applySaveData(saveData);
-    console.log(
+    logger.info(
       `Game loaded from slot ${slotIndex === -1 ? "auto-save" : slotIndex}`,
     );
     return true;
@@ -1705,7 +1706,7 @@ export class GameScene extends Scene {
     try {
       return JSON.parse(data);
     } catch (error) {
-      console.error("Failed to parse unlocked levels:", error);
+      logger.error("Failed to parse unlocked levels:", error);
       return [1];
     }
   }
@@ -1729,7 +1730,7 @@ export class GameScene extends Scene {
     if (!unlockedLevels.includes(levelNumber)) {
       unlockedLevels.push(levelNumber);
       this.updateUnlockedLevels(unlockedLevels);
-      console.log(`Unlocked level ${levelNumber}`);
+      logger.info(`Unlocked level ${levelNumber}`);
     }
   }
 
@@ -1774,7 +1775,7 @@ export class GameScene extends Scene {
     if (this.saveManager) {
       const checkpointData = this.createCheckpointData(checkpointNumber);
       this.saveManager.saveAutoGame(checkpointData);
-      console.log(`Saved checkpoint ${checkpointNumber}`);
+      logger.info(`Saved checkpoint ${checkpointNumber}`);
     }
   }
 
@@ -1870,7 +1871,7 @@ export class GameScene extends Scene {
       this.timeAttackTimer.setAlpha(enabled ? 1 : 0);
     }
     if (enabled) {
-      console.log("Time attack mode enabled");
+      logger.info("Time attack mode enabled");
     }
   }
 
@@ -1902,7 +1903,7 @@ export class GameScene extends Scene {
    * Called when the client successfully reconnects to the server.
    */
   private syncGameStateAfterReconnect(): void {
-    console.log("Syncing game state after reconnection");
+    logger.info("Syncing game state after reconnection");
 
     // Re-send player state to server
     if (this.player && this.networkService?.isConnected()) {
@@ -1925,7 +1926,7 @@ export class GameScene extends Scene {
    * Called when multiplayer connection fails completely.
    */
   private returnToMainMenu(): void {
-    console.log("Returning to main menu due to connection failure");
+    logger.info("Returning to main menu due to connection failure");
 
     // Clean up multiplayer state
     this.isMultiplayer = false;

@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import "phaser";
 import { Character } from "./Character";
 import { InputManager } from "../core/InputManager";
@@ -855,7 +856,7 @@ export class Player extends Character {
    */
   public useSkill(skillId: string, target?: Character): void {
     if (!this.equippedSkills.includes(skillId)) {
-      console.warn(`Skill ${skillId} not equipped.`);
+      logger.warn(`Skill ${skillId} not equipped.`);
       return;
     }
     // Skill logic would be implemented elsewhere (SkillManager)
@@ -900,7 +901,7 @@ export class Player extends Character {
     // Sync inventory data (less critical, send this separately or on less frequent interval)
     if (data.inventory) {
       // Implementation would need items by ID - currently just logging
-      console.log("Inventory sync data received from server");
+      logger.info("Inventory sync data received from server");
     }
   }
 

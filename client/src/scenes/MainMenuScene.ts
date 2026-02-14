@@ -114,7 +114,7 @@ export class MainMenuScene extends Scene {
       }
       if (event.action === "quit" && event.active) {
         // Could return to boot scene or exit
-        console.log("Quit pressed");
+        logger.info("Quit pressed");
       }
     });
   }

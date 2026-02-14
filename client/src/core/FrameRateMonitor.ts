@@ -124,7 +124,7 @@ export class FrameRateMonitor {
     // In a real implementation, you would adjust rendering settings,
     // such as particle density, shadow quality, resolution scaling, etc.
     // For now, we just emit an event; the game can listen and adjust accordingly.
-    console.log(`Quality level changed to ${this.qualityLevel}`);
+    logger.info(`Quality level changed to ${this.qualityLevel}`);
   }
 
   /**

@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 
 export interface AnimationConfig {
@@ -363,7 +364,7 @@ export class AnimationStateMachine {
     const targetStateConfig = this.states.get(toState);
 
     if (!targetStateConfig) {
-      console.warn(`Unknown state: ${toState}`);
+      logger.warn(`Unknown state: ${toState}`);
       return { success: false, animation: "" };
     }
 

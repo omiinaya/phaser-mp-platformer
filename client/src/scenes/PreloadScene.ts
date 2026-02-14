@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from 'phaser';
 import { AssetManager, AssetConfig } from '../core/AssetManager';
 
@@ -22,7 +23,7 @@ export class PreloadScene extends Scene {
     // Register progress callback
     this.assetManager.onProgress(event => {
       const percent = Math.floor(event.progress * 100);
-      console.log(`Loading: ${percent}%`);
+      logger.info(`Loading: ${percent}%`);
       // Could update a progress bar here
     });
 
@@ -32,9 +33,9 @@ export class PreloadScene extends Scene {
     // Start loading
     this.assetManager.startLoad().then(() => {
       // Loading complete, move to create (but create will be called automatically)
-      console.log('All assets loaded');
+      logger.info('All assets loaded');
     }).catch(error => {
-      console.error('Failed to load assets:', error);
+      logger.error('Failed to load assets:', error);
     });
   }
 

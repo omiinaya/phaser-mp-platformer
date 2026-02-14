@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 /**
  * Save data structure for comprehensive game state persistence.
  */
@@ -138,7 +139,7 @@ export class SaveManager {
       }
       return decrypted;
     } catch (error) {
-      console.error("Failed to decrypt save data:", error);
+      logger.error("Failed to decrypt save data:", error);
       return "";
     }
   }
@@ -236,7 +237,7 @@ export class SaveManager {
    */
   saveGame(slotIndex: number, data: Partial<SaveData>): boolean {
     if (slotIndex < 0 || slotIndex >= SaveManager.MAX_SLOTS) {
-      console.error(`Invalid save slot index: ${slotIndex}`);
+      logger.error(`Invalid save slot index: ${slotIndex}`);
       return false;
     }
 
@@ -254,10 +255,10 @@ export class SaveManager {
     try {
       const encrypted = SaveManager.encryptData(JSON.stringify(saveData));
       localStorage.setItem(key, encrypted);
-      console.log(`Game saved to slot ${slotIndex} (encrypted)`);
+      logger.info(`Game saved to slot ${slotIndex} (encrypted)`);
       return true;
     } catch (error) {
-      console.error(`Failed to save game to slot ${slotIndex}:`, error);
+      logger.error(`Failed to save game to slot ${slotIndex}:`, error);
       return false;
     }
   }
@@ -281,10 +282,10 @@ export class SaveManager {
     try {
       const encrypted = SaveManager.encryptData(JSON.stringify(saveData));
       localStorage.setItem(key, encrypted);
-      console.log("Auto-save completed (encrypted)");
+      logger.info("Auto-save completed (encrypted)");
       return true;
     } catch (error) {
-      console.error("Failed to create auto-save:", error);
+      logger.error("Failed to create auto-save:", error);
       return false;
     }
   }
@@ -296,7 +297,7 @@ export class SaveManager {
    */
   loadGame(slotIndex: number): SaveData | undefined {
     if (slotIndex < 0 || slotIndex >= SaveManager.MAX_SLOTS) {
-      console.error(`Invalid save slot index: ${slotIndex}`);
+      logger.error(`Invalid save slot index: ${slotIndex}`);
       return undefined;
     }
 
@@ -310,14 +311,14 @@ export class SaveManager {
     try {
       const decrypted = SaveManager.decryptData(data);
       if (!decrypted) {
-        console.error(`Failed to decrypt game data from slot ${slotIndex}`);
+        logger.error(`Failed to decrypt game data from slot ${slotIndex}`);
         return undefined;
       }
       const saveData: SaveData = JSON.parse(decrypted);
       // Migrate save data if needed (version check)
       return this.migrateSaveData(saveData);
     } catch (error) {
-      console.error(`Failed to load game from slot ${slotIndex}:`, error);
+      logger.error(`Failed to load game from slot ${slotIndex}:`, error);
       return undefined;
     }
   }
@@ -337,13 +338,13 @@ export class SaveManager {
     try {
       const decrypted = SaveManager.decryptData(data);
       if (!decrypted) {
-        console.error("Failed to decrypt auto-save data");
+        logger.error("Failed to decrypt auto-save data");
         return undefined;
       }
       const saveData: SaveData = JSON.parse(decrypted);
       return this.migrateSaveData(saveData);
     } catch (error) {
-      console.error("Failed to load auto-save:", error);
+      logger.error("Failed to load auto-save:", error);
       return undefined;
     }
   }
@@ -355,17 +356,17 @@ export class SaveManager {
    */
   deleteSave(slotIndex: number): boolean {
     if (slotIndex < 0 || slotIndex >= SaveManager.MAX_SLOTS) {
-      console.error(`Invalid save slot index: ${slotIndex}`);
+      logger.error(`Invalid save slot index: ${slotIndex}`);
       return false;
     }
 
     const key = this.getSlotKey(slotIndex);
     try {
       localStorage.removeItem(key);
-      console.log(`Save deleted from slot ${slotIndex}`);
+      logger.info(`Save deleted from slot ${slotIndex}`);
       return true;
     } catch (error) {
-      console.error(`Failed to delete save from slot ${slotIndex}:`, error);
+      logger.error(`Failed to delete save from slot ${slotIndex}:`, error);
       return false;
     }
   }
@@ -443,7 +444,7 @@ export class SaveManager {
       loop: true,
     });
 
-    console.log("Auto-save timer started");
+    logger.info("Auto-save timer started");
   }
 
   /**
@@ -453,7 +454,7 @@ export class SaveManager {
     if (this.autoSaveTimer) {
       this.autoSaveTimer.remove();
       this.autoSaveTimer = undefined;
-      console.log("Auto-save timer stopped");
+      logger.info("Auto-save timer stopped");
     }
   }
 
@@ -576,7 +577,7 @@ export class SaveManager {
       localStorage.removeItem(key);
     }
     localStorage.removeItem(this.getAutoSaveKey());
-    console.log("All save data cleared");
+    logger.info("All save data cleared");
   }
 
   /**

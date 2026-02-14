@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 
 export type AssetType =
@@ -61,7 +62,7 @@ export class LazyAssetLoader {
       const asset = this.assets.get(key);
 
       if (!asset) {
-        console.warn(`Asset ${key} not registered`);
+        logger.warn(`Asset ${key} not registered`);
         if (callback) callback(false);
         resolve(false);
         return;
@@ -180,7 +181,7 @@ export class LazyAssetLoader {
       this.loadedKeys.add(key);
       this.notifyCallbacks(key, true);
     } catch (error) {
-      console.error(`Failed to load asset ${key}:`, error);
+      logger.error(`Failed to load asset ${key}:`, error);
       this.notifyCallbacks(key, false);
     } finally {
       asset.loading = false;
@@ -246,7 +247,7 @@ export class LazyAssetLoader {
       try {
         callback(success);
       } catch (error) {
-        console.error(`Error in asset callback for ${key}:`, error);
+        logger.error(`Error in asset callback for ${key}:`, error);
       }
     }
     asset.callbacks = [];
