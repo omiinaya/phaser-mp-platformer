@@ -1,4 +1,5 @@
 import 'phaser';
+import { logger } from '../utils/logger';
 
 /**
  * Configuration schema definition.

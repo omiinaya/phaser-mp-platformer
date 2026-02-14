@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { InputManager, InputConfig } from "../core/InputManager";
 import { SceneService } from "../core/SceneManager";
+import { logger } from "../utils/logger";
 
 export class MainMenuScene extends Scene {
   private inputManager?: InputManager;

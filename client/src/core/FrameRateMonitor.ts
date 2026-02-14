@@ -1,4 +1,5 @@
 import 'phaser';
+import { logger } from '../utils/logger';
 
 /**
  * Quality level for adaptive settings.
