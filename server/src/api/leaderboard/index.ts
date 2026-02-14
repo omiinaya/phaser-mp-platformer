@@ -44,7 +44,7 @@ router.get('/top/score', async (req, res) => {
     const top = await leaderboardService.getTopPlayersByScore(limit, useCache);
     res.json(top);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -57,7 +57,7 @@ router.get('/top/level', async (req, res) => {
     const top = await leaderboardService.getTopPlayersByLevel(limit);
     res.json(top);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -71,7 +71,7 @@ router.get('/rank/:playerId', async (req, res) => {
     }
     res.json({ rank });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -82,7 +82,7 @@ router.post('/refresh', async (req, res) => {
     await leaderboardService.refreshAllLeaderboards();
     res.json({ success: true });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

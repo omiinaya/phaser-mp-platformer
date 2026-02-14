@@ -64,7 +64,7 @@ router.get('/:playerId/profile', async (req, res) => {
     }
     res.json(profile);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -78,7 +78,7 @@ router.get('/:playerId/stats', async (req, res) => {
     }
     res.json(stats);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -89,7 +89,7 @@ router.patch('/:playerId/stats', async (req, res) => {
     await progressionService.updateStats(req.params.playerId, req.body);
     res.json({ success: true });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -100,7 +100,7 @@ router.get('/:playerId/unlocks', async (req, res) => {
     const unlocks = await unlockRepo.findByPlayerId(req.params.playerId);
     res.json(unlocks);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -119,7 +119,7 @@ router.post('/:playerId/unlocks', async (req, res) => {
       res.status(500).json({ error: 'Failed to grant unlock' });
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -130,7 +130,7 @@ router.get('/:playerId/inventory', async (req, res) => {
     const inventory = await inventoryService.getInventory(req.params.playerId);
     res.json(inventory);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -152,7 +152,7 @@ router.post('/:playerId/inventory', async (req, res) => {
       res.status(500).json({ error: 'Failed to add item' });
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -174,7 +174,7 @@ router.delete('/:playerId/inventory', async (req, res) => {
       res.status(404).json({ error: 'Item not found' });
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -185,7 +185,7 @@ router.get('/:playerId/summary', async (req, res) => {
     const summary = await progressionService.getPlayerSummary(req.params.playerId);
     res.json(summary);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
