@@ -4,6 +4,15 @@ import { PlayerStatsRepository } from '../persistence/repositories/PlayerStatsRe
 import { PlayerProfileRepository } from '../persistence/repositories/PlayerProfileRepository';
 import { logger } from '../utils/logger';
 
+// Validate required environment variables at startup
+if (!process.env.REDIS_URL) {
+  throw new Error('REDIS_URL environment variable is required for leaderboard service');
+}
+
+/**
+ * Service for managing player leaderboards.
+ * Uses Redis for caching and TypeORM for persistent storage.
+ */
 export class LeaderboardService {
   private redisClient: RedisClientType;
 
@@ -14,7 +23,7 @@ export class LeaderboardService {
     redisUrl?: string
   ) {
     this.redisClient = createClient({
-      url: redisUrl || process.env.REDIS_URL || 'redis://localhost:6379',
+      url: redisUrl || process.env.REDIS_URL,
     });
     this.redisClient.on('error', (err) => logger.error('Redis Client Error', err));
     this.redisClient.connect();

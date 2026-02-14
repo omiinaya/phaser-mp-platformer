@@ -2,6 +2,9 @@ import { DataSource } from 'typeorm';
 import { InventoryRepository } from '../persistence/repositories/InventoryRepository';
 import { logger } from '../utils/logger';
 
+/**
+ * Service for managing player inventory operations.
+ */
 export class InventoryService {
   constructor(
     private dataSource: DataSource,

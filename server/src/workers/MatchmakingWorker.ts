@@ -29,6 +29,9 @@ export class MatchmakingWorker {
     if (this.busy) {
       return Promise.reject(new Error('Worker is busy'));
     }
+    if (!this.worker) {
+      return Promise.reject(new Error('Worker not available'));
+    }
     this.busy = true;
     this.queue = queue;
     return new Promise((resolve) => {
