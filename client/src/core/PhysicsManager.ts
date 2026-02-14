@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import 'phaser';
 
 /**
@@ -63,7 +64,7 @@ export class PhysicsManager {
   private init(): void {
     // Enable arcade physics if not already enabled
     if (!this.physics) {
-      console.warn('Arcade physics not available in this scene.');
+      logger.warn('Arcade physics not available in this scene.');
       return;
     }
 

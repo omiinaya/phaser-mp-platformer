@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import 'phaser';
 
 /**
@@ -86,7 +87,7 @@ export class InputManager {
     if (this.config.keyboard) {
       this.keyboard = this.scene.input.keyboard!;
       if (!this.keyboard) {
-        console.warn('Keyboard plugin not available.');
+        logger.warn('Keyboard plugin not available.');
       }
     }
 
@@ -99,7 +100,7 @@ export class InputManager {
     if (this.config.gamepad) {
       this.gamepad = this.scene.input.gamepad!;
       if (!this.gamepad) {
-        console.warn('Gamepad plugin not available.');
+        logger.warn('Gamepad plugin not available.');
       }
     }
 

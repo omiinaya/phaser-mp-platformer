@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 /**
  * Event bus for decoupled communication between game modules.
  * Implements a publish-subscribe pattern with support for typed events.
@@ -96,7 +97,7 @@ export class EventBus {
       try {
         listener.callback(data);
       } catch (error) {
-        console.error(`Error in event listener for "${event}":`, error);
+        logger.error(`Error in event listener for "${event}":`, error);
       }
     });
   }

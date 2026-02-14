@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 
 export class PooledEmitter {
@@ -135,7 +136,7 @@ export class ParticlePool {
     }
 
     if (emitters.length >= this.maxPerConfig) {
-      console.warn(`ParticlePool max size reached for config: ${key}`);
+      logger.warn(`ParticlePool max size reached for config: ${key}`);
     }
 
     const newEmitter = new PooledEmitter(

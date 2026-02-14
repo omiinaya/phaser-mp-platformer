@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 
 export interface AudioConfig {
@@ -147,7 +148,7 @@ export class AudioService {
       // Play with variations for variety
       sound.play({ volume, rate, detune });
     } else {
-      console.warn(`Sound effect not found: ${key}`);
+      logger.warn(`Sound effect not found: ${key}`);
     }
   }
 
@@ -183,7 +184,7 @@ export class AudioService {
         }
       }
     } else {
-      console.warn(`Music track not found: ${key}`);
+      logger.warn(`Music track not found: ${key}`);
     }
   }
 

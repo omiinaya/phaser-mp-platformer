@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import "phaser";
 import { Character } from "./Character";
 import { Player } from "./Player";
@@ -750,7 +751,7 @@ export class Archer extends Enemy {
         projectile: arrow,
       });
     } else {
-      console.warn("ProjectilePool not available, using fallback");
+      logger.warn("ProjectilePool not available, using fallback");
     }
   }
 

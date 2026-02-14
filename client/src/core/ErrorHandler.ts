@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import Phaser from "phaser";
 
 /**
@@ -83,7 +84,7 @@ export class ErrorHandler {
     }
 
     // Log to console
-    console.error(`[${severity.toUpperCase()}] ${message}`);
+    logger.error(`[${severity.toUpperCase()}] ${message}`);
   }
 
   /**

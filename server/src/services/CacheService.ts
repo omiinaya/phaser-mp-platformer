@@ -42,7 +42,8 @@ export class CacheService {
    * @param ttl Time to live in milliseconds (optional, uses default).
    */
   public set<T>(key: string, data: T, ttl?: number): void {
-    const expiresAt = Date.now() + (ttl ?? this.config.defaultTtl!);
+    const defaultTtl = this.config.defaultTtl ?? 300000; // 5 minutes fallback
+    const expiresAt = Date.now() + (ttl ?? defaultTtl);
     this.cache.set(key, { data, expiresAt });
     logger.debug(`Cache set: ${key}`);
   }

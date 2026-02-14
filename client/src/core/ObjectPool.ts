@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import 'phaser';
 
 /**
@@ -50,7 +51,7 @@ export class ObjectPool<T> {
     } else {
       // Check max size
       if (this.activeCount >= this.config.maxSize!) {
-        console.warn('ObjectPool max size reached, creating extra instance');
+        logger.warn('ObjectPool max size reached, creating extra instance');
       }
       obj = this.config.create();
     }

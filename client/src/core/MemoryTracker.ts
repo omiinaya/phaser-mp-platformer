@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 export interface TrackedReference {
   id: string;
   type: string;
@@ -202,7 +203,7 @@ export class CleanupHelper {
         try {
           cleanup();
         } catch (error) {
-          console.error(`Error in cleanup for ${id}:`, error);
+          logger.error(`Error in cleanup for ${id}:`, error);
         }
       }
       this.cleanupStack.delete(id);
@@ -226,10 +227,10 @@ export class ObjectLifecycleTracker {
   public static reportLeaks(): void {
     const leaks = checkMemoryLeaks(10000);
     if (leaks.length > 0) {
-      console.warn("Memory leak detection report:");
-      leaks.forEach((leak) => console.warn(`  - ${leak}`));
+      logger.warn("Memory leak detection report:");
+      leaks.forEach((leak) => logger.warn(`  - ${leak}`));
     } else {
-      console.log("No obvious memory leaks detected.");
+      logger.info("No obvious memory leaks detected.");
     }
   }
 

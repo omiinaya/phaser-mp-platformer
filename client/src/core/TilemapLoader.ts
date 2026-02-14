@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 import { LevelConfig } from "./LevelManager";
 
@@ -37,7 +38,7 @@ export class TilemapLoader {
   public createFromTilemap(key: string): LoadedTilemapData | null {
     const map = this.scene.make.tilemap({ key });
     if (!map) {
-      console.error(`Failed to load tilemap: ${key}`);
+      logger.error(`Failed to load tilemap: ${key}`);
       return null;
     }
 

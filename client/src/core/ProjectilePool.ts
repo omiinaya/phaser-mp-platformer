@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import "phaser";
 import { Scene } from "phaser";
 import { Enemy } from "../entities/Enemy";
@@ -147,7 +148,7 @@ export class ProjectilePool {
       projectile = this.pool.pop()!;
     } else {
       if (this.activeProjectiles.length >= this.maxSize) {
-        console.warn(
+        logger.warn(
           "ProjectilePool max size reached, creating extra projectile",
         );
       }

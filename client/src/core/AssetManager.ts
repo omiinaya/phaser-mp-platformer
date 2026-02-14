@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import 'phaser';
 
 /**
@@ -118,7 +119,7 @@ export class AssetManager {
         } else {
           // Assume url is a single string pointing to a texture, and atlas data is inline? Not supported.
           // Fallback to default atlas loader (requires texture and JSON)
-          console.warn('Atlas loading requires textureURL and atlasURL. Using default.');
+          logger.warn('Atlas loading requires textureURL and atlasURL. Using default.');
           this.loader.atlas(key, url as string, undefined, xhrSettings);
         }
         break;
@@ -127,7 +128,7 @@ export class AssetManager {
         if (audioSprites) {
           (this.loader as any).audioSprite(key, url as string, audioSprites, xhrSettings);
         } else {
-          console.warn('Audio sprite missing audioSprites configuration.');
+          logger.warn('Audio sprite missing audioSprites configuration.');
         }
         break;
       case 'json':
@@ -149,7 +150,7 @@ export class AssetManager {
         this.loader.binary(key, url as string, xhrSettings as any);
         break;
       default:
-        console.warn(`Unknown asset type: ${type}`);
+        logger.warn(`Unknown asset type: ${type}`);
     }
 
     this.totalAssets++;

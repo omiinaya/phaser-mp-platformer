@@ -1,3 +1,4 @@
+import { logger } from '../utils/logger';
 import { Scene } from "phaser";
 import { InputManager } from "../core/InputManager";
 import { NetworkService } from "../services/NetworkService";
@@ -20,7 +21,7 @@ export class LobbyScene extends Scene {
   }
 
   init(data: LobbySceneData) {
-    console.log("LobbyScene init:", data);
+    logger.info("LobbyScene init:", data);
   }
 
   create() {
@@ -59,7 +60,7 @@ export class LobbyScene extends Scene {
     this.networkService.connect().catch((err) => {
       this.statusText?.setText("Connection Failed");
       this.statusText?.setColor("#ff0000");
-      console.error("Failed to connect:", err);
+      logger.error("Failed to connect:", err);
     });
 
     // Room code display
@@ -173,7 +174,7 @@ export class LobbyScene extends Scene {
 
     // Create room on connection
     this.networkService.on("connected", (data: { playerId: string }) => {
-      console.log("Connected with player ID:", data.playerId);
+      logger.info("Connected with player ID:", data.playerId);
       this.statusText?.setText("Creating Room...");
       this.statusText?.setColor("#00ff00");
 
@@ -340,7 +341,7 @@ export class LobbyScene extends Scene {
           });
         })
         .catch((err) => {
-          console.error("Failed to copy:", err);
+          logger.error("Failed to copy:", err);
         });
     }
   }

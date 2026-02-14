@@ -7,6 +7,9 @@ import { UnlockableRepository } from '../persistence/repositories/UnlockableRepo
 import { Achievement } from '../persistence/models/Achievement';
 import { logger } from '../utils/logger';
 
+/**
+ * Service for managing player progression, stats, unlocks, and achievements.
+ */
 export class ProgressionService {
   constructor(
     private dataSource: DataSource,
