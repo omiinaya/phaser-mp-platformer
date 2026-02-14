@@ -7,9 +7,37 @@ import { InventoryRepository } from '../../persistence/repositories/InventoryRep
 import { AchievementProgressRepository } from '../../persistence/repositories/AchievementProgressRepository';
 import { ProgressionService } from '../../services/ProgressionService';
 import { InventoryService } from '../../services/InventoryService';
+import { logger } from '../../utils/logger';
 
 const router: Router = Router();
 const dataSource = AppDataSource;
+
+// Input validation helpers
+const isValidPlayerId = (id: string): boolean => {
+  // Allow UUIDs or alphanumeric IDs (3-50 chars)
+  return /^[a-zA-Z0-9_-]{3,50}$/.test(id);
+};
+
+const isValidItemId = (id: unknown): boolean => {
+  return typeof id === 'string' && /^[a-zA-Z0-9_-]{1,50}$/.test(id);
+};
+
+const isValidQuantity = (qty: unknown): boolean => {
+  return typeof qty === 'number' && Number.isInteger(qty) && qty > 0 && qty <= 1000;
+};
+
+// Middleware to validate playerId param
+const validatePlayerId = (req: any, res: any, next: any) => {
+  const { playerId } = req.params;
+  if (!playerId || !isValidPlayerId(playerId)) {
+    logger.warn(`Invalid playerId format: ${playerId}`);
+    return res.status(400).json({ error: 'Invalid playerId format' });
+  }
+  next();
+};
+
+// Apply playerId validation to all routes
+router.use('/:playerId', validatePlayerId);
 
 const profileRepo = new PlayerProfileRepository(dataSource);
 const statsRepo = new PlayerStatsRepository(dataSource);
@@ -81,8 +109,8 @@ router.get('/:playerId/unlocks', async (req, res) => {
 router.post('/:playerId/unlocks', async (req, res) => {
   try {
     const { unlockableId } = req.body;
-    if (!unlockableId) {
-      return res.status(400).json({ error: 'Missing unlockableId' });
+    if (!isValidItemId(unlockableId)) {
+      return res.status(400).json({ error: 'Invalid unlockableId' });
     }
     const success = await progressionService.grantUnlock(req.params.playerId, unlockableId);
     if (success) {
@@ -111,8 +139,11 @@ router.get('/:playerId/inventory', async (req, res) => {
 router.post('/:playerId/inventory', async (req, res) => {
   try {
     const { itemId, quantity, metadata } = req.body;
-    if (!itemId) {
-      return res.status(400).json({ error: 'Missing itemId' });
+    if (!isValidItemId(itemId)) {
+      return res.status(400).json({ error: 'Invalid itemId' });
+    }
+    if (quantity !== undefined && !isValidQuantity(quantity)) {
+      return res.status(400).json({ error: 'Invalid quantity (must be 1-1000)' });
     }
     const success = await inventoryService.addItem(req.params.playerId, itemId, quantity, metadata);
     if (success) {
@@ -130,8 +161,11 @@ router.post('/:playerId/inventory', async (req, res) => {
 router.delete('/:playerId/inventory', async (req, res) => {
   try {
     const { itemId, quantity } = req.body;
-    if (!itemId) {
-      return res.status(400).json({ error: 'Missing itemId' });
+    if (!isValidItemId(itemId)) {
+      return res.status(400).json({ error: 'Invalid itemId' });
+    }
+    if (quantity !== undefined && !isValidQuantity(quantity)) {
+      return res.status(400).json({ error: 'Invalid quantity (must be 1-1000)' });
     }
     const success = await inventoryService.removeItem(req.params.playerId, itemId, quantity);
     if (success) {

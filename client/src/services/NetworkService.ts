@@ -14,8 +14,10 @@ export class NetworkService extends EventEmitter {
 
   constructor(serverUrl?: string) {
     super();
-    this.serverUrl =
-      serverUrl || process.env.SERVER_URL || "http://localhost:4000";
+    if (!serverUrl && !process.env.SERVER_URL) {
+      throw new Error('Server URL is required. Pass serverUrl or set SERVER_URL environment variable.');
+    }
+    this.serverUrl = serverUrl || process.env.SERVER_URL!;
   }
 
   /**

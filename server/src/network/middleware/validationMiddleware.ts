@@ -5,20 +5,30 @@ import { logger } from '../../utils/logger';
  * Rate limiting middleware.
  * Limits number of events per socket per second.
  */
+const rateLimitBuckets = new Map<string, { count: number; resetTime: number }>();
+
+// Cleanup old buckets every 5 minutes to prevent memory leak
+setInterval(() => {
+  const now = Date.now();
+  for (const [socketId, bucket] of rateLimitBuckets.entries()) {
+    if (now >= bucket.resetTime) {
+      rateLimitBuckets.delete(socketId);
+    }
+  }
+}, 5 * 60 * 1000);
+
 export function rateLimit(
   maxEventsPerSecond: number = 30,
   windowMs: number = 1000
 ) {
-  const buckets = new Map<string, { count: number; resetTime: number }>();
-
   return (socket: Socket, next: (err?: Error) => void) => {
     const socketId = socket.id;
     const now = Date.now();
 
-    let bucket = buckets.get(socketId);
+    let bucket = rateLimitBuckets.get(socketId);
     if (!bucket || now >= bucket.resetTime) {
       bucket = { count: -1, resetTime: now + windowMs }; // -1 because we increment before check
-      buckets.set(socketId, bucket);
+      rateLimitBuckets.set(socketId, bucket);
     }
 
     bucket.count++;

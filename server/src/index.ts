@@ -35,6 +35,11 @@ import { ProgressionService } from "./services/ProgressionService";
 
 dotenv.config();
 
+// Validate required environment variables
+if (!process.env.CLIENT_URL) {
+  throw new Error('CLIENT_URL environment variable is required');
+}
+
 // Initialize database
 AppDataSource.initialize()
   .then(() => {
@@ -44,7 +49,7 @@ AppDataSource.initialize()
     const server = http.createServer(app);
     const io = new Server(server, {
       cors: {
-        origin: process.env.CLIENT_URL || "http://localhost:3000",
+        origin: process.env.CLIENT_URL,
         methods: ["GET", "POST"],
       },
       pingInterval: 5000,
