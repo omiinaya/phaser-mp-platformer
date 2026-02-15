@@ -109,6 +109,9 @@ router.get('/:playerId/unlocks', async (req, res) => {
 router.post('/:playerId/unlocks', async (req, res) => {
   try {
     const { unlockableId } = req.body;
+    if (unlockableId === undefined || unlockableId === null) {
+      return res.status(400).json({ error: 'Missing unlockableId' });
+    }
     if (!isValidItemId(unlockableId)) {
       return res.status(400).json({ error: 'Invalid unlockableId' });
     }

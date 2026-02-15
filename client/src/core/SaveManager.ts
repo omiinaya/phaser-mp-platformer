@@ -291,6 +291,15 @@ export class SaveManager {
   }
 
   /**
+   * Load game data from a specific slot (async version).
+   * @param slotIndex Save slot index (0-4).
+   * @returns The save data, or undefined if slot is empty or invalid.
+   */
+  async loadGameAsync(slotIndex: number): Promise<SaveData | undefined> {
+    return Promise.resolve(this.loadGame(slotIndex));
+  }
+
+  /**
    * Load game data from a specific slot.
    * @param slotIndex Save slot index (0-4).
    * @returns The save data, or undefined if slot is empty or invalid.
@@ -321,6 +330,14 @@ export class SaveManager {
       logger.error(`Failed to load game from slot ${slotIndex}:`, error);
       return undefined;
     }
+  }
+
+  /**
+   * Load auto-save data (async version).
+   * @returns The save data, or undefined if no auto-save exists.
+   */
+  async loadAutoGameAsync(): Promise<SaveData | undefined> {
+    return Promise.resolve(this.loadAutoGame());
   }
 
   /**

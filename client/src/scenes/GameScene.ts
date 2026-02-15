@@ -1143,8 +1143,8 @@ export class GameScene extends Scene {
       this.manualSaveGame(data.slotIndex);
     });
 
-    this.events.on("save:load", (data: { slotIndex: number }) => {
-      this.loadGame(data.slotIndex);
+    this.events.on("save:load", async (data: { slotIndex: number }) => {
+      await this.loadGame(data.slotIndex);
     });
   }
 
@@ -1591,17 +1591,17 @@ export class GameScene extends Scene {
    * @param slotIndex Save slot index (0-4), or -1 for auto-save.
    * @returns True if the load was successful.
    */
-  public loadGame(slotIndex: number): boolean {
+  public async loadGame(slotIndex: number): Promise<boolean> {
     if (!this.saveManager) return false;
 
     let saveData: SaveData | undefined;
 
     if (slotIndex === -1) {
       // Load from auto-save
-      saveData = this.saveManager.loadAutoGame();
+      saveData = await this.saveManager.loadAutoGameAsync();
     } else {
       // Load from specific slot
-      saveData = this.saveManager.loadGame(slotIndex);
+      saveData = await this.saveManager.loadGameAsync(slotIndex);
     }
 
     if (!saveData) {
