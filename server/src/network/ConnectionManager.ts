@@ -1,8 +1,8 @@
-import { Server, Socket } from "socket.io";
-import jwt from "jsonwebtoken";
-import { PlayerSession } from "../persistence/models/PlayerSession";
-import { ProgressionService } from "../services/ProgressionService";
-import { logger } from "../utils/logger";
+import { Server, Socket } from 'socket.io';
+import jwt from 'jsonwebtoken';
+import { PlayerSession } from '../persistence/models/PlayerSession';
+import { ProgressionService } from '../services/ProgressionService';
+import { logger } from '../utils/logger';
 
 /**
  * Manages socket connections, disconnections, and reconnections.
@@ -20,7 +20,7 @@ export class ConnectionManager {
   }
 
   private setupEventHandlers(): void {
-    this.io.on("connection", (socket: Socket) => this.handleConnection(socket));
+    this.io.on('connection', (socket: Socket) => this.handleConnection(socket));
   }
 
   /**
@@ -56,25 +56,25 @@ export class ConnectionManager {
     this.sessions.set(socket.id, session);
 
     // Update player progression (if authenticated)
-    if (this.progressionService && !playerId.startsWith("guest_")) {
+    if (this.progressionService && !playerId.startsWith('guest_')) {
       this.progressionService.initializePlayer(playerId).catch((err) => {
         logger.error(`Failed to initialize player progression: ${err}`);
       });
     }
 
     // Send connection acknowledgment
-    socket.emit("connection_ack", {
+    socket.emit('connection_ack', {
       sessionId: socket.id,
       playerId,
       serverTime: Date.now(),
     });
 
     // Handle disconnection
-    socket.on("disconnect", () => this.handleDisconnection(socket));
+    socket.on('disconnect', () => this.handleDisconnection(socket));
     // Handle reconnection attempts
-    socket.on("reconnect_attempt", () => this.handleReconnectAttempt(socket));
+    socket.on('reconnect_attempt', () => this.handleReconnectAttempt(socket));
     // Handle custom events for activity
-    socket.on("ping", () => this.handlePing(socket));
+    socket.on('ping', () => this.handlePing(socket));
   }
 
   /**
@@ -85,7 +85,7 @@ export class ConnectionManager {
     try {
       const secret = process.env.JWT_SECRET;
       if (!secret) {
-        logger.error("JWT_SECRET environment variable not set");
+        logger.error('JWT_SECRET environment variable not set');
         return null;
       }
 
@@ -107,7 +107,7 @@ export class ConnectionManager {
     if (session) {
       // Notify room that player left
       if (session.roomId) {
-        this.io.to(session.roomId).emit("player_left", {
+        this.io.to(session.roomId).emit('player_left', {
           playerId: session.playerId,
           socketId: socket.id,
         });
@@ -131,7 +131,7 @@ export class ConnectionManager {
     const session = this.sessions.get(socket.id);
     if (session) {
       session.lastActivity = new Date();
-      socket.emit("pong", { serverTime: Date.now() });
+      socket.emit('pong', { serverTime: Date.now() });
     }
   }
 

@@ -1,12 +1,12 @@
-import { GameObject } from "../entities/GameObject";
-import { Player } from "../entities/Player";
+import { GameObject } from '../entities/GameObject';
+import { Player } from '../entities/Player';
 
 export type PowerUpType =
-  | "double_jump"
-  | "shield"
-  | "speed_boost"
-  | "health_boost"
-  | "damage_boost";
+  | 'double_jump'
+  | 'shield'
+  | 'speed_boost'
+  | 'health_boost'
+  | 'damage_boost';
 
 export interface PowerUpConfig {
   type: PowerUpType;
@@ -138,7 +138,7 @@ export class PowerUp extends GameObject {
       duration: 800,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.easeInOut",
+      ease: 'Sine.easeInOut',
     });
 
     this.scene.tweens.add({
@@ -146,41 +146,41 @@ export class PowerUp extends GameObject {
       angle: 360,
       duration: 3000,
       repeat: -1,
-      ease: "Linear",
+      ease: 'Linear',
     });
 
     switch (this.powerUpType) {
-      case "double_jump":
-        this.scene.tweens.add({
-          targets: this,
-          scaleX: 1.2,
-          scaleY: 0.8,
-          duration: 400,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-        break;
-      case "shield":
-        this.scene.tweens.add({
-          targets: this,
-          alpha: 0.6,
-          duration: 500,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-        break;
-      case "speed_boost":
-        this.scene.tweens.add({
-          targets: this,
-          scaleX: 1.3,
-          duration: 300,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-        break;
+    case 'double_jump':
+      this.scene.tweens.add({
+        targets: this,
+        scaleX: 1.2,
+        scaleY: 0.8,
+        duration: 400,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      break;
+    case 'shield':
+      this.scene.tweens.add({
+        targets: this,
+        alpha: 0.6,
+        duration: 500,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      break;
+    case 'speed_boost':
+      this.scene.tweens.add({
+        targets: this,
+        scaleX: 1.3,
+        duration: 300,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      break;
     }
   }
 
@@ -194,7 +194,7 @@ export class PowerUp extends GameObject {
       this.effectValue,
     );
 
-    this.scene.events.emit("powerup:collected", {
+    this.scene.events.emit('powerup:collected', {
       type: this.powerUpType,
       duration: this.duration,
       effectValue: this.effectValue,
@@ -234,8 +234,8 @@ export class DoubleJumpPowerUp extends PowerUp {
     powerUpManager: PowerUpManager,
     duration: number = 10000,
   ) {
-    super(scene, x, y, "double_jump", powerUpManager, {
-      type: "double_jump",
+    super(scene, x, y, 'double_jump', powerUpManager, {
+      type: 'double_jump',
       duration,
     });
   }
@@ -249,8 +249,8 @@ export class ShieldPowerUp extends PowerUp {
     powerUpManager: PowerUpManager,
     duration: number = 8000,
   ) {
-    super(scene, x, y, "shield", powerUpManager, {
-      type: "shield",
+    super(scene, x, y, 'shield', powerUpManager, {
+      type: 'shield',
       duration,
       effectValue: 5, // blocks 5 damage
     });
@@ -266,8 +266,8 @@ export class SpeedBoostPowerUp extends PowerUp {
     duration: number = 6000,
     multiplier: number = 1.5,
   ) {
-    super(scene, x, y, "speed_boost", powerUpManager, {
-      type: "speed_boost",
+    super(scene, x, y, 'speed_boost', powerUpManager, {
+      type: 'speed_boost',
       duration,
       effectValue: multiplier,
     });
@@ -282,8 +282,8 @@ export class HealthBoostPowerUp extends PowerUp {
     powerUpManager: PowerUpManager,
     healAmount: number = 5,
   ) {
-    super(scene, x, y, "health_boost", powerUpManager, {
-      type: "health_boost",
+    super(scene, x, y, 'health_boost', powerUpManager, {
+      type: 'health_boost',
       duration: 0, // instant effect
       effectValue: healAmount,
     });
@@ -297,7 +297,7 @@ export class HealthBoostPowerUp extends PowerUp {
       player.heal(this.effectValue || 5);
     }
 
-    this.scene.events.emit("powerup:collected", {
+    this.scene.events.emit('powerup:collected', {
       type: this.powerUpType,
       effectValue: this.effectValue,
     });
@@ -316,8 +316,8 @@ export class DamageBoostPowerUp extends PowerUp {
     duration: number = 10000,
     multiplier: number = 2,
   ) {
-    super(scene, x, y, "damage_boost", powerUpManager, {
-      type: "damage_boost",
+    super(scene, x, y, 'damage_boost', powerUpManager, {
+      type: 'damage_boost',
       duration,
       effectValue: multiplier,
     });

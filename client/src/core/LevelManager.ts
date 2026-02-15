@@ -1,5 +1,5 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 
 export interface LevelConfig {
   key: string;
@@ -10,7 +10,7 @@ export interface LevelConfig {
   requiredItems?: string[];
   requiredEnemies?: number;
   backgroundColor?: number;
-  theme?: "forest" | "cave" | "sky";
+  theme?: 'forest' | 'cave' | 'sky';
 }
 
 export interface LevelState {
@@ -25,30 +25,30 @@ export interface LevelState {
 // Predefined level configurations
 export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   1: {
-    key: "level1",
-    tilemap: "assets/tilemaps/level1.json",
+    key: 'level1',
+    tilemap: 'assets/tilemaps/level1.json',
     playerStart: { x: 100, y: 300 },
     targetScore: 100,
     backgroundColor: 0x1a1a2e,
-    theme: "forest",
+    theme: 'forest',
   },
   2: {
-    key: "level2",
-    tilemap: "assets/tilemaps/level2.json",
+    key: 'level2',
+    tilemap: 'assets/tilemaps/level2.json',
     playerStart: { x: 400, y: 2050 },
     targetScore: 200,
     timeLimit: 180,
     backgroundColor: 0x0d0d1a,
-    theme: "cave",
+    theme: 'cave',
   },
   3: {
-    key: "level3",
-    tilemap: "assets/tilemaps/level3.json",
+    key: 'level3',
+    tilemap: 'assets/tilemaps/level3.json',
     playerStart: { x: 100, y: 500 },
     targetScore: 300,
     timeLimit: 240,
     backgroundColor: 0x87ceeb,
-    theme: "sky",
+    theme: 'sky',
   },
 };
 

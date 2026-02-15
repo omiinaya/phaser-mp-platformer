@@ -1,5 +1,5 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 
 export interface AudioConfig {
   masterVolume?: number;
@@ -52,21 +52,21 @@ export class AudioService {
    */
   public preload(): void {
     // Sound Effects
-    this.scene.load.audio("jump", "assets/audio/jump.wav");
-    this.scene.load.audio("coin", "assets/audio/coin.wav");
-    this.scene.load.audio("enemy_hit", "assets/audio/enemy_hit.wav");
-    this.scene.load.audio("player_hit", "assets/audio/player_hit.wav");
-    this.scene.load.audio("health_pickup", "assets/audio/health_pickup.wav");
-    this.scene.load.audio("level_complete", "assets/audio/level_complete.wav");
-    this.scene.load.audio("game_over", "assets/audio/game_over.wav");
-    this.scene.load.audio("attack", "assets/audio/attack.wav");
-    this.scene.load.audio("footstep", "assets/audio/footstep.wav");
-    this.scene.load.audio("landing", "assets/audio/landing.wav");
+    this.scene.load.audio('jump', 'assets/audio/jump.wav');
+    this.scene.load.audio('coin', 'assets/audio/coin.wav');
+    this.scene.load.audio('enemy_hit', 'assets/audio/enemy_hit.wav');
+    this.scene.load.audio('player_hit', 'assets/audio/player_hit.wav');
+    this.scene.load.audio('health_pickup', 'assets/audio/health_pickup.wav');
+    this.scene.load.audio('level_complete', 'assets/audio/level_complete.wav');
+    this.scene.load.audio('game_over', 'assets/audio/game_over.wav');
+    this.scene.load.audio('attack', 'assets/audio/attack.wav');
+    this.scene.load.audio('footstep', 'assets/audio/footstep.wav');
+    this.scene.load.audio('landing', 'assets/audio/landing.wav');
 
     // Music
-    this.scene.load.audio("menu_music", "assets/audio/menu_music.mp3");
-    this.scene.load.audio("gameplay_music", "assets/audio/gameplay_music.mp3");
-    this.scene.load.audio("victory_music", "assets/audio/victory_music.mp3");
+    this.scene.load.audio('menu_music', 'assets/audio/menu_music.mp3');
+    this.scene.load.audio('gameplay_music', 'assets/audio/gameplay_music.mp3');
+    this.scene.load.audio('victory_music', 'assets/audio/victory_music.mp3');
   }
 
   /**
@@ -74,24 +74,24 @@ export class AudioService {
    */
   public create(): void {
     // Create sound effects
-    this.createSFX("jump", { volume: 0.6 });
-    this.createSFX("coin", { volume: 0.5 });
-    this.createSFX("enemy_hit", { volume: 0.7 });
-    this.createSFX("player_hit", { volume: 0.8 });
-    this.createSFX("health_pickup", { volume: 0.6 });
-    this.createSFX("level_complete", { volume: 0.8 });
-    this.createSFX("game_over", { volume: 0.7 });
-    this.createSFX("attack", { volume: 0.6 });
-    this.createSFX("footstep", { volume: 0.3, rate: 1.2 });
-    this.createSFX("landing", { volume: 0.4 });
+    this.createSFX('jump', { volume: 0.6 });
+    this.createSFX('coin', { volume: 0.5 });
+    this.createSFX('enemy_hit', { volume: 0.7 });
+    this.createSFX('player_hit', { volume: 0.8 });
+    this.createSFX('health_pickup', { volume: 0.6 });
+    this.createSFX('level_complete', { volume: 0.8 });
+    this.createSFX('game_over', { volume: 0.7 });
+    this.createSFX('attack', { volume: 0.6 });
+    this.createSFX('footstep', { volume: 0.3, rate: 1.2 });
+    this.createSFX('landing', { volume: 0.4 });
 
     // Create music tracks
-    this.createMusic("menu_music", { volume: this.musicVolume, loop: true });
-    this.createMusic("gameplay_music", {
+    this.createMusic('menu_music', { volume: this.musicVolume, loop: true });
+    this.createMusic('gameplay_music', {
       volume: this.musicVolume,
       loop: true,
     });
-    this.createMusic("victory_music", {
+    this.createMusic('victory_music', {
       volume: this.musicVolume,
       loop: false,
     });
@@ -347,7 +347,7 @@ export class AudioService {
    */
   public playFootstep(isRunning: boolean = false): void {
     const rate = isRunning ? 1.5 : 1.2;
-    this.playSFX("footstep", { rate });
+    this.playSFX('footstep', { rate });
   }
 
   /**

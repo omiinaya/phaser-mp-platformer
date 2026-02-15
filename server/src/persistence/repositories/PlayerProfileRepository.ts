@@ -27,7 +27,7 @@ export class PlayerProfileRepository extends BaseRepository<PlayerProfile> {
         order: { level: 'DESC', experience: 'DESC' },
         take: limit,
       }),
-      `Failed to find top players by level`
+      'Failed to find top players by level'
     );
   }
 

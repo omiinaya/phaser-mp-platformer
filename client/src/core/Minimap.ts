@@ -1,19 +1,19 @@
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 /**
  * Minimap marker type.
  */
 export enum MarkerType {
   /** Player position. */
-  PLAYER = "player",
+  PLAYER = 'player',
   /** Enemy position. */
-  ENEMY = "enemy",
+  ENEMY = 'enemy',
   /** Item collectible. */
-  ITEM = "item",
+  ITEM = 'item',
   /** Exit goal. */
-  EXIT = "exit",
+  EXIT = 'exit',
   /** Checkpoint. */
-  CHECKPOINT = "checkpoint",
+  CHECKPOINT = 'checkpoint',
 }
 
 /**
@@ -41,7 +41,7 @@ export interface MinimapConfig {
   /** Height of minimap in pixels. */
   height: number;
   /** Position: 'top-left', 'top-right', 'bottom-left', 'bottom-right'. */
-  position: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   /** Margin from screen edge. */
   margin: number;
   /** Whether to show grid. */
@@ -105,7 +105,7 @@ export class Minimap {
     this.config = {
       width: 200,
       height: 150,
-      position: "top-right",
+      position: 'top-right',
       margin: 20,
       showGrid: true,
       gridSize: 50,
@@ -158,12 +158,12 @@ export class Minimap {
     const screenWidth = this.scene.cameras.main.width;
 
     switch (position) {
-      case "top-left":
-      case "bottom-left":
-        return margin;
-      case "top-right":
-      case "bottom-right":
-        return screenWidth - width - margin;
+    case 'top-left':
+    case 'bottom-left':
+      return margin;
+    case 'top-right':
+    case 'bottom-right':
+      return screenWidth - width - margin;
     }
   }
 
@@ -175,12 +175,12 @@ export class Minimap {
     const screenHeight = this.scene.cameras.main.height;
 
     switch (position) {
-      case "top-left":
-      case "top-right":
-        return margin;
-      case "bottom-left":
-      case "bottom-right":
-        return screenHeight - height - margin;
+    case 'top-left':
+    case 'top-right':
+      return margin;
+    case 'bottom-left':
+    case 'bottom-right':
+      return screenHeight - height - margin;
     }
   }
 
@@ -205,7 +205,7 @@ export class Minimap {
    * Set minimap position.
    * @param position Position type.
    */
-  setPosition(position: MinimapConfig["position"]): void {
+  setPosition(position: MinimapConfig['position']): void {
     this.config.position = position;
     this.container.x = this.calculatePositionX();
     this.container.y = this.calculatePositionY();
@@ -303,23 +303,23 @@ export class Minimap {
     let alpha = 0.7;
 
     switch (type) {
-      case MarkerType.PLAYER:
-        color = 0x00ff00;
-        alpha = 1;
-        break;
-      case MarkerType.ENEMY:
-        color = 0xff0000;
-        break;
-      case MarkerType.ITEM:
-        color = 0xffff00;
-        break;
-      case MarkerType.EXIT:
-        color = 0x00ffff;
-        alpha = 0.9;
-        break;
-      case MarkerType.CHECKPOINT:
-        color = 0xff8800;
-        break;
+    case MarkerType.PLAYER:
+      color = 0x00ff00;
+      alpha = 1;
+      break;
+    case MarkerType.ENEMY:
+      color = 0xff0000;
+      break;
+    case MarkerType.ITEM:
+      color = 0xffff00;
+      break;
+    case MarkerType.EXIT:
+      color = 0x00ffff;
+      alpha = 0.9;
+      break;
+    case MarkerType.CHECKPOINT:
+      color = 0xff8800;
+      break;
     }
 
     this.markersGraphics.fillStyle(color, alpha);

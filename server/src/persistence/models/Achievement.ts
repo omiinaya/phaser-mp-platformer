@@ -12,35 +12,35 @@ export enum AchievementTier {
 @Entity('achievements')
 export class Achievement {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+    id!: string;
 
   @Column({ unique: true })
-  code!: string;
+    code!: string;
 
   @Column()
-  name!: string;
+    name!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string | null = null;
+    description: string | null = null;
 
   @Column({ type: 'enum', enum: AchievementTier, default: AchievementTier.BRONZE })
-  tier!: AchievementTier;
+    tier!: AchievementTier;
 
   @Column({ name: 'required_value', default: 1 })
-  requiredValue!: number;
+    requiredValue!: number;
 
   @Column({ name: 'reward_coins', default: 0 })
-  rewardCoins!: number;
+    rewardCoins!: number;
 
   @Column({ name: 'reward_unlockable_id', nullable: true })
-  rewardUnlockableId: string | null = null;
+    rewardUnlockableId: string | null = null;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any> | null = null;
+    metadata: Record<string, any> | null = null;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @OneToMany(() => AchievementProgress, progress => progress.achievement)
-  progresses!: AchievementProgress[];
+    progresses!: AchievementProgress[];
 }

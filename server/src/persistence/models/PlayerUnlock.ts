@@ -5,25 +5,25 @@ import { Unlockable } from './Unlockable';
 @Entity('player_unlocks')
 export class PlayerUnlock {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+    id: string;
 
   @Column({ name: 'player_id' })
-  playerId: string;
+    playerId: string;
 
   @Column({ name: 'unlockable_id' })
-  unlockableId: string;
+    unlockableId: string;
 
   @CreateDateColumn({ name: 'unlocked_at' })
-  unlockedAt: Date;
+    unlockedAt: Date;
 
   @Column({ default: false })
-  notified: boolean;
+    notified: boolean;
 
   @ManyToOne(() => PlayerProfile, profile => profile.unlocks)
   @JoinColumn({ name: 'player_id' })
-  profile: PlayerProfile;
+    profile: PlayerProfile;
 
   @ManyToOne(() => Unlockable, unlockable => unlockable.playerUnlocks)
   @JoinColumn({ name: 'unlockable_id' })
-  unlockable: Unlockable;
+    unlockable: Unlockable;
 }

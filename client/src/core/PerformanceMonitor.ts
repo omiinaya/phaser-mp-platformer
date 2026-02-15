@@ -129,7 +129,7 @@ export class PerformanceMonitor {
     };
 
     if (
-      typeof (window as any).performance !== "undefined" &&
+      typeof (window as any).performance !== 'undefined' &&
       (window as any).performance.memory
     ) {
       snapshot.memoryUsed =
@@ -149,7 +149,7 @@ export class PerformanceMonitor {
     const metrics = this.getCurrentMetrics(16);
     const stats = this.getStatistics();
 
-    let report = `=== Performance Report ===\n`;
+    let report = '=== Performance Report ===\n';
     report += `Current FPS: ${metrics.fps}\n`;
     report += `Average FPS: ${metrics.fpsAverage}\n`;
     report += `Min FPS: ${metrics.minFps}\n`;
@@ -163,7 +163,7 @@ export class PerformanceMonitor {
     const snapshots = this.getSnapshotsArray();
     if (snapshots.length > 0) {
       const latest = snapshots[snapshots.length - 1];
-      report += `\n=== Latest Snapshot ===\n`;
+      report += '\n=== Latest Snapshot ===\n';
       report += `Active Entities: ${latest.activeEntities}\n`;
       report += `Active Particles: ${latest.activeParticles}\n`;
       report += `Active Projectiles: ${latest.activeProjectiles}\n`;
@@ -240,7 +240,7 @@ export class PerformanceMonitor {
     p50: number;
     p95: number;
     p99: number;
-  } {
+    } {
     const samples = this.getFrameSamples();
     if (samples.length === 0) {
       return { average: 0, min: 0, max: 0, p50: 0, p95: 0, p99: 0 };
@@ -361,7 +361,7 @@ export class PerformanceProfiler {
   public static getAllProfiles(): Map<
     string,
     { totalTime: number; averageTime: number; callCount: number }
-  > {
+    > {
     if (!this.enabled) return new Map();
 
     const result = new Map();
@@ -381,7 +381,7 @@ export class PerformanceProfiler {
   }
 
   public static reportTopProfiles(count: number = 10): string {
-    if (!this.enabled) return "Profiling not enabled";
+    if (!this.enabled) return 'Profiling not enabled';
 
     const all = this.getAllProfiles();
     const sorted = Array.from(all.entries())
@@ -389,17 +389,17 @@ export class PerformanceProfiler {
       .slice(0, count);
 
     if (sorted.length === 0) {
-      return "No profile data available";
+      return 'No profile data available';
     }
 
-    let report = "=== Top Performance Profiles ===\n";
+    let report = '=== Top Performance Profiles ===\n';
     report +=
-      "Profile".padEnd(30) +
-      "Calls".padStart(10) +
-      "Total(ms)".padStart(15) +
-      "Avg(ms)".padStart(15) +
-      "\n";
-    report += "-".repeat(70) + "\n";
+      'Profile'.padEnd(30) +
+      'Calls'.padStart(10) +
+      'Total(ms)'.padStart(15) +
+      'Avg(ms)'.padStart(15) +
+      '\n';
+    report += '-'.repeat(70) + '\n';
 
     for (const [id, stats] of sorted) {
       report += `${id.padEnd(30)} ${stats.callCount.toString().padStart(10)} ${stats.totalTime.toFixed(2).padStart(15)} ${stats.averageTime.toFixed(2).padStart(15)}\n`;

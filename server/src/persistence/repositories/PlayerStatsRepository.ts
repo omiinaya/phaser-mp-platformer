@@ -64,7 +64,7 @@ export class PlayerStatsRepository extends BaseRepository<PlayerStats> {
         order: { score: 'DESC' },
         take: limit,
       }),
-      `Failed to find top players by score`
+      'Failed to find top players by score'
     );
   }
 }

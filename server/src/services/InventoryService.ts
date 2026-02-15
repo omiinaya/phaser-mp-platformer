@@ -53,7 +53,7 @@ export class InventoryService {
       const toRepo = new InventoryRepository(this.dataSource);
       const removed = await fromRepo.removeItem(fromPlayerId, itemId, quantity);
       if (!removed) {
-        throw new Error(`Source player does not have enough items`);
+        throw new Error('Source player does not have enough items');
       }
       await toRepo.addItem(toPlayerId, itemId, quantity);
       logger.info(`Transferred item ${itemId} x${quantity} from ${fromPlayerId} to ${toPlayerId}`);

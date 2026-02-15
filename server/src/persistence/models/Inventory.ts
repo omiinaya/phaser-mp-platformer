@@ -4,24 +4,24 @@ import { PlayerProfile } from './PlayerProfile';
 @Entity('inventory')
 export class Inventory {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+    id: string;
 
   @Column({ name: 'player_id' })
-  playerId: string;
+    playerId: string;
 
   @Column()
-  itemId: string;
+    itemId: string;
 
   @Column()
-  quantity: number;
+    quantity: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any> | null;
+    metadata: Record<string, any> | null;
 
   @Column({ name: 'acquired_at', default: () => 'CURRENT_TIMESTAMP' })
-  acquiredAt: Date;
+    acquiredAt: Date;
 
   @ManyToOne(() => PlayerProfile, profile => profile.inventoryItems)
   @JoinColumn({ name: 'player_id' })
-  profile: PlayerProfile;
+    profile: PlayerProfile;
 }

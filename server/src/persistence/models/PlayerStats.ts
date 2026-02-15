@@ -4,36 +4,36 @@ import { PlayerProfile } from './PlayerProfile';
 @Entity('player_stats')
 export class PlayerStats {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+    id: string;
 
   @Column({ name: 'player_id', unique: true })
-  playerId: string;
+    playerId: string;
 
   @Column({ default: 0 })
-  kills: number;
+    kills: number;
 
   @Column({ default: 0 })
-  deaths: number;
+    deaths: number;
 
   @Column({ default: 0 })
-  score: number;
+    score: number;
 
   @Column({ name: 'play_time_seconds', default: 0 })
-  playTimeSeconds: number;
+    playTimeSeconds: number;
 
   @Column({ name: 'games_played', default: 0 })
-  gamesPlayed: number;
+    gamesPlayed: number;
 
   @Column({ name: 'games_won', default: 0 })
-  gamesWon: number;
+    gamesWon: number;
 
   @Column({ name: 'highest_score', default: 0 })
-  highestScore: number;
+    highestScore: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  extraStats: Record<string, any> | null;
+    extraStats: Record<string, any> | null;
 
   @OneToOne(() => PlayerProfile, profile => profile.stats)
   @JoinColumn({ name: 'player_id' })
-  profile: PlayerProfile;
+    profile: PlayerProfile;
 }

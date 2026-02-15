@@ -1,7 +1,7 @@
-import "phaser";
-import { GameObject } from "./GameObject";
+import 'phaser';
+import { GameObject } from './GameObject';
 
-export type HazardType = "spike" | "lava" | "saw_blade" | "fire" | "acid";
+export type HazardType = 'spike' | 'lava' | 'saw_blade' | 'fire' | 'acid';
 
 export interface HazardConfig {
   type: HazardType;
@@ -55,23 +55,23 @@ export class Hazard extends GameObject {
       body.allowGravity = false;
 
       switch (this.hazardType) {
-        case "spike":
-          body.setSize(this.width * 0.6, this.height * 0.6);
-          body.setOffset(this.width * 0.2, this.height * 0.4);
-          break;
-        case "lava":
-          body.setSize(this.width, this.height * 0.3);
-          body.setOffset(0, this.height * 0.7);
-          break;
-        case "saw_blade":
-          body.setCircle(this.width * 0.4, this.width * 0.1, this.width * 0.1);
-          break;
-        case "fire":
-          body.setSize(this.width * 0.8, this.height * 0.8);
-          break;
-        case "acid":
-          body.setSize(this.width, this.height * 0.3);
-          break;
+      case 'spike':
+        body.setSize(this.width * 0.6, this.height * 0.6);
+        body.setOffset(this.width * 0.2, this.height * 0.4);
+        break;
+      case 'lava':
+        body.setSize(this.width, this.height * 0.3);
+        body.setOffset(0, this.height * 0.7);
+        break;
+      case 'saw_blade':
+        body.setCircle(this.width * 0.4, this.width * 0.1, this.width * 0.1);
+        break;
+      case 'fire':
+        body.setSize(this.width * 0.8, this.height * 0.8);
+        break;
+      case 'acid':
+        body.setSize(this.width, this.height * 0.3);
+        break;
       }
     }
   }
@@ -80,58 +80,58 @@ export class Hazard extends GameObject {
     if (!this.isAnimated) return;
 
     switch (this.hazardType) {
-      case "spike":
-        this.scene.tweens.add({
-          targets: this,
-          scaleX: 1.1,
-          scaleY: 0.9,
-          duration: 300,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-        break;
-      case "lava":
-        this.scene.tweens.add({
-          targets: this,
-          alpha: 0.8,
-          duration: 500,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-        break;
-      case "saw_blade":
-        this.scene.tweens.add({
-          targets: this,
-          angle: 360,
-          duration: 2000,
-          repeat: -1,
-          ease: "Linear",
-        });
-        break;
-      case "fire":
-        this.scene.tweens.add({
-          targets: this,
-          scale: 1.2,
-          alpha: 0.7,
-          duration: 400,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-        break;
-      case "acid":
-        this.scene.tweens.add({
-          targets: this,
-          alpha: 0.7,
-          y: this.y + 5,
-          duration: 600,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-        break;
+    case 'spike':
+      this.scene.tweens.add({
+        targets: this,
+        scaleX: 1.1,
+        scaleY: 0.9,
+        duration: 300,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      break;
+    case 'lava':
+      this.scene.tweens.add({
+        targets: this,
+        alpha: 0.8,
+        duration: 500,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      break;
+    case 'saw_blade':
+      this.scene.tweens.add({
+        targets: this,
+        angle: 360,
+        duration: 2000,
+        repeat: -1,
+        ease: 'Linear',
+      });
+      break;
+    case 'fire':
+      this.scene.tweens.add({
+        targets: this,
+        scale: 1.2,
+        alpha: 0.7,
+        duration: 400,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      break;
+    case 'acid':
+      this.scene.tweens.add({
+        targets: this,
+        alpha: 0.7,
+        y: this.y + 5,
+        duration: 600,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+      break;
     }
   }
 
@@ -184,8 +184,8 @@ export class Hazard extends GameObject {
 
 export class Spike extends Hazard {
   constructor(scene: Phaser.Scene, x: number, y: number, damage: number = 1) {
-    super(scene, x, y, "spike", {
-      type: "spike",
+    super(scene, x, y, 'spike', {
+      type: 'spike',
       damage,
       damageInterval: 1000,
       animated: true,
@@ -202,8 +202,8 @@ export class Lava extends Hazard {
     height: number = 32,
     damage: number = 2,
   ) {
-    super(scene, x, y, "lava", {
-      type: "lava",
+    super(scene, x, y, 'lava', {
+      type: 'lava',
       damage,
       damageInterval: 500,
       animated: true,
@@ -222,8 +222,8 @@ export class SawBlade extends Hazard {
     moveSpeed: number = 150,
     moveRange: number = 100,
   ) {
-    super(scene, x, y, "saw_blade", {
-      type: "saw_blade",
+    super(scene, x, y, 'saw_blade', {
+      type: 'saw_blade',
       damage,
       damageInterval: 800,
       animated: true,
@@ -237,8 +237,8 @@ export class SawBlade extends Hazard {
 
 export class Fire extends Hazard {
   constructor(scene: Phaser.Scene, x: number, y: number, damage: number = 2) {
-    super(scene, x, y, "fire", {
-      type: "fire",
+    super(scene, x, y, 'fire', {
+      type: 'fire',
       damage,
       damageInterval: 600,
       animated: true,
@@ -255,8 +255,8 @@ export class Acid extends Hazard {
     height: number = 32,
     damage: number = 1,
   ) {
-    super(scene, x, y, "acid", {
-      type: "acid",
+    super(scene, x, y, 'acid', {
+      type: 'acid',
       damage,
       damageInterval: 700,
       animated: true,

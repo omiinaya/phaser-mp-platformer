@@ -18,7 +18,7 @@ export class AchievementProgressRepository extends BaseRepository<AchievementPro
   async findByAchievementId(playerId: string, achievementId: string): Promise<AchievementProgress | null> {
     return this.safeOperation(
       this.findOne({ where: { playerId, achievementId } }),
-      `Failed to find achievement progress`
+      'Failed to find achievement progress'
     );
   }
 
@@ -34,7 +34,7 @@ export class AchievementProgressRepository extends BaseRepository<AchievementPro
       });
       return this.safeOperation(
         this.save(newProgress),
-        `Failed to create achievement progress`
+        'Failed to create achievement progress'
       );
     }
     progress.progress += amount;
@@ -46,21 +46,21 @@ export class AchievementProgressRepository extends BaseRepository<AchievementPro
     }
     return this.safeOperation(
       this.save(progress),
-      `Failed to update achievement progress`
+      'Failed to update achievement progress'
     );
   }
 
   async markCompleted(playerId: string, achievementId: string): Promise<void> {
     await this.safeOperation(
       this.update({ playerId, achievementId }, { completed: true, completedAt: new Date() }),
-      `Failed to mark achievement as completed`
+      'Failed to mark achievement as completed'
     );
   }
 
   async countCompletedAchievements(playerId: string): Promise<number> {
     return this.safeOperation(
       this.count({ where: { playerId, completed: true } }),
-      `Failed to count completed achievements`
+      'Failed to count completed achievements'
     );
   }
 }

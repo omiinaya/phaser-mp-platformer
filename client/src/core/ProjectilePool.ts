@@ -1,7 +1,7 @@
 import { logger } from '../utils/logger';
-import "phaser";
-import { Scene } from "phaser";
-import { Enemy } from "../entities/Enemy";
+import 'phaser';
+import { Scene } from 'phaser';
+import { Enemy } from '../entities/Enemy';
 
 let globalProjectilePool: ProjectilePool | null = null;
 
@@ -22,7 +22,7 @@ export class PooledProjectile extends Phaser.Physics.Arcade.Sprite {
   protected isActive: boolean = false;
 
   constructor(scene: Phaser.Scene, pool?: ProjectilePool) {
-    super(scene, -1000, -1000, "arrow");
+    super(scene, -1000, -1000, 'arrow');
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     this.setVisible(false);
@@ -35,7 +35,7 @@ export class PooledProjectile extends Phaser.Physics.Arcade.Sprite {
       body.enable = false;
 
       body.world.on(
-        "worldbounds",
+        'worldbounds',
         (
           _body: any,
           _up: boolean,
@@ -149,7 +149,7 @@ export class ProjectilePool {
     } else {
       if (this.activeProjectiles.length >= this.maxSize) {
         logger.warn(
-          "ProjectilePool max size reached, creating extra projectile",
+          'ProjectilePool max size reached, creating extra projectile',
         );
       }
       projectile = new PooledProjectile(this.scene, this);

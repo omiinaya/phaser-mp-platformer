@@ -17,7 +17,7 @@ export class InventoryRepository extends BaseRepository<Inventory> {
   async findByItemId(playerId: string, itemId: string): Promise<Inventory | null> {
     return this.safeOperation(
       this.findOne({ where: { playerId, itemId } }),
-      `Failed to find inventory item`
+      'Failed to find inventory item'
     );
   }
 
@@ -30,7 +30,7 @@ export class InventoryRepository extends BaseRepository<Inventory> {
       }
       return this.safeOperation(
         this.save(existing),
-        `Failed to update inventory item`
+        'Failed to update inventory item'
       );
     } else {
       const item = this.create({
@@ -42,7 +42,7 @@ export class InventoryRepository extends BaseRepository<Inventory> {
       });
       return this.safeOperation(
         this.save(item),
-        `Failed to add inventory item`
+        'Failed to add inventory item'
       );
     }
   }
@@ -55,14 +55,14 @@ export class InventoryRepository extends BaseRepository<Inventory> {
     if (item.quantity <= quantity) {
       await this.safeOperation(
         this.delete({ playerId, itemId }),
-        `Failed to delete inventory item`
+        'Failed to delete inventory item'
       );
       return true;
     } else {
       item.quantity -= quantity;
       await this.safeOperation(
         this.save(item),
-        `Failed to update inventory item quantity`
+        'Failed to update inventory item quantity'
       );
       return true;
     }
@@ -74,7 +74,7 @@ export class InventoryRepository extends BaseRepository<Inventory> {
         .select('SUM(inventory.quantity)', 'total')
         .where('inventory.player_id = :playerId', { playerId })
         .getRawOne(),
-      `Failed to get total item count`
+      'Failed to get total item count'
     );
     return parseInt(result?.total || '0', 10);
   }

@@ -1,4 +1,4 @@
-import { Item } from "./Item";
+import { Item } from './Item';
 
 /**
  * Represents a slot in the inventory.
@@ -111,7 +111,7 @@ export class Inventory {
         quantity -= canAdd;
 
         if (quantity <= 0) {
-          this.emitChange("add", {
+          this.emitChange('add', {
             item,
             quantity: 1,
             slotIndex: i,
@@ -128,7 +128,7 @@ export class Inventory {
       );
       if (emptySlotIndex === -1) {
         // No more empty slots - cannot add all items
-        this.emitChange("add-failed", { item, quantity });
+        this.emitChange('add-failed', { item, quantity });
         return false;
       }
 
@@ -138,7 +138,7 @@ export class Inventory {
       slot.quantity = canAdd;
       quantity -= canAdd;
 
-      this.emitChange("add", {
+      this.emitChange('add', {
         item,
         quantity: canAdd,
         slotIndex: emptySlotIndex,
@@ -168,7 +168,7 @@ export class Inventory {
           slot.item = undefined;
         }
 
-        this.emitChange("remove", {
+        this.emitChange('remove', {
           itemId,
           quantity: canRemove,
           slotIndex: i,
@@ -191,7 +191,7 @@ export class Inventory {
 
     const slot = this.slots[slotIndex];
     if (slot.item) {
-      this.emitChange("clear", {
+      this.emitChange('clear', {
         itemId: slot.item.id,
         quantity: slot.quantity,
         slotIndex,
@@ -235,7 +235,7 @@ export class Inventory {
       slot.item = undefined;
     }
 
-    this.emitChange("drop", {
+    this.emitChange('drop', {
       itemId: item.id,
       quantity: dropQuantity,
       slotIndex,
@@ -267,7 +267,7 @@ export class Inventory {
 
     // Emit an event so the GameScene or EntityFactory can create
     // the appropriate item type based on the item's ID or config
-    this.scene.events.emit("inventory:item-dropped", {
+    this.scene.events.emit('inventory:item-dropped', {
       itemId: item.id,
       config: item.config,
       texture: item.texture.key,
@@ -357,7 +357,7 @@ export class Inventory {
     this.slots[slotIndex1] = this.slots[slotIndex2];
     this.slots[slotIndex2] = temp;
 
-    this.emitChange("swap", {
+    this.emitChange('swap', {
       slotIndex1,
       slotIndex2,
     });
@@ -370,7 +370,7 @@ export class Inventory {
    */
   showUI(): void {
     this.uiVisible = true;
-    this.emitChange("ui-show", {});
+    this.emitChange('ui-show', {});
   }
 
   /**
@@ -378,7 +378,7 @@ export class Inventory {
    */
   hideUI(): void {
     this.uiVisible = false;
-    this.emitChange("ui-hide", {});
+    this.emitChange('ui-hide', {});
   }
 
   /**
@@ -440,7 +440,7 @@ export class Inventory {
   clear(): void {
     for (const slot of this.slots) {
       if (slot.item) {
-        this.emitChange("remove", {
+        this.emitChange('remove', {
           itemId: slot.item.id,
           quantity: slot.quantity,
           cleared: true,

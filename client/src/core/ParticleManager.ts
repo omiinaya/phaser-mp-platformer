@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 
 export interface ParticleConfig {
   x: number;
@@ -43,21 +43,21 @@ export class ParticleManager {
     const circleGraphics = this.scene.add.graphics();
     circleGraphics.fillStyle(0xffffff);
     circleGraphics.fillCircle(4, 4, 4);
-    circleGraphics.generateTexture("particle_circle", 8, 8);
+    circleGraphics.generateTexture('particle_circle', 8, 8);
     circleGraphics.destroy();
 
     // Square particle
     const squareGraphics = this.scene.add.graphics();
     squareGraphics.fillStyle(0xffffff);
     squareGraphics.fillRect(0, 0, 8, 8);
-    squareGraphics.generateTexture("particle_square", 8, 8);
+    squareGraphics.generateTexture('particle_square', 8, 8);
     squareGraphics.destroy();
 
     // Star particle
     const starGraphics = this.scene.add.graphics();
     starGraphics.fillStyle(0xffffff);
     this.drawStar(starGraphics, 4, 4, 5, 4, 2);
-    starGraphics.generateTexture("particle_star", 8, 8);
+    starGraphics.generateTexture('particle_star', 8, 8);
     starGraphics.destroy();
 
     // Dust particle (soft circle)
@@ -67,7 +67,7 @@ export class ParticleManager {
       dustGraphics.fillStyle(0xffffff, alpha);
       dustGraphics.fillCircle(8, 8, 8 - i);
     }
-    dustGraphics.generateTexture("particle_dust", 16, 16);
+    dustGraphics.generateTexture('particle_dust', 16, 16);
     dustGraphics.destroy();
   }
 
@@ -122,7 +122,7 @@ export class ParticleManager {
    * Create jump dust effect (when player lands).
    */
   public createJumpDust(x: number, y: number): void {
-    const particles = this.scene.add.particles(x, y, "particle_dust", {
+    const particles = this.scene.add.particles(x, y, 'particle_dust', {
       speed: { min: 20, max: 60 },
       scale: { start: 0.5, end: 0 },
       alpha: { start: 0.6, end: 0 },
@@ -146,7 +146,7 @@ export class ParticleManager {
    * Create coin collection sparkles.
    */
   public createCoinSparkles(x: number, y: number): void {
-    const particles = this.scene.add.particles(x, y, "particle_star", {
+    const particles = this.scene.add.particles(x, y, 'particle_star', {
       speed: { min: 50, max: 100 },
       scale: { start: 0.8, end: 0 },
       alpha: { start: 1, end: 0 },
@@ -174,7 +174,7 @@ export class ParticleManager {
     color: number = 0xff0000,
   ): void {
     // Main explosion
-    const particles = this.scene.add.particles(x, y, "particle_circle", {
+    const particles = this.scene.add.particles(x, y, 'particle_circle', {
       speed: { min: 80, max: 150 },
       scale: { start: 1, end: 0 },
       alpha: { start: 1, end: 0 },
@@ -189,7 +189,7 @@ export class ParticleManager {
     particles.explode(20, x, y);
 
     // Secondary burst (smaller, faster particles)
-    const burstParticles = this.scene.add.particles(x, y, "particle_square", {
+    const burstParticles = this.scene.add.particles(x, y, 'particle_square', {
       speed: { min: 100, max: 200 },
       scale: { start: 0.5, end: 0 },
       alpha: { start: 1, end: 0 },
@@ -212,7 +212,7 @@ export class ParticleManager {
    * Create health pickup effect (green sparkles).
    */
   public createHealthPickupEffect(x: number, y: number): void {
-    const particles = this.scene.add.particles(x, y, "particle_star", {
+    const particles = this.scene.add.particles(x, y, 'particle_star', {
       speed: { min: 30, max: 80 },
       scale: { start: 0.6, end: 0 },
       alpha: { start: 1, end: 0 },
@@ -230,10 +230,10 @@ export class ParticleManager {
     for (let i = 0; i < 3; i++) {
       const plusX = x + (Math.random() - 0.5) * 40;
       const plusY = y + (Math.random() - 0.5) * 20;
-      const plus = this.scene.add.text(plusX, plusY, "+", {
-        fontSize: "24px",
-        color: "#2ecc71",
-        fontStyle: "bold",
+      const plus = this.scene.add.text(plusX, plusY, '+', {
+        fontSize: '24px',
+        color: '#2ecc71',
+        fontStyle: 'bold',
       });
 
       this.scene.tweens.add({
@@ -256,7 +256,7 @@ export class ParticleManager {
    */
   public createDamageEffect(x: number, y: number, amount: number = 1): void {
     // Red flash particles
-    const particles = this.scene.add.particles(x, y, "particle_circle", {
+    const particles = this.scene.add.particles(x, y, 'particle_circle', {
       speed: { min: 60, max: 120 },
       scale: { start: 0.8, end: 0 },
       alpha: { start: 1, end: 0 },
@@ -272,10 +272,10 @@ export class ParticleManager {
 
     // Floating damage number
     const damageText = this.scene.add.text(x, y - 20, `-${amount}`, {
-      fontSize: "20px",
-      color: "#e74c3c",
-      fontStyle: "bold",
-      stroke: "#000000",
+      fontSize: '20px',
+      color: '#e74c3c',
+      fontStyle: 'bold',
+      stroke: '#000000',
       strokeThickness: 3,
     });
     damageText.setOrigin(0.5);
@@ -285,7 +285,7 @@ export class ParticleManager {
       y: y - 60,
       alpha: 0,
       duration: 1000,
-      ease: "Power2",
+      ease: 'Power2',
       onComplete: () => damageText.destroy(),
     });
 
@@ -303,7 +303,7 @@ export class ParticleManager {
     direction: number,
     color: number = 0x3498db,
   ): void {
-    const particles = this.scene.add.particles(x, y, "particle_dust", {
+    const particles = this.scene.add.particles(x, y, 'particle_dust', {
       speed: 20,
       scale: { start: 0.4, end: 0 },
       alpha: { start: 0.5, end: 0 },
@@ -329,7 +329,7 @@ export class ParticleManager {
     const colors = [0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff];
 
     colors.forEach((color, index) => {
-      const particles = this.scene.add.particles(x, y, "particle_square", {
+      const particles = this.scene.add.particles(x, y, 'particle_square', {
         speed: { min: 100, max: 300 },
         scale: { start: 0.8, end: 0 },
         alpha: { start: 1, end: 0 },
@@ -352,11 +352,11 @@ export class ParticleManager {
     });
 
     // Victory text effect
-    const victoryText = this.scene.add.text(x, y - 100, "VICTORY!", {
-      fontSize: "48px",
-      color: "#f1c40f",
-      fontStyle: "bold",
-      stroke: "#000000",
+    const victoryText = this.scene.add.text(x, y - 100, 'VICTORY!', {
+      fontSize: '48px',
+      color: '#f1c40f',
+      fontStyle: 'bold',
+      stroke: '#000000',
       strokeThickness: 6,
     });
     victoryText.setOrigin(0.5);
@@ -366,7 +366,7 @@ export class ParticleManager {
       targets: victoryText,
       scale: 1,
       duration: 500,
-      ease: "Back.out",
+      ease: 'Back.out',
     });
 
     this.scene.tweens.add({

@@ -88,10 +88,10 @@ export class SaveManager {
   private static readonly MAX_SLOTS = 5;
 
   /** Current save version for migration. */
-  private static readonly CURRENT_VERSION = "1.0.0";
+  private static readonly CURRENT_VERSION = '1.0.0';
 
   /** Key prefix for LocalStorage keys. */
-  private static readonly STORAGE_PREFIX = "phaser_platformer_";
+  private static readonly STORAGE_PREFIX = 'phaser_platformer_';
 
   /** Auto-save enabled flag. */
   private autoSaveEnabled: boolean;
@@ -106,7 +106,7 @@ export class SaveManager {
   private scene?: Phaser.Scene;
 
   /** Encryption key for save data. In production, this should be from a secure source. */
-  private static readonly ENCRYPTION_KEY = "PhaserPlatformerSaveKey2024!";
+  private static readonly ENCRYPTION_KEY = 'PhaserPlatformerSaveKey2024!';
 
   /**
    * Encrypt data using XOR encryption.
@@ -114,7 +114,7 @@ export class SaveManager {
    * @returns Encrypted base64 string.
    */
   private static encryptData(data: string): string {
-    let encrypted = "";
+    let encrypted = '';
     const key = SaveManager.ENCRYPTION_KEY;
     for (let i = 0; i < data.length; i++) {
       const charCode = data.charCodeAt(i) ^ key.charCodeAt(i % key.length);
@@ -131,7 +131,7 @@ export class SaveManager {
   private static decryptData(encryptedData: string): string {
     try {
       const decoded = atob(encryptedData);
-      let decrypted = "";
+      let decrypted = '';
       const key = SaveManager.ENCRYPTION_KEY;
       for (let i = 0; i < decoded.length; i++) {
         const charCode = decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length);
@@ -139,8 +139,8 @@ export class SaveManager {
       }
       return decrypted;
     } catch (error) {
-      logger.error("Failed to decrypt save data:", error);
-      return "";
+      logger.error('Failed to decrypt save data:', error);
+      return '';
     }
   }
 
@@ -216,7 +216,7 @@ export class SaveManager {
 
     const key = this.getSlotKey(slotIndex);
     const data = localStorage.getItem(key);
-    return data !== null && data !== "";
+    return data !== null && data !== '';
   }
 
   /**
@@ -226,7 +226,7 @@ export class SaveManager {
   hasAutoSave(): boolean {
     const key = this.getAutoSaveKey();
     const data = localStorage.getItem(key);
-    return data !== null && data !== "";
+    return data !== null && data !== '';
   }
 
   /**
@@ -282,10 +282,10 @@ export class SaveManager {
     try {
       const encrypted = SaveManager.encryptData(JSON.stringify(saveData));
       localStorage.setItem(key, encrypted);
-      logger.info("Auto-save completed (encrypted)");
+      logger.info('Auto-save completed (encrypted)');
       return true;
     } catch (error) {
-      logger.error("Failed to create auto-save:", error);
+      logger.error('Failed to create auto-save:', error);
       return false;
     }
   }
@@ -355,13 +355,13 @@ export class SaveManager {
     try {
       const decrypted = SaveManager.decryptData(data);
       if (!decrypted) {
-        logger.error("Failed to decrypt auto-save data");
+        logger.error('Failed to decrypt auto-save data');
         return undefined;
       }
       const saveData: SaveData = JSON.parse(decrypted);
       return this.migrateSaveData(saveData);
     } catch (error) {
-      logger.error("Failed to load auto-save:", error);
+      logger.error('Failed to load auto-save:', error);
       return undefined;
     }
   }
@@ -455,13 +455,13 @@ export class SaveManager {
       callback: () => {
         if (this.scene) {
           // Emit event so GameScene can provide data
-          this.scene.events.emit("save:autosave");
+          this.scene.events.emit('save:autosave');
         }
       },
       loop: true,
     });
 
-    logger.info("Auto-save timer started");
+    logger.info('Auto-save timer started');
   }
 
   /**
@@ -471,7 +471,7 @@ export class SaveManager {
     if (this.autoSaveTimer) {
       this.autoSaveTimer.remove();
       this.autoSaveTimer = undefined;
-      logger.info("Auto-save timer stopped");
+      logger.info('Auto-save timer stopped');
     }
   }
 
@@ -579,7 +579,7 @@ export class SaveManager {
    * @param playerData Player data to merge.
    * @returns Merged save data.
    */
-  mergePlayerProgress(playerData: SaveData["player"]): Partial<SaveData> {
+  mergePlayerProgress(playerData: SaveData['player']): Partial<SaveData> {
     return {
       player: playerData,
     };
@@ -594,7 +594,7 @@ export class SaveManager {
       localStorage.removeItem(key);
     }
     localStorage.removeItem(this.getAutoSaveKey());
-    logger.info("All save data cleared");
+    logger.info('All save data cleared');
   }
 
   /**

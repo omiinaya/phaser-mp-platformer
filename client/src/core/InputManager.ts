@@ -221,20 +221,20 @@ export class InputManager {
     if (!this.mouse) return false;
     for (const btn of buttons) {
       switch (btn) {
-        case 0:
-          if (this.mouse.leftButtonDown()) return true;
-          break;
-        case 1:
-          if (this.mouse.rightButtonDown()) return true;
-          break;
-        case 2:
-          if (this.mouse.middleButtonDown()) return true;
-          break;
-        default:
-          // Additional buttons (3-4) may be supported via `this.mouse.buttons` bitmask
-          // Check if the corresponding bit is set
-          if (this.mouse.buttons & (1 << btn)) return true;
-          break;
+      case 0:
+        if (this.mouse.leftButtonDown()) return true;
+        break;
+      case 1:
+        if (this.mouse.rightButtonDown()) return true;
+        break;
+      case 2:
+        if (this.mouse.middleButtonDown()) return true;
+        break;
+      default:
+        // Additional buttons (3-4) may be supported via `this.mouse.buttons` bitmask
+        // Check if the corresponding bit is set
+        if (this.mouse.buttons & (1 << btn)) return true;
+        break;
       }
     }
     return false;

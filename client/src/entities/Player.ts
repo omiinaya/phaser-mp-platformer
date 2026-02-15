@@ -1,13 +1,13 @@
 import { logger } from '../utils/logger';
-import "phaser";
-import { Character } from "./Character";
-import { InputManager } from "../core/InputManager";
+import 'phaser';
+import { Character } from './Character';
+import { InputManager } from '../core/InputManager';
 import {
   AnimationManager,
   AnimationStateMachine,
-} from "../core/AnimationManager";
-import { Inventory } from "./Inventory";
-import { Item } from "./Item";
+} from '../core/AnimationManager';
+import { Inventory } from './Inventory';
+import { Item } from './Item';
 
 /**
  * Player-specific configuration.
@@ -51,11 +51,11 @@ export class Player extends Character {
 
   /** Current animation state. */
   private animationState:
-    | "idle"
-    | "walking"
-    | "jumping"
-    | "falling"
-    | "attacking";
+    | 'idle'
+    | 'walking'
+    | 'jumping'
+    | 'falling'
+    | 'attacking';
 
   /** Whether the player is currently attacking. */
   private isAttacking: boolean;
@@ -113,13 +113,13 @@ export class Player extends Character {
     frame?: string | number,
   ) {
     super(scene, x, y, texture, frame);
-    this.sessionId = config.sessionId || "local";
-    this.name = config.name || "Player";
+    this.sessionId = config.sessionId || 'local';
+    this.name = config.name || 'Player';
     this.health = config.health ?? 10;
     this.maxHealth = this.health;
     this.moveSpeed = config.moveSpeed ?? 250;
     this.jumpForce = config.jumpForce ?? 450;
-    this.animationState = "idle";
+    this.animationState = 'idle';
     this.isAttacking = false;
     this.attackCooldown = 500; // half second
     this.attackTimer = 0;
@@ -155,43 +155,43 @@ export class Player extends Character {
   private setupAnimationStates(): void {
     // Define all animation states
     this.animationStateMachine.addState(
-      "idle",
-      "player_idle",
-      ["walk", "jump", "fall", "attack"],
-      () => this.onAnimationEnter("idle"),
-      () => this.onAnimationExit("idle"),
+      'idle',
+      'player_idle',
+      ['walk', 'jump', 'fall', 'attack'],
+      () => this.onAnimationEnter('idle'),
+      () => this.onAnimationExit('idle'),
     );
 
     this.animationStateMachine.addState(
-      "walk",
-      "player_walk",
-      ["idle", "jump", "fall", "attack"],
-      () => this.onAnimationEnter("walk"),
-      () => this.onAnimationExit("walk"),
+      'walk',
+      'player_walk',
+      ['idle', 'jump', 'fall', 'attack'],
+      () => this.onAnimationEnter('walk'),
+      () => this.onAnimationExit('walk'),
     );
 
     this.animationStateMachine.addState(
-      "jump",
-      "player_jump",
-      ["fall", "idle", "walk"],
-      () => this.onAnimationEnter("jump"),
-      () => this.onAnimationExit("jump"),
+      'jump',
+      'player_jump',
+      ['fall', 'idle', 'walk'],
+      () => this.onAnimationEnter('jump'),
+      () => this.onAnimationExit('jump'),
     );
 
     this.animationStateMachine.addState(
-      "fall",
-      "player_fall",
-      ["idle", "walk", "jump"],
-      () => this.onAnimationEnter("fall"),
-      () => this.onAnimationExit("fall"),
+      'fall',
+      'player_fall',
+      ['idle', 'walk', 'jump'],
+      () => this.onAnimationEnter('fall'),
+      () => this.onAnimationExit('fall'),
     );
 
     this.animationStateMachine.addState(
-      "attack",
-      "player_attack",
-      ["idle", "walk"],
-      () => this.onAnimationEnter("attack"),
-      () => this.onAnimationExit("attack"),
+      'attack',
+      'player_attack',
+      ['idle', 'walk'],
+      () => this.onAnimationEnter('attack'),
+      () => this.onAnimationExit('attack'),
     );
   }
 
@@ -203,11 +203,11 @@ export class Player extends Character {
 
     // Create animations from player sprite sheet
     if (this.animationManager) {
-      this.animationManager.createAnimationsFromSheet("player", [
-        { name: "idle", start: 0, end: 7, frameRate: 8, repeat: -1 },
-        { name: "walk", start: 8, end: 15, frameRate: 12, repeat: -1 },
-        { name: "jump", start: 16, end: 19, frameRate: 10, repeat: 0 },
-        { name: "attack", start: 20, end: 25, frameRate: 15, repeat: 0 },
+      this.animationManager.createAnimationsFromSheet('player', [
+        { name: 'idle', start: 0, end: 7, frameRate: 8, repeat: -1 },
+        { name: 'walk', start: 8, end: 15, frameRate: 12, repeat: -1 },
+        { name: 'jump', start: 16, end: 19, frameRate: 10, repeat: 0 },
+        { name: 'attack', start: 20, end: 25, frameRate: 15, repeat: 0 },
       ]);
     }
 
@@ -219,9 +219,9 @@ export class Player extends Character {
    */
   private onAnimationEnter(state: string): void {
     // Could trigger effects, sounds, etc.
-    if (state === "jump") {
+    if (state === 'jump') {
       // Play jump sound
-      this.scene.events.emit("player:jump", { player: this });
+      this.scene.events.emit('player:jump', { player: this });
     }
   }
 
@@ -293,26 +293,26 @@ export class Player extends Character {
 
     // Horizontal movement
     let direction = 0;
-    if (this.inputManager.isActionActive("left")) {
+    if (this.inputManager.isActionActive('left')) {
       direction -= 1;
     }
-    if (this.inputManager.isActionActive("right")) {
+    if (this.inputManager.isActionActive('right')) {
       direction += 1;
     }
     this.move(direction);
 
     // Jump
-    if (this.inputManager.isActionActive("jump")) {
+    if (this.inputManager.isActionActive('jump')) {
       this.jump();
     }
 
     // Attack
-    if (this.inputManager.isActionActive("attack") && !this.isAttacking) {
+    if (this.inputManager.isActionActive('attack') && !this.isAttacking) {
       this.attack();
     }
 
     // Parry
-    if (this.inputManager.isActionActive("parry") && !this.isParrying) {
+    if (this.inputManager.isActionActive('parry') && !this.isParrying) {
       this.parry();
     }
 
@@ -326,7 +326,7 @@ export class Player extends Character {
     if (this.isOnGround) {
       super.jump();
       // Transition to jump animation
-      this.animationStateMachine.transition("jump");
+      this.animationStateMachine.transition('jump');
     }
   }
 
@@ -346,7 +346,7 @@ export class Player extends Character {
     this.createShieldEffect();
 
     // Emit parry event
-    this.scene.events.emit("player:parry", { player: this });
+    this.scene.events.emit('player:parry', { player: this });
 
     // Schedule parry end
     this.scene.time.delayedCall(this.parryWindow, () => {
@@ -363,7 +363,7 @@ export class Player extends Character {
     this.shieldSprite = this.scene.add.sprite(
       this.x,
       this.y,
-      "shield",
+      'shield',
     ) as Phaser.GameObjects.Sprite;
     this.shieldSprite.setTint(0x4caf50);
     this.shieldSprite.setAlpha(0.6);
@@ -375,7 +375,7 @@ export class Player extends Character {
       scaleY: 1.2,
       angle: 360,
       duration: this.parryWindow,
-      ease: "Sine.easeInOut",
+      ease: 'Sine.easeInOut',
       onComplete: () => {
         if (this.shieldSprite) {
           this.shieldSprite.destroy();
@@ -397,7 +397,7 @@ export class Player extends Character {
     }
 
     // Emit parry end event
-    this.scene.events.emit("player:parry-end", { player: this });
+    this.scene.events.emit('player:parry-end', { player: this });
   }
 
   /**
@@ -412,7 +412,7 @@ export class Player extends Character {
       this.wasPerfectParry = true;
 
       // Perfect parry bonus effects
-      this.scene.events.emit("player:perfect-parry", { player: this });
+      this.scene.events.emit('player:perfect-parry', { player: this });
 
       // Visual feedback
       this.scene.tweens.add({
@@ -454,7 +454,7 @@ export class Player extends Character {
     this.attackTimer = 0;
 
     // Transition to attack animation
-    const result = this.animationStateMachine.transition("attack");
+    const result = this.animationStateMachine.transition('attack');
     if (result.success && this.animationManager) {
       this.animationManager.playOnce(
         this as unknown as Phaser.GameObjects.Sprite,
@@ -462,13 +462,13 @@ export class Player extends Character {
         () => {
           this.isAttacking = false;
           // Return to idle after attack
-          this.animationStateMachine.transition("idle");
+          this.animationStateMachine.transition('idle');
         },
       );
     }
 
     // Emit attack event with combo data
-    this.scene.events.emit("player:attack", {
+    this.scene.events.emit('player:attack', {
       player: this,
       comboCount: this.comboCount,
       comboMultiplier: this.comboMultiplier,
@@ -483,14 +483,14 @@ export class Player extends Character {
     // Don't interrupt attack animation
     if (this.isAttacking) return;
 
-    let newState: "idle" | "walking" | "jumping" | "falling" = "idle";
+    let newState: 'idle' | 'walking' | 'jumping' | 'falling' = 'idle';
 
     if (!this.isOnGround) {
-      newState = this.velocity.y < 0 ? "jumping" : "falling";
+      newState = this.velocity.y < 0 ? 'jumping' : 'falling';
     } else if (Math.abs(this.velocity.x) > 10) {
-      newState = "walking";
+      newState = 'walking';
     } else {
-      newState = "idle";
+      newState = 'idle';
     }
 
     // Only transition if state changed
@@ -499,10 +499,10 @@ export class Player extends Character {
 
       // Map state names to animation state machine states
       const stateMap: Record<string, string> = {
-        idle: "idle",
-        walking: "walk",
-        jumping: "jump",
-        falling: "fall",
+        idle: 'idle',
+        walking: 'walk',
+        jumping: 'jump',
+        falling: 'fall',
       };
 
       const targetState = stateMap[newState];
@@ -626,7 +626,7 @@ export class Player extends Character {
   public onEnemyHit(): void {
     const prevCount = this.comboCount;
     this.incrementCombo(1);
-    this.scene.events.emit("player:combo-changed", {
+    this.scene.events.emit('player:combo-changed', {
       player: this,
       comboCount: this.comboCount,
       comboMultiplier: this.comboMultiplier,
@@ -667,14 +667,14 @@ export class Player extends Character {
 
         // Perfect parry counter-attack bonus (combo multiplier boost)
         this.incrementCombo(2);
-        this.scene.events.emit("player:parry-successful", {
+        this.scene.events.emit('player:parry-successful', {
           player: this,
           perfectParry: true,
         });
       } else {
         // Regular parry: reduce damage by 75-90%
         actualDamage = Math.ceil(amount * 0.2);
-        this.scene.events.emit("player:parry-successful", {
+        this.scene.events.emit('player:parry-successful', {
           player: this,
           perfectParry: false,
         });
@@ -684,9 +684,9 @@ export class Player extends Character {
     // Reset combo when taking damage (only if damage > 0)
     if (actualDamage > 0) {
       this.resetCombo();
-      this.scene.events.emit("player:combo-reset", {
+      this.scene.events.emit('player:combo-reset', {
         player: this,
-        reason: "damage",
+        reason: 'damage',
       });
     }
 
@@ -702,7 +702,7 @@ export class Player extends Character {
   public pickupItem(item: Item, quantity: number = 1): boolean {
     const success = this.inventory.addItem(item, quantity);
     if (success) {
-      this.scene.events.emit("player:item-picked-up", {
+      this.scene.events.emit('player:item-picked-up', {
         player: this,
         item,
         quantity,
@@ -722,10 +722,10 @@ export class Player extends Character {
       .findIndex((slot) => slot.item?.id === itemId);
 
     if (slotIndex === -1) {
-      this.scene.events.emit("player:item-use-failed", {
+      this.scene.events.emit('player:item-use-failed', {
         player: this,
         itemId,
-        reason: "not_found",
+        reason: 'not_found',
       });
       return false;
     }
@@ -739,43 +739,43 @@ export class Player extends Character {
     let itemUsed = false;
 
     switch (slot.item.config.type) {
-      case "consumable":
-        // Handle consumable items (health potions, etc.)
-        if (slot.item.config.value) {
-          if (slot.item.config.name.toLowerCase().includes("health")) {
-            const healAmount = Math.min(
-              slot.item.config.value,
-              this.maxHealth - this.health,
-            );
-            if (healAmount > 0) {
-              this.health = Math.min(this.maxHealth, this.health + healAmount);
-              this.scene.events.emit("player:healed", {
-                player: this,
-                amount: healAmount,
-              });
-              itemUsed = true;
-            }
+    case 'consumable':
+      // Handle consumable items (health potions, etc.)
+      if (slot.item.config.value) {
+        if (slot.item.config.name.toLowerCase().includes('health')) {
+          const healAmount = Math.min(
+            slot.item.config.value,
+            this.maxHealth - this.health,
+          );
+          if (healAmount > 0) {
+            this.health = Math.min(this.maxHealth, this.health + healAmount);
+            this.scene.events.emit('player:healed', {
+              player: this,
+              amount: healAmount,
+            });
+            itemUsed = true;
           }
         }
-        break;
+      }
+      break;
 
-      case "powerup":
-        // Handle power-up items
-        this.scene.events.emit("player:powerup-used", {
-          player: this,
-          item: slot.item,
-        });
-        itemUsed = true;
-        break;
+    case 'powerup':
+      // Handle power-up items
+      this.scene.events.emit('player:powerup-used', {
+        player: this,
+        item: slot.item,
+      });
+      itemUsed = true;
+      break;
 
-      default:
-        break;
+    default:
+      break;
     }
 
     if (itemUsed) {
       // Remove one from inventory
       this.inventory.removeItem(itemId, 1);
-      this.scene.events.emit("player:item-used", {
+      this.scene.events.emit('player:item-used', {
         player: this,
         itemId,
         item: slot.item,
@@ -812,7 +812,7 @@ export class Player extends Character {
     health: number;
     maxHealth: number;
     inventory: any[];
-  } {
+    } {
     return {
       health: this.health,
       maxHealth: this.maxHealth,
@@ -861,7 +861,7 @@ export class Player extends Character {
     }
     // Skill logic would be implemented elsewhere (SkillManager)
     // For now, just emit an event
-    this.scene.events.emit("player:skill-used", {
+    this.scene.events.emit('player:skill-used', {
       player: this,
       skillId,
       target,
@@ -901,7 +901,7 @@ export class Player extends Character {
     // Sync inventory data (less critical, send this separately or on less frequent interval)
     if (data.inventory) {
       // Implementation would need items by ID - currently just logging
-      logger.info("Inventory sync data received from server");
+      logger.info('Inventory sync data received from server');
     }
   }
 
@@ -927,12 +927,12 @@ export class Player extends Character {
     this.health = this.maxHealth;
     this.invulnerable = false;
     this.isAttacking = false;
-    this.animationState = "idle";
+    this.animationState = 'idle';
 
     // Reset to idle animation
-    this.animationStateMachine.forceSetState("idle");
+    this.animationStateMachine.forceSetState('idle');
     if (this.animationManager) {
-      const result = this.animationStateMachine.transition("idle");
+      const result = this.animationStateMachine.transition('idle');
       if (result.success) {
         this.animationManager.play(
           this as unknown as Phaser.GameObjects.Sprite,

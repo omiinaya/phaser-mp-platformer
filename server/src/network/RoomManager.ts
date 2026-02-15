@@ -1,6 +1,6 @@
-import { Server } from "socket.io";
-import { ConnectionManager } from "./ConnectionManager";
-import { logger } from "../utils/logger";
+import { Server } from 'socket.io';
+import { ConnectionManager } from './ConnectionManager';
+import { logger } from '../utils/logger';
 
 /**
  * Game state structure for a room.
@@ -81,7 +81,7 @@ export class RoomManager {
     logger.info(`Room created: ${roomId} (${options.players.length} players)`);
 
     // Notify all players in room
-    this.io.to(roomId).emit("room_created", {
+    this.io.to(roomId).emit('room_created', {
       roomId,
       gameMode: room.gameMode,
       players: room.players,
@@ -123,7 +123,7 @@ export class RoomManager {
     this.connectionManager.assignRoom(socketId, roomId);
 
     // Notify room
-    this.io.to(roomId).emit("player_joined_room", {
+    this.io.to(roomId).emit('player_joined_room', {
       playerId,
       socketId,
       roomId,
@@ -150,7 +150,7 @@ export class RoomManager {
       }
 
       // Notify room
-      this.io.to(roomId).emit("player_left_room", {
+      this.io.to(roomId).emit('player_left_room', {
         playerId,
         roomId,
       });
@@ -174,7 +174,7 @@ export class RoomManager {
     if (!room || !room.isActive) return false;
 
     room.isActive = false;
-    this.io.to(roomId).emit("room_paused", { roomId });
+    this.io.to(roomId).emit('room_paused', { roomId });
     logger.info(`Room paused: ${roomId}`);
     return true;
   }
@@ -187,7 +187,7 @@ export class RoomManager {
     if (!room || room.isActive) return false;
 
     room.isActive = true;
-    this.io.to(roomId).emit("room_resumed", { roomId });
+    this.io.to(roomId).emit('room_resumed', { roomId });
     logger.info(`Room resumed: ${roomId}`);
     return true;
   }
@@ -200,9 +200,9 @@ export class RoomManager {
     if (!room) return false;
 
     // Notify all players
-    this.io.to(roomId).emit("room_ended", {
+    this.io.to(roomId).emit('room_ended', {
       roomId,
-      reason: "game_over",
+      reason: 'game_over',
     });
 
     // Kick all players out

@@ -92,65 +92,65 @@ export class AssetManager {
     const { key, type, url, frameConfig, xhrSettings, textureURL, atlasURL, audioSprites } = config;
 
     switch (type) {
-      case 'image':
-        this.loader.image(key, url as string, xhrSettings);
-        break;
-      case 'audio':
-        this.loader.audio(key, url as string, xhrSettings);
-        break;
-      case 'spritesheet':
-        this.loader.spritesheet(
-          key,
+    case 'image':
+      this.loader.image(key, url as string, xhrSettings);
+      break;
+    case 'audio':
+      this.loader.audio(key, url as string, xhrSettings);
+      break;
+    case 'spritesheet':
+      this.loader.spritesheet(
+        key,
           url as string,
           frameConfig as Phaser.Types.Loader.FileTypes.ImageFrameConfig,
           xhrSettings
-        );
-        break;
-      case 'tilemap':
-        this.loader.tilemapTiledJSON(key, url as string, xhrSettings);
-        break;
-      case 'bitmapFont':
-        this.loader.bitmapFont(key, url as string, undefined, xhrSettings);
-        break;
-      case 'atlas':
-        // If separate texture and atlas URLs are provided, use them
-        if (textureURL && atlasURL) {
-          this.loader.atlas(key, textureURL, atlasURL, xhrSettings);
-        } else {
-          // Assume url is a single string pointing to a texture, and atlas data is inline? Not supported.
-          // Fallback to default atlas loader (requires texture and JSON)
-          logger.warn('Atlas loading requires textureURL and atlasURL. Using default.');
-          this.loader.atlas(key, url as string, undefined, xhrSettings);
-        }
-        break;
-      case 'audioSprite':
-        // Audio sprite loading: url is audio file, audioSprites defines sprites
-        if (audioSprites) {
-          (this.loader as any).audioSprite(key, url as string, audioSprites, xhrSettings);
-        } else {
-          logger.warn('Audio sprite missing audioSprites configuration.');
-        }
-        break;
-      case 'json':
-        this.loader.json(key, url as string, undefined, xhrSettings);
-        break;
-      case 'xml':
-        this.loader.xml(key, url as string, xhrSettings as any);
-        break;
-      case 'text':
-        this.loader.text(key, url as string, xhrSettings as any);
-        break;
-      case 'script':
-        this.loader.script(key, url as string, xhrSettings as any);
-        break;
-      case 'html':
-        this.loader.html(key, url as string, xhrSettings as any);
-        break;
-      case 'binary':
-        this.loader.binary(key, url as string, xhrSettings as any);
-        break;
-      default:
-        logger.warn(`Unknown asset type: ${type}`);
+      );
+      break;
+    case 'tilemap':
+      this.loader.tilemapTiledJSON(key, url as string, xhrSettings);
+      break;
+    case 'bitmapFont':
+      this.loader.bitmapFont(key, url as string, undefined, xhrSettings);
+      break;
+    case 'atlas':
+      // If separate texture and atlas URLs are provided, use them
+      if (textureURL && atlasURL) {
+        this.loader.atlas(key, textureURL, atlasURL, xhrSettings);
+      } else {
+        // Assume url is a single string pointing to a texture, and atlas data is inline? Not supported.
+        // Fallback to default atlas loader (requires texture and JSON)
+        logger.warn('Atlas loading requires textureURL and atlasURL. Using default.');
+        this.loader.atlas(key, url as string, undefined, xhrSettings);
+      }
+      break;
+    case 'audioSprite':
+      // Audio sprite loading: url is audio file, audioSprites defines sprites
+      if (audioSprites) {
+        (this.loader as any).audioSprite(key, url as string, audioSprites, xhrSettings);
+      } else {
+        logger.warn('Audio sprite missing audioSprites configuration.');
+      }
+      break;
+    case 'json':
+      this.loader.json(key, url as string, undefined, xhrSettings);
+      break;
+    case 'xml':
+      this.loader.xml(key, url as string, xhrSettings as any);
+      break;
+    case 'text':
+      this.loader.text(key, url as string, xhrSettings as any);
+      break;
+    case 'script':
+      this.loader.script(key, url as string, xhrSettings as any);
+      break;
+    case 'html':
+      this.loader.html(key, url as string, xhrSettings as any);
+      break;
+    case 'binary':
+      this.loader.binary(key, url as string, xhrSettings as any);
+      break;
+    default:
+      logger.warn(`Unknown asset type: ${type}`);
     }
 
     this.totalAssets++;
@@ -290,30 +290,30 @@ export class AssetManager {
    */
   public isLoaded(key: string, type?: AssetType): boolean {
     switch (type) {
-      case 'image':
-      case 'spritesheet':
-      case 'atlas':
-      case 'bitmapFont':
-        return this.textureManager.exists(key);
-      case 'audio':
-        return (this.soundManager as any).exists(key);
-      case 'audioSprite':
-        return (this.cache as any).audioSprite?.has(key);
-      case 'json':
-        return this.cache.json.has(key);
-      case 'xml':
-        return this.cache.xml.has(key);
-      case 'text':
-        return this.cache.text.has(key);
-      default:
-        // Generic check across caches
-        return (
-          this.textureManager.exists(key) ||
+    case 'image':
+    case 'spritesheet':
+    case 'atlas':
+    case 'bitmapFont':
+      return this.textureManager.exists(key);
+    case 'audio':
+      return (this.soundManager as any).exists(key);
+    case 'audioSprite':
+      return (this.cache as any).audioSprite?.has(key);
+    case 'json':
+      return this.cache.json.has(key);
+    case 'xml':
+      return this.cache.xml.has(key);
+    case 'text':
+      return this.cache.text.has(key);
+    default:
+      // Generic check across caches
+      return (
+        this.textureManager.exists(key) ||
           (this.soundManager as any).exists(key) ||
           this.cache.json.has(key) ||
           this.cache.xml.has(key) ||
           this.cache.text.has(key)
-        );
+      );
     }
   }
 
@@ -324,34 +324,34 @@ export class AssetManager {
    */
   public removeAsset(key: string, type?: AssetType): void {
     switch (type) {
-      case 'image':
-      case 'spritesheet':
-      case 'atlas':
-      case 'bitmapFont':
-        this.textureManager.remove(key);
-        break;
-      case 'audio':
-        (this.soundManager as any).remove(key);
-        break;
-      case 'audioSprite':
-        (this.cache as any).audioSprite?.remove(key);
-        break;
-      case 'json':
-        this.cache.json.remove(key);
-        break;
-      case 'xml':
-        this.cache.xml.remove(key);
-        break;
-      case 'text':
-        this.cache.text.remove(key);
-        break;
-      default:
-        // Remove from all caches
-        this.textureManager.remove(key);
-        (this.soundManager as any).remove(key);
-        this.cache.json.remove(key);
-        this.cache.xml.remove(key);
-        this.cache.text.remove(key);
+    case 'image':
+    case 'spritesheet':
+    case 'atlas':
+    case 'bitmapFont':
+      this.textureManager.remove(key);
+      break;
+    case 'audio':
+      (this.soundManager as any).remove(key);
+      break;
+    case 'audioSprite':
+      (this.cache as any).audioSprite?.remove(key);
+      break;
+    case 'json':
+      this.cache.json.remove(key);
+      break;
+    case 'xml':
+      this.cache.xml.remove(key);
+      break;
+    case 'text':
+      this.cache.text.remove(key);
+      break;
+    default:
+      // Remove from all caches
+      this.textureManager.remove(key);
+      (this.soundManager as any).remove(key);
+      this.cache.json.remove(key);
+      this.cache.xml.remove(key);
+      this.cache.text.remove(key);
     }
   }
 

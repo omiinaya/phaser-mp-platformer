@@ -1,22 +1,22 @@
-import "phaser";
-import { GameObject } from "./GameObject";
-import { Character } from "./Character";
+import 'phaser';
+import { GameObject } from './GameObject';
+import { Character } from './Character';
 
 /**
  * Item type classification.
  */
 export enum ItemType {
-  Consumable = "consumable",
-  PowerUp = "powerup",
-  Key = "key",
-  Coin = "coin",
-  Gem = "gem",
-  Weapon = "weapon",
-  Armor = "armor",
-  Miscellaneous = "misc",
+  Consumable = 'consumable',
+  PowerUp = 'powerup',
+  Key = 'key',
+  Coin = 'coin',
+  Gem = 'gem',
+  Weapon = 'weapon',
+  Armor = 'armor',
+  Miscellaneous = 'misc',
 }
 
-export type GemType = "red" | "blue" | "green" | "purple" | "yellow";
+export type GemType = 'red' | 'blue' | 'green' | 'purple' | 'yellow';
 
 /**
  * Configuration for an item.
@@ -130,7 +130,7 @@ export abstract class Item extends GameObject {
     // Play visual effect
     if (this.config.collectEffect) {
       // Emit event for effect creation
-      this.scene.events.emit("item:collected", {
+      this.scene.events.emit('item:collected', {
         item: this,
         character,
         effect: this.config.collectEffect,
@@ -189,10 +189,10 @@ export class HealthPotion extends Item {
     y: number,
     config?: Partial<ItemConfig>,
   ) {
-    super(scene, x, y, "health_potion", {
+    super(scene, x, y, 'health_potion', {
       type: ItemType.Consumable,
-      name: "Health Potion",
-      description: "Restores 20 health.",
+      name: 'Health Potion',
+      description: 'Restores 20 health.',
       value: 20,
       ...config,
     });
@@ -213,10 +213,10 @@ export class Coin extends Item {
     y: number,
     config?: Partial<ItemConfig>,
   ) {
-    super(scene, x, y, "coin", {
+    super(scene, x, y, 'coin', {
       type: ItemType.Coin,
-      name: "Coin",
-      description: "Currency for purchasing items.",
+      name: 'Coin',
+      description: 'Currency for purchasing items.',
       value: 1,
       respawns: false,
       ...config,
@@ -226,7 +226,7 @@ export class Coin extends Item {
   protected applyEffect(character: Character): void {
     // Increase player's coin count (assuming character has inventory)
     // Emit event for currency increase
-    this.scene.events.emit("currency:add", {
+    this.scene.events.emit('currency:add', {
       amount: this.config.value,
       character,
     });
@@ -243,10 +243,10 @@ export class SpeedBoost extends Item {
     y: number,
     config?: Partial<ItemConfig>,
   ) {
-    super(scene, x, y, "speed_boost", {
+    super(scene, x, y, 'speed_boost', {
       type: ItemType.PowerUp,
-      name: "Speed Boost",
-      description: "Increases movement speed for 10 seconds.",
+      name: 'Speed Boost',
+      description: 'Increases movement speed for 10 seconds.',
       value: 1.5, // multiplier
       duration: 10000,
       respawns: true,
@@ -277,10 +277,10 @@ export class Key extends Item {
     y: number,
     config?: Partial<ItemConfig>,
   ) {
-    super(scene, x, y, "key", {
+    super(scene, x, y, 'key', {
       type: ItemType.Key,
-      name: "Key",
-      description: "Unlocks doors.",
+      name: 'Key',
+      description: 'Unlocks doors.',
       respawns: false,
       ...config,
     });
@@ -288,7 +288,7 @@ export class Key extends Item {
 
   protected applyEffect(character: Character): void {
     // Add key to character's inventory
-    this.scene.events.emit("key:collected", {
+    this.scene.events.emit('key:collected', {
       character,
       keyId: this.config.name,
     });
@@ -328,7 +328,7 @@ export abstract class Gem extends Item {
     this.isSecret = config?.isSecret ?? false;
 
     if (this.isSecret) {
-      this.config.description += " (Secret!)";
+      this.config.description += ' (Secret!)';
       this.alpha = 0.6;
     }
 
@@ -343,7 +343,7 @@ export abstract class Gem extends Item {
       duration: 1200 - this.rarity * 200,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.easeInOut",
+      ease: 'Sine.easeInOut',
     });
 
     // Rotation animation
@@ -352,7 +352,7 @@ export abstract class Gem extends Item {
       angle: 360,
       duration: 4000 - this.rarity * 500,
       repeat: -1,
-      ease: "Linear",
+      ease: 'Linear',
     });
 
     // Pulsing glow for secret gems
@@ -363,7 +363,7 @@ export abstract class Gem extends Item {
         duration: 800,
         yoyo: true,
         repeat: -1,
-        ease: "Sine.easeInOut",
+        ease: 'Sine.easeInOut',
       });
     }
   }
@@ -372,7 +372,7 @@ export abstract class Gem extends Item {
     // Calculate total value including rarity multiplier
     const totalValue = this.config.value! * (1 + this.rarity * 0.5);
 
-    this.scene.events.emit("gem:collected", {
+    this.scene.events.emit('gem:collected', {
       gemType: this.gemType,
       rarity: this.rarity,
       value: totalValue,
@@ -381,7 +381,7 @@ export abstract class Gem extends Item {
     });
 
     if (this.isSecret) {
-      this.scene.events.emit("gem:secret-discovered", {
+      this.scene.events.emit('gem:secret-discovered', {
         gemType: this.gemType,
         character,
       });
@@ -399,7 +399,7 @@ export class RedGem extends Gem {
     y: number,
     config?: Partial<ItemConfig> & { isSecret?: boolean },
   ) {
-    super(scene, x, y, "red", "gem_red", config);
+    super(scene, x, y, 'red', 'gem_red', config);
   }
 }
 
@@ -413,7 +413,7 @@ export class BlueGem extends Gem {
     y: number,
     config?: Partial<ItemConfig> & { isSecret?: boolean },
   ) {
-    super(scene, x, y, "blue", "gem_blue", config);
+    super(scene, x, y, 'blue', 'gem_blue', config);
   }
 }
 
@@ -427,7 +427,7 @@ export class GreenGem extends Gem {
     y: number,
     config?: Partial<ItemConfig> & { isSecret?: boolean },
   ) {
-    super(scene, x, y, "green", "gem_green", config);
+    super(scene, x, y, 'green', 'gem_green', config);
   }
 }
 
@@ -441,7 +441,7 @@ export class PurpleGem extends Gem {
     y: number,
     config?: Partial<ItemConfig> & { isSecret?: boolean },
   ) {
-    super(scene, x, y, "purple", "gem_purple", config);
+    super(scene, x, y, 'purple', 'gem_purple', config);
   }
 }
 
@@ -455,7 +455,7 @@ export class YellowGem extends Gem {
     y: number,
     config?: Partial<ItemConfig> & { isSecret?: boolean },
   ) {
-    super(scene, x, y, "yellow", "gem_yellow", config);
+    super(scene, x, y, 'yellow', 'gem_yellow', config);
   }
 }
 
@@ -464,18 +464,18 @@ export class YellowGem extends Gem {
  */
 function getGemBaseValue(gemType: GemType): number {
   switch (gemType) {
-    case "red":
-      return 50;
-    case "blue":
-      return 100;
-    case "green":
-      return 200;
-    case "purple":
-      return 500;
-    case "yellow":
-      return 1000;
-    default:
-      return 50;
+  case 'red':
+    return 50;
+  case 'blue':
+    return 100;
+  case 'green':
+    return 200;
+  case 'purple':
+    return 500;
+  case 'yellow':
+    return 1000;
+  default:
+    return 50;
   }
 }
 
@@ -484,17 +484,17 @@ function getGemBaseValue(gemType: GemType): number {
  */
 function getGemRarity(gemType: GemType): number {
   switch (gemType) {
-    case "red":
-      return 0;
-    case "blue":
-      return 1;
-    case "green":
-      return 2;
-    case "purple":
-      return 3;
-    case "yellow":
-      return 4;
-    default:
-      return 0;
+  case 'red':
+    return 0;
+  case 'blue':
+    return 1;
+  case 'green':
+    return 2;
+  case 'purple':
+    return 3;
+  case 'yellow':
+    return 4;
+  default:
+    return 0;
   }
 }

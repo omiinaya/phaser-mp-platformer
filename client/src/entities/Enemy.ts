@@ -1,27 +1,27 @@
 import { logger } from '../utils/logger';
-import "phaser";
-import { Character } from "./Character";
-import { Player } from "./Player";
+import 'phaser';
+import { Character } from './Character';
+import { Player } from './Player';
 import {
   AttackPatternManager,
   AttackPatternType,
   AttackConfig,
-} from "./AttackPatternManager";
+} from './AttackPatternManager';
 import {
   getGlobalProjectilePool,
   PooledProjectile,
-} from "../core/ProjectilePool";
+} from '../core/ProjectilePool';
 
 /**
  * Enemy behavior state.
  */
 export type EnemyState =
-  | "idle"
-  | "patrol"
-  | "chase"
-  | "attack"
-  | "flee"
-  | "dead";
+  | 'idle'
+  | 'patrol'
+  | 'chase'
+  | 'attack'
+  | 'flee'
+  | 'dead';
 
 /**
  * Configuration for enemy AI.
@@ -92,7 +92,7 @@ export abstract class Enemy extends Character {
     frame?: string | number,
   ) {
     super(scene, x, y, texture, frame);
-    this.aiState = "idle";
+    this.aiState = 'idle';
     this.target = undefined;
     this.aiConfig = config;
     this.patrolTimer = 0;
@@ -108,7 +108,7 @@ export abstract class Enemy extends Character {
       patrolChangeTime: 2000,
       flying: false,
       dropsLoot: true,
-      lootTable: ["coin"],
+      lootTable: ['coin'],
       ...config,
     };
 
@@ -145,24 +145,24 @@ export abstract class Enemy extends Character {
 
     // State machine
     switch (this.aiState) {
-      case "idle":
-        this.updateIdle(delta);
-        break;
-      case "patrol":
-        this.updatePatrol(delta);
-        break;
-      case "chase":
-        this.updateChase(delta);
-        break;
-      case "attack":
-        this.updateAttack(delta);
-        break;
-      case "flee":
-        this.updateFlee(delta);
-        break;
-      case "dead":
-        // Do nothing
-        break;
+    case 'idle':
+      this.updateIdle(delta);
+      break;
+    case 'patrol':
+      this.updatePatrol(delta);
+      break;
+    case 'chase':
+      this.updateChase(delta);
+      break;
+    case 'attack':
+      this.updateAttack(delta);
+      break;
+    case 'flee':
+      this.updateFlee(delta);
+      break;
+    case 'dead':
+      // Do nothing
+      break;
     }
 
     // Update animation based on state
@@ -185,7 +185,7 @@ export abstract class Enemy extends Character {
       priority: 1,
     };
 
-    this.attackManager?.addAttack("melee", meleeAttack);
+    this.attackManager?.addAttack('melee', meleeAttack);
   }
 
   /**
@@ -207,7 +207,7 @@ export abstract class Enemy extends Character {
       );
       if (distance <= detectionRange) {
         this.target = player;
-        this.setAIState("chase");
+        this.setAIState('chase');
         return;
       }
     }
@@ -220,7 +220,7 @@ export abstract class Enemy extends Character {
   protected updateIdle(delta: number): void {
     // After a while, start patrolling
     if (this.stateTimer > 2000) {
-      this.setState("patrol");
+      this.setState('patrol');
     }
   }
 
@@ -241,7 +241,7 @@ export abstract class Enemy extends Character {
 
     // Check for target
     if (this.target) {
-      this.setAIState("chase");
+      this.setAIState('chase');
     }
   }
 
@@ -251,7 +251,7 @@ export abstract class Enemy extends Character {
    */
   protected updateChase(delta: number): void {
     if (!this.target) {
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -264,14 +264,14 @@ export abstract class Enemy extends Character {
 
     // If within attack range, attack
     if (distance <= this.aiConfig.attackRange!) {
-      this.setAIState("attack");
+      this.setAIState('attack');
       return;
     }
 
     // If out of detection range, lose target
     if (distance > this.aiConfig.detectionRange!) {
       this.target = undefined;
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -287,7 +287,7 @@ export abstract class Enemy extends Character {
    */
   protected updateAttack(delta: number): void {
     if (!this.target) {
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -300,7 +300,7 @@ export abstract class Enemy extends Character {
 
     // If target moved out of attack range, chase
     if (distance > this.aiConfig.attackRange!) {
-      this.setAIState("chase");
+      this.setAIState('chase');
       return;
     }
 
@@ -335,7 +335,7 @@ export abstract class Enemy extends Character {
     }
     // After some time, revert to idle
     if (this.stateTimer > 3000) {
-      this.setAIState("idle");
+      this.setAIState('idle');
     }
   }
 
@@ -360,15 +360,15 @@ export abstract class Enemy extends Character {
 
     // On state exit/entry logic
     switch (newState) {
-      case "patrol":
-        this.moveSpeed = this.aiConfig.patrolSpeed!;
-        break;
-      case "chase":
-        this.moveSpeed = this.aiConfig.chaseSpeed!;
-        break;
-      case "attack":
-        this.velocity.x = 0;
-        break;
+    case 'patrol':
+      this.moveSpeed = this.aiConfig.patrolSpeed!;
+      break;
+    case 'chase':
+      this.moveSpeed = this.aiConfig.chaseSpeed!;
+      break;
+    case 'attack':
+      this.velocity.x = 0;
+      break;
     }
   }
 
@@ -380,7 +380,7 @@ export abstract class Enemy extends Character {
   public takeDamage(amount: number): boolean {
     const alive = super.takeDamage(amount);
     if (alive && this.health < this.maxHealth * 0.3) {
-      this.setAIState("flee");
+      this.setAIState('flee');
     }
     return alive;
   }
@@ -389,7 +389,7 @@ export abstract class Enemy extends Character {
    * Called when health reaches zero.
    */
   protected die(): void {
-    this.setAIState("dead");
+    this.setAIState('dead');
     this.dropLoot();
     super.die();
   }
@@ -400,7 +400,7 @@ export abstract class Enemy extends Character {
   protected dropLoot(): void {
     if (this.aiConfig.dropsLoot && this.aiConfig.lootTable) {
       // Emit event for loot creation
-      this.scene.events.emit("enemy:dropped-loot", {
+      this.scene.events.emit('enemy:dropped-loot', {
         enemy: this,
         loot: this.aiConfig.lootTable,
       });
@@ -412,17 +412,17 @@ export abstract class Enemy extends Character {
    */
   protected updateAnimation(): void {
     // Base implementation: set animation based on state and velocity
-    let animName = "";
-    if (this.aiState === "dead") {
-      animName = "dead";
-    } else if (this.aiState === "attack") {
-      animName = "attack";
+    let animName = '';
+    if (this.aiState === 'dead') {
+      animName = 'dead';
+    } else if (this.aiState === 'attack') {
+      animName = 'attack';
     } else if (!this.isOnGround) {
-      animName = "jump";
+      animName = 'jump';
     } else if (Math.abs(this.velocity.x) > 10) {
-      animName = "walk";
+      animName = 'walk';
     } else {
-      animName = "idle";
+      animName = 'idle';
     }
 
     // Flip sprite based on facing direction
@@ -443,7 +443,7 @@ export class Slime extends Enemy {
     y: number,
     config: EnemyAIConfig = {},
   ) {
-    super(scene, x, y, "slime", {
+    super(scene, x, y, 'slime', {
       detectionRange: 200,
       attackRange: 30,
       patrolSpeed: 60,
@@ -472,7 +472,7 @@ export class FlyingEnemy extends Enemy {
     y: number,
     config: EnemyAIConfig = {},
   ) {
-    super(scene, x, y, "flying", {
+    super(scene, x, y, 'flying', {
       flying: true,
       detectionRange: 400,
       attackRange: 60,
@@ -571,7 +571,7 @@ export class Archer extends Enemy {
   protected shotCooldown: number = 1500;
   protected projectileSpeed: number = 350;
   protected projectileDamage: number = 2;
-  protected projectileTexture: string = "arrow";
+  protected projectileTexture: string = 'arrow';
 
   constructor(
     scene: Phaser.Scene,
@@ -579,7 +579,7 @@ export class Archer extends Enemy {
     y: number,
     config: EnemyAIConfig = {},
   ) {
-    super(scene, x, y, "archer", {
+    super(scene, x, y, 'archer', {
       detectionRange: 400,
       attackRange: 350,
       patrolSpeed: 50,
@@ -605,12 +605,12 @@ export class Archer extends Enemy {
       },
     };
 
-    this.attackManager?.addAttack("shoot", projectileAttack);
+    this.attackManager?.addAttack('shoot', projectileAttack);
   }
 
   protected updateChase(delta: number): void {
     if (!this.target) {
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -626,18 +626,18 @@ export class Archer extends Enemy {
     const maxRange = this.aiConfig.attackRange!;
 
     if (distance < minRange) {
-      this.setAIState("flee");
+      this.setAIState('flee');
       return;
     }
 
     if (distance <= maxRange) {
-      this.setAIState("attack");
+      this.setAIState('attack');
       return;
     }
 
     if (distance > this.aiConfig.detectionRange!) {
       this.target = undefined;
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -650,7 +650,7 @@ export class Archer extends Enemy {
     // Use parent's attack manager handling
     // Check if too close or too far
     if (!this.target) {
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -663,13 +663,13 @@ export class Archer extends Enemy {
 
     // If too close, flee
     if (distance < this.aiConfig.attackRange! * 0.4) {
-      this.setAIState("flee");
+      this.setAIState('flee');
       return;
     }
 
     // If too far, chase
     if (distance > this.aiConfig.attackRange!) {
-      this.setAIState("chase");
+      this.setAIState('chase');
       return;
     }
 
@@ -701,7 +701,7 @@ export class Archer extends Enemy {
 
   protected updateFlee(delta: number): void {
     if (!this.target) {
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -713,7 +713,7 @@ export class Archer extends Enemy {
     );
 
     if (distance >= this.aiConfig.attackRange! * 0.8) {
-      this.setAIState("attack");
+      this.setAIState('attack');
       return;
     }
 
@@ -722,7 +722,7 @@ export class Archer extends Enemy {
     this.move(direction);
 
     if (this.stateTimer > 3000) {
-      this.setAIState("patrol");
+      this.setAIState('patrol');
     }
   }
 
@@ -746,12 +746,12 @@ export class Archer extends Enemy {
         this.projectileDamage,
       );
 
-      this.scene.events.emit("enemy:projectile-fired", {
+      this.scene.events.emit('enemy:projectile-fired', {
         enemy: this,
         projectile: arrow,
       });
     } else {
-      logger.warn("ProjectilePool not available, using fallback");
+      logger.warn('ProjectilePool not available, using fallback');
     }
   }
 
@@ -771,7 +771,7 @@ export class AdvancedEnemy extends Enemy {
     y: number,
     config: EnemyAIConfig = {},
   ) {
-    super(scene, x, y, "slime", {
+    super(scene, x, y, 'slime', {
       detectionRange: 350,
       attackRange: 200,
       patrolSpeed: 80,
@@ -816,9 +816,9 @@ export class AdvancedEnemy extends Enemy {
       priority: 1,
     };
 
-    this.attackManager?.addAttack("melee_slash", meleeAttack);
-    this.attackManager?.addAttack("charge", chargeAttack);
-    this.attackManager?.addAttack("shockwave", aoeAttack);
+    this.attackManager?.addAttack('melee_slash', meleeAttack);
+    this.attackManager?.addAttack('charge', chargeAttack);
+    this.attackManager?.addAttack('shockwave', aoeAttack);
   }
 
   /**
@@ -826,7 +826,7 @@ export class AdvancedEnemy extends Enemy {
    */
   protected updateAttack(delta: number): void {
     if (!this.target) {
-      this.setAIState("patrol");
+      this.setAIState('patrol');
       return;
     }
 
@@ -839,7 +839,7 @@ export class AdvancedEnemy extends Enemy {
 
     // If target moved out of attack range, chase
     if (distance > this.aiConfig.attackRange!) {
-      this.setAIState("chase");
+      this.setAIState('chase');
       return;
     }
 
@@ -851,7 +851,7 @@ export class AdvancedEnemy extends Enemy {
         // When health is low, use more aggressive attacks
         if (this.health < this.maxHealth * 0.3 && Math.random() < 0.3) {
           // Prefer charge or shockwave when desperate
-          const aggressiveAttacks = ["charge", "shockwave"];
+          const aggressiveAttacks = ['charge', 'shockwave'];
           const availableAggressive = aggressiveAttacks.filter((name) =>
             this.attackManager!.getAvailableAttacks().includes(name),
           );

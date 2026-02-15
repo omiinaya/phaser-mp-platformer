@@ -1,5 +1,5 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 
 export interface AnimationConfig {
   key: string;
@@ -120,8 +120,8 @@ export class AnimationManager {
     let state = this.animationStates.get(spriteKey);
     if (!state) {
       state = {
-        current: "",
-        previous: "",
+        current: '',
+        previous: '',
         isPlaying: false,
         frameRate: 10,
       };
@@ -142,7 +142,7 @@ export class AnimationManager {
     sprite.play(animationKey, ignoreIfPlaying);
 
     // Listen for animation completion
-    sprite.once("animationcomplete", () => {
+    sprite.once('animationcomplete', () => {
       state!.isPlaying = false;
     });
 
@@ -210,7 +210,7 @@ export class AnimationManager {
   public getCurrentAnimation(sprite: Phaser.GameObjects.Sprite): string {
     const spriteKey = this.getSpriteKey(sprite);
     const state = this.animationStates.get(spriteKey);
-    return state?.current ?? "";
+    return state?.current ?? '';
   }
 
   /**
@@ -241,7 +241,7 @@ export class AnimationManager {
     this.play(sprite, animationKey, false);
 
     if (onComplete) {
-      sprite.once("animationcomplete", () => {
+      sprite.once('animationcomplete', () => {
         onComplete();
       });
     }
@@ -258,7 +258,7 @@ export class AnimationManager {
   ): void {
     const currentAnim = this.getCurrentAnimation(sprite);
 
-    if (currentAnim === fromAnimation || currentAnim === "") {
+    if (currentAnim === fromAnimation || currentAnim === '') {
       // Fade out current if needed
       this.scene.tweens.add({
         targets: sprite,
@@ -298,7 +298,7 @@ export class AnimationManager {
    * Generate a unique key for a sprite.
    */
   private getSpriteKey(sprite: Phaser.GameObjects.Sprite): string {
-    return `${sprite.texture.key}_${sprite.name || "unnamed"}_${sprite.x}_${sprite.y}`;
+    return `${sprite.texture.key}_${sprite.name || 'unnamed'}_${sprite.x}_${sprite.y}`;
   }
 
   /**
@@ -315,7 +315,7 @@ export class AnimationManager {
  * Animation state machine for character entities.
  */
 export class AnimationStateMachine {
-  private currentState: string = "idle";
+  private currentState: string = 'idle';
   private states: Map<
     string,
     {
@@ -365,7 +365,7 @@ export class AnimationStateMachine {
 
     if (!targetStateConfig) {
       logger.warn(`Unknown state: ${toState}`);
-      return { success: false, animation: "" };
+      return { success: false, animation: '' };
     }
 
     // Check if transition is allowed
@@ -376,7 +376,7 @@ export class AnimationStateMachine {
       // Check custom validator
       const validator = this.transitions.get(this.currentState);
       if (!validator || !validator(this.currentState, toState)) {
-        return { success: false, animation: "" };
+        return { success: false, animation: '' };
       }
     }
 
@@ -408,7 +408,7 @@ export class AnimationStateMachine {
    */
   public getCurrentAnimation(): string {
     const state = this.states.get(this.currentState);
-    return state?.animation ?? "";
+    return state?.animation ?? '';
   }
 
   /**

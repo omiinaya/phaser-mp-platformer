@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { logger } from "../../utils/logger";
-import { httpRequestDuration, httpRequestTotal } from "../../utils/metrics";
+import { Request, Response, NextFunction } from 'express';
+import { logger } from '../../utils/logger';
+import { httpRequestDuration, httpRequestTotal } from '../../utils/metrics';
 
 /**
  * Metrics middleware that records request duration and logs performance.
@@ -14,7 +14,7 @@ export function metricsMiddleware(
   const start = process.hrtime.bigint();
 
   // Capture response finish event
-  res.on("finish", () => {
+  res.on('finish', () => {
     const end = process.hrtime.bigint();
     const durationMs = Number(end - start) / 1_000_000; // convert nanoseconds to milliseconds
     const durationSeconds = durationMs / 1000;
@@ -28,7 +28,7 @@ export function metricsMiddleware(
         route,
         statusCode: res.statusCode,
         durationMs,
-        userAgent: req.get("user-agent"),
+        userAgent: req.get('user-agent'),
       },
     );
 

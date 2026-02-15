@@ -1,14 +1,14 @@
-import "phaser";
-import { GameObject } from "../entities/GameObject";
-import { Character } from "../entities/Character";
-import { Player, PlayerConfig } from "../entities/Player";
+import 'phaser';
+import { GameObject } from '../entities/GameObject';
+import { Character } from '../entities/Character';
+import { Player, PlayerConfig } from '../entities/Player';
 import {
   Enemy,
   EnemyAIConfig,
   Slime,
   FlyingEnemy,
   Archer,
-} from "../entities/Enemy";
+} from '../entities/Enemy';
 import {
   Item,
   ItemConfig,
@@ -23,19 +23,19 @@ import {
   PurpleGem,
   YellowGem,
   GemType,
-} from "../entities/Item";
+} from '../entities/Item';
 import {
   Skill,
   SkillConfig,
   DashSkill,
   FireballSkill,
   HealSkill,
-} from "../entities/Skill";
+} from '../entities/Skill';
 import {
   Platform,
   PlatformConfig,
   PlatformMovement,
-} from "../entities/Platform";
+} from '../entities/Platform';
 import {
   PowerUp,
   PowerUpManager,
@@ -44,7 +44,7 @@ import {
   SpeedBoostPowerUp,
   HealthBoostPowerUp,
   DamageBoostPowerUp,
-} from "../entities/PowerUp";
+} from '../entities/PowerUp';
 
 /**
  * Factory configuration for creating game entities.
@@ -83,15 +83,15 @@ export class EntityFactory {
     this.scene = scene;
     this.config = {
       textures: {
-        player: "player",
-        slime: "slime",
-        flying: "flying",
-        archer: "archer",
-        healthPotion: "health_potion",
-        coin: "coin",
-        speedBoost: "speed_boost",
-        key: "key",
-        platform: "platform",
+        player: 'player',
+        slime: 'slime',
+        flying: 'flying',
+        archer: 'archer',
+        healthPotion: 'health_potion',
+        coin: 'coin',
+        speedBoost: 'speed_boost',
+        key: 'key',
+        platform: 'platform',
       },
       ...config,
     };
@@ -169,20 +169,20 @@ export class EntityFactory {
    * @param config Enemy AI configuration.
    */
   public createEnemy(
-    type: "slime" | "flying" | "archer",
+    type: 'slime' | 'flying' | 'archer',
     x: number,
     y: number,
     config?: EnemyAIConfig,
   ): Enemy {
     switch (type) {
-      case "slime":
-        return this.createSlime(x, y, config);
-      case "flying":
-        return this.createFlyingEnemy(x, y, config);
-      case "archer":
-        return this.createArcher(x, y, config);
-      default:
-        return this.createSlime(x, y, config);
+    case 'slime':
+      return this.createSlime(x, y, config);
+    case 'flying':
+      return this.createFlyingEnemy(x, y, config);
+    case 'archer':
+      return this.createArcher(x, y, config);
+    default:
+      return this.createSlime(x, y, config);
     }
   }
 
@@ -332,25 +332,25 @@ export class EntityFactory {
    * @param config Override configuration.
    */
   public createSkill(
-    skillId: "dash" | "fireball" | "heal" | SkillConfig,
+    skillId: 'dash' | 'fireball' | 'heal' | SkillConfig,
     config?: Partial<SkillConfig>,
   ): Skill {
     let skillConfig: SkillConfig;
-    if (typeof skillId === "string") {
+    if (typeof skillId === 'string') {
       const base = this.getBaseSkillConfig(skillId);
       skillConfig = { ...base, ...config };
     } else {
       skillConfig = skillId;
     }
     switch (skillConfig.id) {
-      case "dash":
-        return new DashSkill(skillConfig);
-      case "fireball":
-        return new FireballSkill(skillConfig);
-      case "heal":
-        return new HealSkill(skillConfig);
-      default:
-        throw new Error(`Unknown skill ID: ${skillConfig.id}`);
+    case 'dash':
+      return new DashSkill(skillConfig);
+    case 'fireball':
+      return new FireballSkill(skillConfig);
+    case 'heal':
+      return new HealSkill(skillConfig);
+    default:
+      throw new Error(`Unknown skill ID: ${skillConfig.id}`);
     }
   }
 
@@ -360,32 +360,32 @@ export class EntityFactory {
    */
   private getBaseSkillConfig(skillId: string): SkillConfig {
     switch (skillId) {
-      case "dash":
-        return {
-          id: "dash",
-          name: "Dash",
-          cooldown: 2000,
-          cost: 10,
-          target: "directional" as any,
-        };
-      case "fireball":
-        return {
-          id: "fireball",
-          name: "Fireball",
-          cooldown: 3000,
-          cost: 20,
-          target: "projectile" as any,
-        };
-      case "heal":
-        return {
-          id: "heal",
-          name: "Heal",
-          cooldown: 5000,
-          cost: 30,
-          target: "target" as any,
-        };
-      default:
-        throw new Error(`Unknown skill ID: ${skillId}`);
+    case 'dash':
+      return {
+        id: 'dash',
+        name: 'Dash',
+        cooldown: 2000,
+        cost: 10,
+        target: 'directional' as any,
+      };
+    case 'fireball':
+      return {
+        id: 'fireball',
+        name: 'Fireball',
+        cooldown: 3000,
+        cost: 20,
+        target: 'projectile' as any,
+      };
+    case 'heal':
+      return {
+        id: 'heal',
+        name: 'Heal',
+        cooldown: 5000,
+        cost: 30,
+        target: 'target' as any,
+      };
+    default:
+      throw new Error(`Unknown skill ID: ${skillId}`);
     }
   }
 
@@ -547,18 +547,18 @@ export class EntityFactory {
     config?: Partial<ItemConfig> & { isSecret?: boolean },
   ): Gem {
     switch (gemType) {
-      case "red":
-        return new RedGem(this.scene, x, y, config);
-      case "blue":
-        return new BlueGem(this.scene, x, y, config);
-      case "green":
-        return new GreenGem(this.scene, x, y, config);
-      case "purple":
-        return new PurpleGem(this.scene, x, y, config);
-      case "yellow":
-        return new YellowGem(this.scene, x, y, config);
-      default:
-        return new RedGem(this.scene, x, y, config);
+    case 'red':
+      return new RedGem(this.scene, x, y, config);
+    case 'blue':
+      return new BlueGem(this.scene, x, y, config);
+    case 'green':
+      return new GreenGem(this.scene, x, y, config);
+    case 'purple':
+      return new PurpleGem(this.scene, x, y, config);
+    case 'yellow':
+      return new YellowGem(this.scene, x, y, config);
+    default:
+      return new RedGem(this.scene, x, y, config);
     }
   }
 

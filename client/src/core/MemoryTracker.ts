@@ -38,7 +38,7 @@ export class MemoryTracker {
     parent?: string,
     customId?: string,
   ): string {
-    if (!this.enabled) return "";
+    if (!this.enabled) return '';
 
     const id =
       customId ||
@@ -81,7 +81,7 @@ export class MemoryTracker {
 
       if (isStuck || lingering) {
         leaks.push(
-          `Potential leak: ${tracked.type} (id: ${id}) age: ${age}ms, parent: ${tracked.parent || "none"}`,
+          `Potential leak: ${tracked.type} (id: ${id}) age: ${age}ms, parent: ${tracked.parent || 'none'}`,
         );
       }
     }
@@ -94,7 +94,7 @@ export class MemoryTracker {
     byType: Map<string, number>;
     withParent: number;
     withoutParent: number;
-  } {
+    } {
     const stats = {
       totalTracked: this.trackedObjects.size,
       byType: new Map<string, number>(),
@@ -227,10 +227,10 @@ export class ObjectLifecycleTracker {
   public static reportLeaks(): void {
     const leaks = checkMemoryLeaks(10000);
     if (leaks.length > 0) {
-      logger.warn("Memory leak detection report:");
+      logger.warn('Memory leak detection report:');
       leaks.forEach((leak) => logger.warn(`  - ${leak}`));
     } else {
-      logger.info("No obvious memory leaks detected.");
+      logger.info('No obvious memory leaks detected.');
     }
   }
 

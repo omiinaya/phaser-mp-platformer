@@ -1,6 +1,6 @@
-import { Server } from "socket.io";
-import { RoomManager } from "./RoomManager";
-import { logger } from "../utils/logger";
+import { Server } from 'socket.io';
+import { RoomManager } from './RoomManager';
+import { logger } from '../utils/logger';
 
 /**
  * Represents a game state snapshot.
@@ -62,7 +62,7 @@ export class GameSync {
     if (this.tickInterval) {
       clearInterval(this.tickInterval);
       this.tickInterval = null;
-      logger.info("GameSync stopped");
+      logger.info('GameSync stopped');
     }
   }
 
@@ -112,9 +112,9 @@ export class GameSync {
           // Entity fell off the world
           delete currentState.entities[entityId];
           currentState.events.push({
-            type: "entity_destroyed",
+            type: 'entity_destroyed',
             entityId,
-            reason: "out_of_bounds",
+            reason: 'out_of_bounds',
             timestamp: now,
           });
           continue;
@@ -141,53 +141,53 @@ export class GameSync {
    */
   private processGameEvent(state: GameStateSnapshot, event: any): void {
     switch (event.type) {
-      case "player_input": {
-        const entity = state.entities[event.playerId];
-        if (entity) {
-          // Apply player movement
-          if (event.input.moveX !== undefined) {
-            entity.velocity = entity.velocity || { x: 0, y: 0 };
-            entity.velocity.x = event.input.moveX * 200; // movement speed
-          }
-          if (event.input.jump && entity.isOnGround) {
-            entity.velocity = entity.velocity || { x: 0, y: 0 };
-            entity.velocity.y = -400; // jump force
-            entity.isOnGround = false;
+    case 'player_input': {
+      const entity = state.entities[event.playerId];
+      if (entity) {
+        // Apply player movement
+        if (event.input.moveX !== undefined) {
+          entity.velocity = entity.velocity || { x: 0, y: 0 };
+          entity.velocity.x = event.input.moveX * 200; // movement speed
+        }
+        if (event.input.jump && entity.isOnGround) {
+          entity.velocity = entity.velocity || { x: 0, y: 0 };
+          entity.velocity.y = -400; // jump force
+          entity.isOnGround = false;
+        }
+      }
+      break;
+    }
+
+    case 'collision': {
+      // Handle collision between entities
+      const entity1 = state.entities[event.entityId1];
+      const entity2 = state.entities[event.entityId2];
+      if (entity1 && entity2) {
+        // Apply collision response
+        if (event.damage) {
+          entity2.health = (entity2.health || 100) - event.damage;
+          if (entity2.health <= 0) {
+            state.events.push({
+              type: 'entity_destroyed',
+              entityId: event.entityId2,
+              reason: 'destroyed',
+              timestamp: Date.now(),
+            });
           }
         }
-        break;
       }
+      break;
+    }
 
-      case "collision": {
-        // Handle collision between entities
-        const entity1 = state.entities[event.entityId1];
-        const entity2 = state.entities[event.entityId2];
-        if (entity1 && entity2) {
-          // Apply collision response
-          if (event.damage) {
-            entity2.health = (entity2.health || 100) - event.damage;
-            if (entity2.health <= 0) {
-              state.events.push({
-                type: "entity_destroyed",
-                entityId: event.entityId2,
-                reason: "destroyed",
-                timestamp: Date.now(),
-              });
-            }
-          }
-        }
-        break;
-      }
+    case 'entity_destroyed': {
+      // Entity was destroyed, remove from state
+      delete state.entities[event.entityId];
+      break;
+    }
 
-      case "entity_destroyed": {
-        // Entity was destroyed, remove from state
-        delete state.entities[event.entityId];
-        break;
-      }
-
-      default:
-        // Unknown event type, log for debugging
-        logger.debug(`Unknown game event type: ${event.type}`);
+    default:
+      // Unknown event type, log for debugging
+      logger.debug(`Unknown game event type: ${event.type}`);
     }
   }
 
@@ -279,7 +279,7 @@ export class GameSync {
    */
   private broadcastState(roomId: string): void {
     const delta = this.computeDelta(roomId);
-    this.io.to(roomId).emit("game_state_update", delta);
+    this.io.to(roomId).emit('game_state_update', delta);
 
     // Optional: log bandwidth usage
     logger.debug(`Broadcast state for room ${roomId} (full: ${delta.full})`);
@@ -321,7 +321,7 @@ export class GameSync {
 
     // You could also add to an event queue for processing in the next tick
     state.events.push({
-      type: "player_input",
+      type: 'player_input',
       playerId,
       input,
       timestamp: Date.now(),
@@ -335,7 +335,7 @@ export class GameSync {
    */
   private validateInput(input: any): boolean {
     // Basic validation: ensure required fields, within bounds, etc.
-    if (!input || typeof input !== "object") return false;
+    if (!input || typeof input !== 'object') return false;
     // Add more checks as needed
     return true;
   }

@@ -7,42 +7,42 @@ import { AchievementProgress } from './AchievementProgress';
 @Entity('player_profiles')
 export class PlayerProfile {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+    id!: string;
 
   @Column({ unique: true, length: 50 })
-  username!: string;
+    username!: string;
 
   @Column({ unique: true, nullable: true })
-  email!: string | null;
+    email!: string | null;
 
   @Column({ name: 'password_hash', nullable: true })
-  passwordHash!: string | null;
+    passwordHash!: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @Column({ name: 'last_login', type: 'timestamp', nullable: true })
-  lastLogin!: Date | null;
+    lastLogin!: Date | null;
 
   @Column({ default: 0 })
-  experience!: number;
+    experience!: number;
 
   @Column({ default: 1 })
-  level!: number;
+    level!: number;
 
   @Column({ default: 0 })
-  coins!: number;
+    coins!: number;
 
   // Relations
   @OneToOne(() => PlayerStats, stats => stats.profile, { cascade: true })
-  stats!: PlayerStats;
+    stats!: PlayerStats;
 
   @OneToMany(() => PlayerUnlock, unlock => unlock.profile)
-  unlocks!: PlayerUnlock[];
+    unlocks!: PlayerUnlock[];
 
   @OneToMany(() => Inventory, inventory => inventory.profile)
-  inventoryItems!: Inventory[];
+    inventoryItems!: Inventory[];
 
   @OneToMany(() => AchievementProgress, progress => progress.profile)
-  achievements!: AchievementProgress[];
+    achievements!: AchievementProgress[];
 }

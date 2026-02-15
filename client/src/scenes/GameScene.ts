@@ -1,50 +1,50 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
-import { AssetManager } from "../core/AssetManager";
-import { InputManager, InputConfig } from "../core/InputManager";
-import { PhysicsManager } from "../core/PhysicsManager";
-import { GameLoop, GameLoopEvent } from "../core/GameLoop";
-import { eventBus } from "../core/EventBus";
-import { AnimationManager } from "../core/AnimationManager";
-import { AudioService, setGlobalAudioService } from "../core/AudioService";
+import { Scene } from 'phaser';
+import { AssetManager } from '../core/AssetManager';
+import { InputManager, InputConfig } from '../core/InputManager';
+import { PhysicsManager } from '../core/PhysicsManager';
+import { GameLoop, GameLoopEvent } from '../core/GameLoop';
+import { eventBus } from '../core/EventBus';
+import { AnimationManager } from '../core/AnimationManager';
+import { AudioService, setGlobalAudioService } from '../core/AudioService';
 import {
   ParticleManager,
   setGlobalParticleManager,
-} from "../core/ParticleManager";
-import { SaveManager, SaveData } from "../core/SaveManager";
-import { Minimap } from "../core/Minimap";
+} from '../core/ParticleManager';
+import { SaveManager, SaveData } from '../core/SaveManager';
+import { Minimap } from '../core/Minimap';
 import {
   PerformanceMonitor,
   startPerformanceMonitoring,
   stopPerformanceMonitoring,
-} from "../core/PerformanceMonitor";
+} from '../core/PerformanceMonitor';
 import {
   MemoryTracker,
   enableMemoryTracking,
   disableMemoryTracking,
-} from "../core/MemoryTracker";
+} from '../core/MemoryTracker';
 import {
   ErrorHandler,
   initErrorHandler,
   showConnectionError,
   showDisconnectionError,
-} from "../core/ErrorHandler";
+} from '../core/ErrorHandler';
 import {
   ProjectilePool,
   PooledProjectile,
   setGlobalProjectilePool,
-} from "../core/ProjectilePool";
-import { EntityFactory } from "../factories/EntityFactory";
-import { Player } from "../entities/Player";
-import { Enemy, Projectile, Archer } from "../entities/Enemy";
-import { Item } from "../entities/Item";
-import { Platform } from "../entities/Platform";
-import { LevelManager, LevelConfig } from "../core/LevelManager";
-import { TilemapLoader, LoadedTilemapData } from "../core/TilemapLoader";
-import { SceneService } from "../core/SceneManager";
-import { PauseSceneData } from "./PauseScene";
-import { GameOverSceneData } from "./GameOverScene";
-import { NetworkService } from "../services/NetworkService";
+} from '../core/ProjectilePool';
+import { EntityFactory } from '../factories/EntityFactory';
+import { Player } from '../entities/Player';
+import { Enemy, Projectile, Archer } from '../entities/Enemy';
+import { Item } from '../entities/Item';
+import { Platform } from '../entities/Platform';
+import { LevelManager, LevelConfig } from '../core/LevelManager';
+import { TilemapLoader, LoadedTilemapData } from '../core/TilemapLoader';
+import { SceneService } from '../core/SceneManager';
+import { PauseSceneData } from './PauseScene';
+import { GameOverSceneData } from './GameOverScene';
+import { NetworkService } from '../services/NetworkService';
 
 export interface GameSceneData {
   level?: number;
@@ -117,14 +117,14 @@ export class GameScene extends Scene {
     dirty: boolean;
     lastUpdate: number;
   } = {
-    enemies: [],
-    items: [],
-    dirty: true,
-    lastUpdate: 0,
-  };
+      enemies: [],
+      items: [],
+      dirty: true,
+      lastUpdate: 0,
+    };
 
   constructor() {
-    super({ key: "GameScene" });
+    super({ key: 'GameScene' });
     this.performanceMonitor = PerformanceMonitor.getInstance();
     this.memoryTracker = MemoryTracker.getInstance();
     this.errorHandler = initErrorHandler();
@@ -152,45 +152,45 @@ export class GameScene extends Scene {
 
     // Load sprite sheets with animations
     // Player: 32px frames, 26 total frames (8 idle + 8 walk + 4 jump + 6 attack)
-    this.load.spritesheet("player", "assets/spritesheets/player.png", {
+    this.load.spritesheet('player', 'assets/spritesheets/player.png', {
       frameWidth: 32,
       frameHeight: 32,
     });
 
     // Enemy sprite sheets
-    this.load.spritesheet("slime", "assets/spritesheets/slime.png", {
+    this.load.spritesheet('slime', 'assets/spritesheets/slime.png', {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("flying", "assets/spritesheets/flying.png", {
+    this.load.spritesheet('flying', 'assets/spritesheets/flying.png', {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("archer", "assets/spritesheets/archer.png", {
+    this.load.spritesheet('archer', 'assets/spritesheets/archer.png', {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.image("arrow", "assets/sprites/arrow.png");
+    this.load.image('arrow', 'assets/sprites/arrow.png');
 
     // Static items (we'll animate them with tweens)
-    this.load.svg("health_potion", "assets/sprites/health_potion.svg", {
+    this.load.svg('health_potion', 'assets/sprites/health_potion.svg', {
       width: 32,
       height: 32,
     });
-    this.load.svg("coin", "assets/sprites/coin.svg", { width: 32, height: 32 });
-    this.load.svg("platform", "assets/sprites/platform.svg", {
+    this.load.svg('coin', 'assets/sprites/coin.svg', { width: 32, height: 32 });
+    this.load.svg('platform', 'assets/sprites/platform.svg', {
       width: 32,
       height: 32,
     });
-    this.load.svg("shield", "assets/sprites/shield.svg", {
+    this.load.svg('shield', 'assets/sprites/shield.svg', {
       width: 32,
       height: 32,
     });
 
     // Load all level tilemaps
-    this.load.tilemapTiledJSON("level1", "assets/tilemaps/level1.json");
-    this.load.tilemapTiledJSON("level2", "assets/tilemaps/level2.json");
-    this.load.tilemapTiledJSON("level3", "assets/tilemaps/level3.json");
+    this.load.tilemapTiledJSON('level1', 'assets/tilemaps/level1.json');
+    this.load.tilemapTiledJSON('level2', 'assets/tilemaps/level2.json');
+    this.load.tilemapTiledJSON('level3', 'assets/tilemaps/level3.json');
   }
 
   create() {
@@ -238,7 +238,7 @@ export class GameScene extends Scene {
     // Initialize AudioService
     this.audioService!.create();
     setGlobalAudioService(this.audioService!);
-    this.audioService!.playMusic("gameplay_music");
+    this.audioService!.playMusic('gameplay_music');
 
     // Subscribe to audio events
     this.setupAudioEvents();
@@ -269,21 +269,21 @@ export class GameScene extends Scene {
     // Initialize InputManager
     const inputConfig: InputConfig = {
       actions: [
-        { id: "left", keys: ["Left", "A"] },
-        { id: "right", keys: ["Right", "D"] },
-        { id: "jump", keys: ["Up", "W", "Space"] },
-        { id: "pause", keys: ["Escape", "P"] },
-        { id: "attack", keys: ["Z", "Space"] },
-        { id: "parry", keys: ["X", "Shift", "Ctrl"] },
-        { id: "toggleMinimap", keys: ["M"] },
+        { id: 'left', keys: ['Left', 'A'] },
+        { id: 'right', keys: ['Right', 'D'] },
+        { id: 'jump', keys: ['Up', 'W', 'Space'] },
+        { id: 'pause', keys: ['Escape', 'P'] },
+        { id: 'attack', keys: ['Z', 'Space'] },
+        { id: 'parry', keys: ['X', 'Shift', 'Ctrl'] },
+        { id: 'toggleMinimap', keys: ['M'] },
       ],
     };
     this.inputManager = new InputManager(this, inputConfig);
     this.inputManager.onInputEvent((event) => {
-      if (event.action === "pause" && event.active) {
+      if (event.action === 'pause' && event.active) {
         this.openPauseMenu();
       }
-      if (event.action === "toggleMinimap" && event.active) {
+      if (event.action === 'toggleMinimap' && event.active) {
         this.toggleMinimap();
       }
     });
@@ -293,8 +293,8 @@ export class GameScene extends Scene {
 
     // Create player using factory with animation manager
     this.player = this.entityFactory.createPlayer(100, 300, {
-      sessionId: "test",
-      name: "Hero",
+      sessionId: 'test',
+      name: 'Hero',
       health: 20,
       moveSpeed: -1, // use default
       animationManager: this.animationManager,
@@ -335,14 +335,14 @@ export class GameScene extends Scene {
     // Create items with callbacks and particle effects
     const healthPotion = this.entityFactory.createHealthPotion(150, 350);
     healthPotion.onCollide = (player) => {
-      this.levelManager?.collectItem("health_potion");
+      this.levelManager?.collectItem('health_potion');
       // Health pickup particles
       this.particleManager?.createHealthPickupEffect(
         healthPotion.x,
         healthPotion.y,
       );
       // Play sound
-      this.audioService?.playSFX("health_pickup");
+      this.audioService?.playSFX('health_pickup');
       healthPotion.destroy();
     };
     this.items.push(healthPotion);
@@ -353,7 +353,7 @@ export class GameScene extends Scene {
       // Coin collection particles
       this.particleManager?.createCoinSparkles(coin.x, coin.y);
       // Play sound
-      this.audioService?.playSFX("coin");
+      this.audioService?.playSFX('coin');
       coin.destroy();
     };
     this.items.push(coin);
@@ -363,7 +363,7 @@ export class GameScene extends Scene {
     coin2.onCollide = (player) => {
       this.levelManager?.collectCoin();
       this.particleManager?.createCoinSparkles(coin2.x, coin2.y);
-      this.audioService?.playSFX("coin");
+      this.audioService?.playSFX('coin');
       coin2.destroy();
     };
     this.items.push(coin2);
@@ -372,14 +372,14 @@ export class GameScene extends Scene {
     coin3.onCollide = (player) => {
       this.levelManager?.collectCoin();
       this.particleManager?.createCoinSparkles(coin3.x, coin3.y);
-      this.audioService?.playSFX("coin");
+      this.audioService?.playSFX('coin');
       coin3.destroy();
     };
     this.items.push(coin3);
 
     // Add item animations (coin spin and potion glow)
     this.items.forEach((item) => {
-      if (item.texture.key === "coin") {
+      if (item.texture.key === 'coin') {
         // Coin spin animation
         this.tweens.add({
           targets: item,
@@ -387,7 +387,7 @@ export class GameScene extends Scene {
           duration: 300,
           yoyo: true,
           repeat: -1,
-          ease: "Sine.easeInOut",
+          ease: 'Sine.easeInOut',
         });
         // Floating animation
         this.tweens.add({
@@ -396,9 +396,9 @@ export class GameScene extends Scene {
           duration: 800,
           yoyo: true,
           repeat: -1,
-          ease: "Sine.easeInOut",
+          ease: 'Sine.easeInOut',
         });
-      } else if (item.texture.key === "health_potion") {
+      } else if (item.texture.key === 'health_potion') {
         // Potion glow animation
         this.tweens.add({
           targets: item,
@@ -406,7 +406,7 @@ export class GameScene extends Scene {
           duration: 500,
           yoyo: true,
           repeat: -1,
-          ease: "Sine.easeInOut",
+          ease: 'Sine.easeInOut',
         });
         // Gentle float
         this.tweens.add({
@@ -415,7 +415,7 @@ export class GameScene extends Scene {
           duration: 1000,
           yoyo: true,
           repeat: -1,
-          ease: "Sine.easeInOut",
+          ease: 'Sine.easeInOut',
         });
       }
     });
@@ -450,7 +450,7 @@ export class GameScene extends Scene {
           // Damage particles
           this.particleManager?.createDamageEffect(player.x, player.y, 1);
           // Play sound
-          this.audioService?.playSFX("player_hit");
+          this.audioService?.playSFX('player_hit');
         }
       },
     );
@@ -467,7 +467,7 @@ export class GameScene extends Scene {
           // Damage particles
           this.particleManager?.createDamageEffect(player.x, player.y, 1);
           // Play sound
-          this.audioService?.playSFX("player_hit");
+          this.audioService?.playSFX('player_hit');
         }
       },
     );
@@ -477,7 +477,7 @@ export class GameScene extends Scene {
 
     // Listen for enemy projectile firing
     this.events.on(
-      "enemy:projectile-fired",
+      'enemy:projectile-fired',
       (data: { enemy: Enemy; projectile: PooledProjectile }) => {
         this.projectiles.push(data.projectile);
         if (this.physicsManager) {
@@ -495,7 +495,7 @@ export class GameScene extends Scene {
                   player.y,
                   projectile.getDamage(),
                 );
-                this.audioService?.playSFX("player_hit");
+                this.audioService?.playSFX('player_hit');
               }
               projectile.recycle();
             },
@@ -527,7 +527,7 @@ export class GameScene extends Scene {
     this.minimap = new Minimap(this, levelBounds.width, levelBounds.height, {
       width: 200,
       height: 150,
-      position: "top-right",
+      position: 'top-right',
       margin: 20,
       showGrid: true,
       gridSize: 100,
@@ -538,8 +538,8 @@ export class GameScene extends Scene {
     this.createUI();
 
     // Subscribe to events
-    eventBus.on("game:pause", this.openPauseMenu.bind(this));
-    eventBus.on("game:resume", this.resumeGame.bind(this));
+    eventBus.on('game:pause', this.openPauseMenu.bind(this));
+    eventBus.on('game:resume', this.resumeGame.bind(this));
   }
 
   update(time: number, delta: number) {
@@ -554,16 +554,16 @@ export class GameScene extends Scene {
     const { width } = this.cameras.main;
 
     // Score text with animated counter
-    this.scoreText = this.add.text(20, 20, "Score: 0", {
-      fontSize: "28px",
-      color: "#f1c40f",
-      fontFamily: "Arial",
-      fontStyle: "bold",
-      stroke: "#000000",
+    this.scoreText = this.add.text(20, 20, 'Score: 0', {
+      fontSize: '28px',
+      color: '#f1c40f',
+      fontFamily: 'Arial',
+      fontStyle: 'bold',
+      stroke: '#000000',
       strokeThickness: 4,
     });
     this.scoreText.setScrollFactor(0);
-    this.scoreText.setShadow(2, 2, "#000000", 2, true, true);
+    this.scoreText.setShadow(2, 2, '#000000', 2, true, true);
 
     // Health bar background
     this.healthBarBg = this.add.graphics();
@@ -578,43 +578,43 @@ export class GameScene extends Scene {
     this.healthBar.setScrollFactor(0);
 
     // Health text (overlay on bar)
-    this.healthText = this.add.text(120, 65, "20 / 20", {
-      fontSize: "16px",
-      color: "#ffffff",
-      fontFamily: "Arial",
-      fontStyle: "bold",
+    this.healthText = this.add.text(120, 65, '20 / 20', {
+      fontSize: '16px',
+      color: '#ffffff',
+      fontFamily: 'Arial',
+      fontStyle: 'bold',
     });
     this.healthText.setOrigin(0.5);
     this.healthText.setScrollFactor(0);
-    this.healthText.setShadow(1, 1, "#000000", 1, true, true);
+    this.healthText.setShadow(1, 1, '#000000', 1, true, true);
 
     // Combo text (hidden initially)
-    this.comboText = this.add.text(width / 2, 50, "COMBO: 0", {
-      fontSize: "36px",
-      color: "#ff6b6b",
-      fontFamily: "Arial",
-      fontStyle: "bold",
-      stroke: "#000000",
+    this.comboText = this.add.text(width / 2, 50, 'COMBO: 0', {
+      fontSize: '36px',
+      color: '#ff6b6b',
+      fontFamily: 'Arial',
+      fontStyle: 'bold',
+      stroke: '#000000',
       strokeThickness: 4,
     });
     this.comboText.setOrigin(0.5);
     this.comboText.setScrollFactor(0);
     this.comboText.setAlpha(0);
-    this.comboText.setShadow(2, 2, "#000000", 2, true, true);
+    this.comboText.setShadow(2, 2, '#000000', 2, true, true);
 
     // Combo multiplier text (hidden initially)
-    this.comboMultiplierText = this.add.text(width / 2, 90, "1.0x", {
-      fontSize: "24px",
-      color: "#ffd93d",
-      fontFamily: "Arial",
-      fontStyle: "bold",
-      stroke: "#000000",
+    this.comboMultiplierText = this.add.text(width / 2, 90, '1.0x', {
+      fontSize: '24px',
+      color: '#ffd93d',
+      fontFamily: 'Arial',
+      fontStyle: 'bold',
+      stroke: '#000000',
       strokeThickness: 3,
     });
     this.comboMultiplierText.setOrigin(0.5);
     this.comboMultiplierText.setScrollFactor(0);
     this.comboMultiplierText.setAlpha(0);
-    this.comboMultiplierText.setShadow(2, 2, "#000000", 2, true, true);
+    this.comboMultiplierText.setShadow(2, 2, '#000000', 2, true, true);
 
     // Level text
     this.levelText = this.add.text(
@@ -622,35 +622,35 @@ export class GameScene extends Scene {
       20,
       `Level ${this.currentLevel}`,
       {
-        fontSize: "24px",
-        color: "#3498db",
-        fontFamily: "Arial",
-        fontStyle: "bold",
+        fontSize: '24px',
+        color: '#3498db',
+        fontFamily: 'Arial',
+        fontStyle: 'bold',
       },
     );
     this.levelText.setOrigin(1, 0);
     this.levelText.setScrollFactor(0);
 
     // Time attack timer (hidden by default)
-    this.timeAttackTimer = this.add.text(width - 20, 60, "3:00", {
-      fontSize: "28px",
-      color: "#ffffff",
-      fontFamily: "Arial",
-      fontStyle: "bold",
-      stroke: "#000000",
+    this.timeAttackTimer = this.add.text(width - 20, 60, '3:00', {
+      fontSize: '28px',
+      color: '#ffffff',
+      fontFamily: 'Arial',
+      fontStyle: 'bold',
+      stroke: '#000000',
       strokeThickness: 4,
     });
     this.timeAttackTimer.setOrigin(1, 0);
     this.timeAttackTimer.setScrollFactor(0);
     this.timeAttackTimer.setAlpha(0); // Hidden by default
-    this.timeAttackTimer.setShadow(2, 2, "#000000", 2, true, true);
+    this.timeAttackTimer.setShadow(2, 2, '#000000', 2, true, true);
 
     // Performance display (top-left, small font)
-    this.performanceDisplay = this.add.text(20, 100, "FPS: 60", {
-      fontSize: "14px",
-      color: "#00ff00",
-      fontFamily: "monospace",
-      backgroundColor: "#000000",
+    this.performanceDisplay = this.add.text(20, 100, 'FPS: 60', {
+      fontSize: '14px',
+      color: '#00ff00',
+      fontFamily: 'monospace',
+      backgroundColor: '#000000',
       padding: { x: 4, y: 2 },
     });
     this.performanceDisplay.setScrollFactor(0);
@@ -710,7 +710,7 @@ export class GameScene extends Scene {
       this.lastPerformanceUpdate = 0;
 
       const fps = metrics?.fps ?? 60;
-      const color = fps >= 55 ? "#00ff00" : fps >= 30 ? "#ffff00" : "#ff0000";
+      const color = fps >= 55 ? '#00ff00' : fps >= 30 ? '#ffff00' : '#ff0000';
 
       this.performanceDisplay.setText(`FPS: ${fps}`);
       this.performanceDisplay.setColor(color);
@@ -734,22 +734,22 @@ export class GameScene extends Scene {
         attack: false,
       };
 
-      if (this.inputManager.isActionActive("left")) {
+      if (this.inputManager.isActionActive('left')) {
         input.moveX -= 1;
       }
-      if (this.inputManager.isActionActive("right")) {
+      if (this.inputManager.isActionActive('right')) {
         input.moveX += 1;
       }
-      if (this.inputManager.isActionActive("up")) {
+      if (this.inputManager.isActionActive('up')) {
         input.moveY -= 1;
       }
-      if (this.inputManager.isActionActive("down")) {
+      if (this.inputManager.isActionActive('down')) {
         input.moveY += 1;
       }
-      if (this.inputManager.isActionActive("jump")) {
+      if (this.inputManager.isActionActive('jump')) {
         input.jump = true;
       }
-      if (this.inputManager.isActionActive("attack")) {
+      if (this.inputManager.isActionActive('attack')) {
         input.attack = true;
       }
 
@@ -818,7 +818,7 @@ export class GameScene extends Scene {
       const playerData = {
         x: this.player.x,
         y: this.player.y,
-        id: this.player.sessionId || "local",
+        id: this.player.sessionId || 'local',
       };
 
       // Only update cached data every 100ms or when dirty
@@ -867,9 +867,9 @@ export class GameScene extends Scene {
       const timeRemaining = Math.max(0, timeLimit - timeElapsed);
       const minutes = Math.floor(timeRemaining / 60);
       const seconds = Math.floor(timeRemaining % 60);
-      const timeColor = timeRemaining < 30 ? "#ff0000" : "#ffffff";
+      const timeColor = timeRemaining < 30 ? '#ff0000' : '#ffffff';
       this.timeAttackTimer.setText(
-        `${minutes}:${seconds.toString().padStart(2, "0")}`,
+        `${minutes}:${seconds.toString().padStart(2, '0')}`,
       );
       this.timeAttackTimer.setColor(timeColor);
     }
@@ -927,7 +927,7 @@ export class GameScene extends Scene {
       timeElapsed: this.levelManager?.getTimeElapsed() ?? 0,
     };
 
-    this.scene.launch("GameOverScene", gameOverData);
+    this.scene.launch('GameOverScene', gameOverData);
     this.scene.pause();
   }
 
@@ -954,7 +954,7 @@ export class GameScene extends Scene {
       timeElapsed: this.levelManager?.getTimeElapsed() ?? 0,
     };
 
-    this.scene.launch("GameOverScene", gameOverData);
+    this.scene.launch('GameOverScene', gameOverData);
     this.scene.pause();
   }
 
@@ -969,10 +969,10 @@ export class GameScene extends Scene {
     const pauseData: PauseSceneData = {
       score: state?.score ?? 0,
       level: this.currentLevel,
-      fromScene: "GameScene",
+      fromScene: 'GameScene',
     };
 
-    this.scene.launch("PauseScene", pauseData);
+    this.scene.launch('PauseScene', pauseData);
     this.scene.pause();
   }
 
@@ -994,39 +994,39 @@ export class GameScene extends Scene {
 
   private setupAudioEvents(): void {
     // Player events
-    this.events.on("player:jump", () => {
-      this.audioService?.playSFX("jump");
+    this.events.on('player:jump', () => {
+      this.audioService?.playSFX('jump');
     });
 
-    this.events.on("player:attack", () => {
-      this.audioService?.playSFX("attack");
+    this.events.on('player:attack', () => {
+      this.audioService?.playSFX('attack');
     });
 
-    this.events.on("player:land", () => {
-      this.audioService?.playSFX("landing");
+    this.events.on('player:land', () => {
+      this.audioService?.playSFX('landing');
     });
 
     // Item collection events
-    this.events.on("item:collected", (data: { type: string }) => {
-      if (data.type === "coin") {
-        this.audioService?.playSFX("coin");
-      } else if (data.type === "health_potion") {
-        this.audioService?.playSFX("health_pickup");
+    this.events.on('item:collected', (data: { type: string }) => {
+      if (data.type === 'coin') {
+        this.audioService?.playSFX('coin');
+      } else if (data.type === 'health_potion') {
+        this.audioService?.playSFX('health_pickup');
       }
     });
 
     // Damage events
-    this.events.on("player:damage", () => {
-      this.audioService?.playSFX("player_hit");
+    this.events.on('player:damage', () => {
+      this.audioService?.playSFX('player_hit');
     });
 
-    this.events.on("enemy:damage", () => {
-      this.audioService?.playSFX("enemy_hit");
+    this.events.on('enemy:damage', () => {
+      this.audioService?.playSFX('enemy_hit');
     });
 
     // Player attack event - deal damage to nearby enemies
     this.events.on(
-      "player:attack",
+      'player:attack',
       (data: {
         player: Player;
         comboCount: number;
@@ -1039,7 +1039,7 @@ export class GameScene extends Scene {
 
     // Combo changed event
     this.events.on(
-      "player:combo-changed",
+      'player:combo-changed',
       (data: {
         player: Player;
         comboCount: number;
@@ -1054,7 +1054,7 @@ export class GameScene extends Scene {
 
     // Combo reset event
     this.events.on(
-      "player:combo-reset",
+      'player:combo-reset',
       (data: { player: Player; reason: string }) => {
         this.currentComboCount = 0;
         this.currentComboMultiplier = 1.0;
@@ -1063,42 +1063,42 @@ export class GameScene extends Scene {
     );
 
     // Parry start event
-    this.events.on("player:parry", (data: { player: Player }) => {
-      this.audioService?.playSFX("defense");
+    this.events.on('player:parry', (data: { player: Player }) => {
+      this.audioService?.playSFX('defense');
     });
 
     // Parry successful event
     this.events.on(
-      "player:parry-successful",
+      'player:parry-successful',
       (data: { player: Player; perfectParry: boolean }) => {
         if (data.perfectParry) {
-          this.audioService?.playSFX("powerup");
+          this.audioService?.playSFX('powerup');
         }
       },
     );
 
     // Perfect parry event
-    this.events.on("player:perfect-parry", (data: { player: Player }) => {
+    this.events.on('player:perfect-parry', (data: { player: Player }) => {
       this.cameras.main.shake(50, 0.01);
       this.particleManager?.createDamageEffect(data.player.x, data.player.y, 0);
     });
 
     // Level events
-    this.events.on("level:complete", () => {
+    this.events.on('level:complete', () => {
       this.audioService?.stopMusic(true);
-      this.audioService?.playSFX("level_complete");
+      this.audioService?.playSFX('level_complete');
     });
 
-    this.events.on("game:over", () => {
+    this.events.on('game:over', () => {
       this.audioService?.stopMusic(true);
-      this.audioService?.playSFX("game_over");
+      this.audioService?.playSFX('game_over');
     });
 
     // Inventory events
     this.events.on(
-      "player:item-picked-up",
+      'player:item-picked-up',
       (data: { player: Player; item: Item; quantity: number }) => {
-        this.audioService?.playSFX("item_pickup");
+        this.audioService?.playSFX('item_pickup');
         // Visual feedback
         if (data.item.config.collectEffect) {
           this.particleManager?.createHealthPickupEffect(
@@ -1110,9 +1110,9 @@ export class GameScene extends Scene {
     );
 
     this.events.on(
-      "player:healed",
+      'player:healed',
       (data: { player: Player; amount: number }) => {
-        this.audioService?.playSFX("health_pickup");
+        this.audioService?.playSFX('health_pickup');
         // Heal particles
         this.particleManager?.createHealthPickupEffect(
           data.player.x,
@@ -1121,29 +1121,29 @@ export class GameScene extends Scene {
       },
     );
 
-    this.events.on("inventory:add", (data: any) => {
-      logger.info("Item added to inventory:", data);
+    this.events.on('inventory:add', (data: any) => {
+      logger.info('Item added to inventory:', data);
     });
 
-    this.events.on("inventory:remove", (data: any) => {
-      logger.info("Item removed from inventory:", data);
+    this.events.on('inventory:remove', (data: any) => {
+      logger.info('Item removed from inventory:', data);
     });
 
     // Handle dropped items from inventory
-    this.events.on("inventory:item-dropped", (data: any) => {
+    this.events.on('inventory:item-dropped', (data: any) => {
       this.handleDroppedItem(data);
     });
 
     // Save system events
-    this.events.on("save:autosave", () => {
+    this.events.on('save:autosave', () => {
       this.autoSaveGame();
     });
 
-    this.events.on("save:manual", (data: { slotIndex: number }) => {
+    this.events.on('save:manual', (data: { slotIndex: number }) => {
       this.manualSaveGame(data.slotIndex);
     });
 
-    this.events.on("save:load", async (data: { slotIndex: number }) => {
+    this.events.on('save:load', async (data: { slotIndex: number }) => {
       await this.loadGame(data.slotIndex);
     });
   }
@@ -1159,37 +1159,37 @@ export class GameScene extends Scene {
   } {
     // Define level dimensions based on level number
     switch (levelNumber) {
-      case 1:
-        return { width: 2000, height: 600 };
-      case 2:
-        return { width: 1280, height: 2560 };
-      case 3:
-        return { width: 3000, height: 800 };
-      default:
-        return { width: 2000, height: 600 };
+    case 1:
+      return { width: 2000, height: 600 };
+    case 2:
+      return { width: 1280, height: 2560 };
+    case 3:
+      return { width: 3000, height: 800 };
+    default:
+      return { width: 2000, height: 600 };
     }
   }
 
   private setupNetwork(): void {
     this.networkService = new NetworkService();
 
-    this.networkService.on("connected", (data: { playerId: string }) => {
-      logger.info("Connected to server with ID:", data.playerId);
+    this.networkService.on('connected', (data: { playerId: string }) => {
+      logger.info('Connected to server with ID:', data.playerId);
       this.playerIdText = this.add
         .text(
           this.cameras.main.width / 2,
           80,
           `Player: ${data.playerId.substring(0, 8)}`,
-          { fontSize: "16px", color: "#fff" },
+          { fontSize: '16px', color: '#fff' },
         )
         .setOrigin(0.5)
         .setScrollFactor(0);
     });
 
     this.networkService.on(
-      "room_joined",
+      'room_joined',
       (data: { roomId: string; players: any[] }) => {
-        logger.info("Joined room:", data.roomId);
+        logger.info('Joined room:', data.roomId);
         this.remotePlayers.clear();
         data.players.forEach((playerData: any) => {
           if (playerData.playerId !== this.networkService?.getPlayerId()) {
@@ -1200,78 +1200,78 @@ export class GameScene extends Scene {
     );
 
     this.networkService.on(
-      "player_joined",
+      'player_joined',
       (data: { playerId: string; playerData: any }) => {
         if (data.playerId !== this.networkService?.getPlayerId()) {
           this.createRemotePlayer(
             data.playerId,
             data.playerData?.position || { x: 200, y: 300 },
           );
-          this.showPlayerName(data.playerId, "connected");
+          this.showPlayerName(data.playerId, 'connected');
         }
       },
     );
 
-    this.networkService.on("player_left", (data: { playerId: string }) => {
+    this.networkService.on('player_left', (data: { playerId: string }) => {
       this.removeRemotePlayer(data.playerId);
-      this.showPlayerName(data.playerId, "disconnected");
+      this.showPlayerName(data.playerId, 'disconnected');
     });
 
     this.networkService.on(
-      "game_state_update",
+      'game_state_update',
       (state: { entities: any; full: boolean }) => {
         this.handleGameStateUpdate(state);
       },
     );
 
     this.networkService.on(
-      "player_input",
+      'player_input',
       (data: { playerId: string; input: any }) => {
         this.handleRemotePlayerInput(data.playerId, data.input);
       },
     );
 
-    this.networkService.on("error", (error: { message: string }) => {
-      logger.error("Network error:", error.message);
+    this.networkService.on('error', (error: { message: string }) => {
+      logger.error('Network error:', error.message);
     });
 
     // Handle disconnection with recovery
-    this.networkService.on("disconnected", (data: { reason: string }) => {
-      logger.warn("Disconnected from server:", data.reason);
+    this.networkService.on('disconnected', (data: { reason: string }) => {
+      logger.warn('Disconnected from server:', data.reason);
       showConnectionError(() => {
         // Retry connection
         this.networkService?.connect().catch((err) => {
-          logger.error("Reconnection failed:", err);
+          logger.error('Reconnection failed:', err);
         });
       });
     });
 
     this.networkService.on(
-      "reconnect_attempt",
+      'reconnect_attempt',
       (data: { attemptNumber: number }) => {
         logger.info(`Reconnection attempt ${data.attemptNumber}...`);
       },
     );
 
-    this.networkService.on("reconnected", (data: { attemptNumber: number }) => {
+    this.networkService.on('reconnected', (data: { attemptNumber: number }) => {
       logger.info(
-        "Successfully reconnected after",
+        'Successfully reconnected after',
         data.attemptNumber,
-        "attempts",
+        'attempts',
       );
       // Sync game state after reconnection
       this.syncGameStateAfterReconnect();
     });
 
-    this.networkService.on("reconnect_failed", () => {
-      logger.error("Failed to reconnect to server");
+    this.networkService.on('reconnect_failed', () => {
+      logger.error('Failed to reconnect to server');
       showDisconnectionError(() => {
         this.returnToMainMenu();
       });
     });
 
     this.networkService.connect().catch((err) => {
-      logger.error("Failed to connect to server:", err);
+      logger.error('Failed to connect to server:', err);
     });
   }
 
@@ -1281,15 +1281,15 @@ export class GameScene extends Scene {
   ): void {
     if (this.remotePlayers.has(playerId)) return;
 
-    const sprite = this.add.sprite(position.x, position.y, "player");
+    const sprite = this.add.sprite(position.x, position.y, 'player');
     sprite.setTint(0x8f4d8d);
     sprite.setDepth(5);
 
     const nameText = this.add
       .text(position.x, position.y - 20, `P${playerId.substring(0, 4)}`, {
-        fontSize: "12px",
-        color: "#fff",
-        fontStyle: "bold",
+        fontSize: '12px',
+        color: '#fff',
+        fontStyle: 'bold',
       })
       .setOrigin(0.5)
       .setDepth(6);
@@ -1374,10 +1374,10 @@ export class GameScene extends Scene {
         nameText.y = sprite.y - 25;
 
         if (Math.abs(playerData.currentVelocity?.x || 0) > 10) {
-          sprite.anims.play("walk", true);
+          sprite.anims.play('walk', true);
           sprite.flipX = playerData.currentVelocity.x < 0;
         } else {
-          sprite.anims.play("idle", true);
+          sprite.anims.play('idle', true);
         }
       }
 
@@ -1408,9 +1408,9 @@ export class GameScene extends Scene {
         this.cameras.main.height / 2,
         `Player ${playerId.substring(0, 8)} ${action}`,
         {
-          fontSize: "24px",
-          color: action === "connected" ? "#4CAF50" : "#f44336",
-          fontStyle: "bold",
+          fontSize: '24px',
+          color: action === 'connected' ? '#4CAF50' : '#f44336',
+          fontStyle: 'bold',
         },
       )
       .setOrigin(0.5)
@@ -1422,7 +1422,7 @@ export class GameScene extends Scene {
       y: this.cameras.main.height / 2 - 50,
       alpha: 0,
       duration: 2000,
-      ease: "Sine.easeIn",
+      ease: 'Sine.easeIn',
       onComplete: () => text.destroy(),
     });
   }
@@ -1458,7 +1458,7 @@ export class GameScene extends Scene {
             enemy.y,
             attackDamage,
           );
-          this.audioService?.playSFX("enemy_hit");
+          this.audioService?.playSFX('enemy_hit');
         }
       }
     });
@@ -1471,7 +1471,7 @@ export class GameScene extends Scene {
     if (!this.comboText || !this.comboMultiplierText) return;
 
     this.comboText.setText(
-      this.currentComboCount > 0 ? `COMBO: ${this.currentComboCount}!` : "",
+      this.currentComboCount > 0 ? `COMBO: ${this.currentComboCount}!` : '',
     );
     this.comboMultiplierText.setText(
       `${this.currentComboMultiplier.toFixed(1)}x`,
@@ -1485,7 +1485,7 @@ export class GameScene extends Scene {
         scaleY: 1.3,
         duration: 100,
         yoyo: true,
-        ease: "Sine.easeInOut",
+        ease: 'Sine.easeInOut',
       });
     }
 
@@ -1494,10 +1494,10 @@ export class GameScene extends Scene {
 
     // Color based on multiplier
     const multiplier = this.currentComboMultiplier;
-    let comboColor = "#ff6b6b";
-    if (multiplier >= 2.0) comboColor = "#ffd93d";
-    if (multiplier >= 2.5) comboColor = "#ff9f43";
-    if (multiplier >= 3.0) comboColor = "#ee5a24";
+    let comboColor = '#ff6b6b';
+    if (multiplier >= 2.0) comboColor = '#ffd93d';
+    if (multiplier >= 2.5) comboColor = '#ff9f43';
+    if (multiplier >= 3.0) comboColor = '#ee5a24';
 
     this.comboText.setColor(comboColor);
   }
@@ -1512,7 +1512,7 @@ export class GameScene extends Scene {
       targets: [this.comboText, this.comboMultiplierText],
       alpha: 0,
       duration: 500,
-      ease: "Sine.easeOut",
+      ease: 'Sine.easeOut',
     });
   }
 
@@ -1524,7 +1524,7 @@ export class GameScene extends Scene {
     const levelState = this.levelManager?.getState();
 
     return {
-      version: "1.0.0",
+      version: '1.0.0',
       timestamp: Date.now(),
       player: {
         health: this.player.health,
@@ -1563,7 +1563,7 @@ export class GameScene extends Scene {
     if (this.saveManager && this.levelManager) {
       const saveData = this.createSaveData();
       this.saveManager.saveAutoGame(saveData);
-      logger.info("Auto-saved game");
+      logger.info('Auto-saved game');
     }
   }
 
@@ -1605,13 +1605,13 @@ export class GameScene extends Scene {
     }
 
     if (!saveData) {
-      logger.error("Failed to load game: no save data found");
+      logger.error('Failed to load game: no save data found');
       return false;
     }
 
     this.applySaveData(saveData);
     logger.info(
-      `Game loaded from slot ${slotIndex === -1 ? "auto-save" : slotIndex}`,
+      `Game loaded from slot ${slotIndex === -1 ? 'auto-save' : slotIndex}`,
     );
     return true;
   }
@@ -1687,7 +1687,7 @@ export class GameScene extends Scene {
    * @param unlockedLevels Array of unlocked level numbers.
    */
   private updateUnlockedLevels(unlockedLevels: number[]): void {
-    const key = SaveManager["STORAGE_PREFIX"] + "unlocked_levels";
+    const key = SaveManager['STORAGE_PREFIX'] + 'unlocked_levels';
     localStorage.setItem(key, JSON.stringify(unlockedLevels));
   }
 
@@ -1696,7 +1696,7 @@ export class GameScene extends Scene {
    * @returns Array of unlocked level numbers.
    */
   private getUnlockedLevels(): number[] {
-    const key = SaveManager["STORAGE_PREFIX"] + "unlocked_levels";
+    const key = SaveManager['STORAGE_PREFIX'] + 'unlocked_levels';
     const data = localStorage.getItem(key);
 
     if (!data) {
@@ -1706,7 +1706,7 @@ export class GameScene extends Scene {
     try {
       return JSON.parse(data);
     } catch (error) {
-      logger.error("Failed to parse unlocked levels:", error);
+      logger.error('Failed to parse unlocked levels:', error);
       return [1];
     }
   }
@@ -1786,12 +1786,12 @@ export class GameScene extends Scene {
    */
   private parseGemTypeFromName(
     itemName: string,
-  ): "red" | "blue" | "green" | "purple" | "yellow" {
-    if (itemName.includes("blue")) return "blue";
-    if (itemName.includes("green")) return "green";
-    if (itemName.includes("purple")) return "purple";
-    if (itemName.includes("yellow")) return "yellow";
-    return "red";
+  ): 'red' | 'blue' | 'green' | 'purple' | 'yellow' {
+    if (itemName.includes('blue')) return 'blue';
+    if (itemName.includes('green')) return 'green';
+    if (itemName.includes('purple')) return 'purple';
+    if (itemName.includes('yellow')) return 'yellow';
+    return 'red';
   }
 
   /**
@@ -1809,21 +1809,21 @@ export class GameScene extends Scene {
     let droppedItem: Item | undefined;
 
     // Handle based on item type
-    const itemType = data.config?.type || "misc";
-    const itemName = data.config?.name?.toLowerCase() || "";
+    const itemType = data.config?.type || 'misc';
+    const itemName = data.config?.name?.toLowerCase() || '';
 
-    if (itemName.includes("health") || itemName.includes("potion")) {
+    if (itemName.includes('health') || itemName.includes('potion')) {
       droppedItem = this.entityFactory?.createHealthPotion(
         data.position.x,
         data.position.y,
         data.config,
       );
-    } else if (itemName.includes("coin")) {
+    } else if (itemName.includes('coin')) {
       droppedItem = this.entityFactory?.createCoin(
         data.position.x,
         data.position.y,
       );
-    } else if (itemType.includes("gem")) {
+    } else if (itemType.includes('gem')) {
       // For gems, we could parse the gem type from the item name
       const gemType = this.parseGemTypeFromName(itemName);
       droppedItem = this.entityFactory?.createGem(
@@ -1846,7 +1846,7 @@ export class GameScene extends Scene {
             const player = playerObj as Player;
             const item = itemObj as Item;
             if (player.pickupItem(item, data.quantity)) {
-              this.audioService?.playSFX("item_pickup");
+              this.audioService?.playSFX('item_pickup');
               item.destroy();
 
               // Remove from items array
@@ -1871,7 +1871,7 @@ export class GameScene extends Scene {
       this.timeAttackTimer.setAlpha(enabled ? 1 : 0);
     }
     if (enabled) {
-      logger.info("Time attack mode enabled");
+      logger.info('Time attack mode enabled');
     }
   }
 
@@ -1903,16 +1903,16 @@ export class GameScene extends Scene {
    * Called when the client successfully reconnects to the server.
    */
   private syncGameStateAfterReconnect(): void {
-    logger.info("Syncing game state after reconnection");
+    logger.info('Syncing game state after reconnection');
 
     // Re-send player state to server
     if (this.player && this.networkService?.isConnected()) {
       const syncData = this.player.getSyncData();
-      this.networkService["socket"]?.emit("player_sync", syncData);
+      this.networkService['socket']?.emit('player_sync', syncData);
     }
 
     // Request full game state from server
-    this.networkService?.["socket"]?.emit("request_full_state");
+    this.networkService?.['socket']?.emit('request_full_state');
 
     // Show reconnection success message
     if (this.errorHandler) {
@@ -1926,7 +1926,7 @@ export class GameScene extends Scene {
    * Called when multiplayer connection fails completely.
    */
   private returnToMainMenu(): void {
-    logger.info("Returning to main menu due to connection failure");
+    logger.info('Returning to main menu due to connection failure');
 
     // Clean up multiplayer state
     this.isMultiplayer = false;
@@ -1939,7 +1939,7 @@ export class GameScene extends Scene {
     this.networkService?.disconnect();
 
     // Transition to main menu
-    this.scene.start("MainMenuScene");
+    this.scene.start('MainMenuScene');
   }
 
   destroy() {
@@ -1950,33 +1950,33 @@ export class GameScene extends Scene {
     this.errorHandler?.destroy();
 
     // Clean up event bus listeners
-    eventBus.off("game:pause", this.openPauseMenu.bind(this));
-    eventBus.off("game:resume", this.resumeGame.bind(this));
+    eventBus.off('game:pause', this.openPauseMenu.bind(this));
+    eventBus.off('game:resume', this.resumeGame.bind(this));
 
     // Remove all scene event listeners to prevent memory leaks
-    this.events.off("enemy:projectile-fired");
-    this.events.off("player:jump");
-    this.events.off("player:attack");
-    this.events.off("player:land");
-    this.events.off("item:collected");
-    this.events.off("player:damage");
-    this.events.off("enemy:damage");
-    this.events.off("player:parry");
-    this.events.off("player:perfect-parry");
-    this.events.off("level:complete");
-    this.events.off("game:over");
-    this.events.off("inventory:add");
-    this.events.off("inventory:remove");
-    this.events.off("inventory:item-dropped");
-    this.events.off("save:autosave");
-    this.events.off("save:manual");
-    this.events.off("save:load");
+    this.events.off('enemy:projectile-fired');
+    this.events.off('player:jump');
+    this.events.off('player:attack');
+    this.events.off('player:land');
+    this.events.off('item:collected');
+    this.events.off('player:damage');
+    this.events.off('enemy:damage');
+    this.events.off('player:parry');
+    this.events.off('player:perfect-parry');
+    this.events.off('level:complete');
+    this.events.off('game:over');
+    this.events.off('inventory:add');
+    this.events.off('inventory:remove');
+    this.events.off('inventory:item-dropped');
+    this.events.off('save:autosave');
+    this.events.off('save:manual');
+    this.events.off('save:load');
     // Additional events that were missing cleanup
-    this.events.off("player:combo-changed");
-    this.events.off("player:combo-reset");
-    this.events.off("player:parry-successful");
-    this.events.off("player:item-picked-up");
-    this.events.off("player:healed");
+    this.events.off('player:combo-changed');
+    this.events.off('player:combo-reset');
+    this.events.off('player:parry-successful');
+    this.events.off('player:item-picked-up');
+    this.events.off('player:healed');
 
     // Remove network service listeners
     if (this.networkService) {
@@ -2018,16 +2018,16 @@ export class GameScene extends Scene {
     // Clean up managers (only call destroy if it exists)
     if (
       this.animationManager &&
-      typeof this.animationManager.destroy === "function"
+      typeof this.animationManager.destroy === 'function'
     ) {
       this.animationManager.destroy();
     }
-    if (this.audioService && typeof this.audioService.destroy === "function") {
+    if (this.audioService && typeof this.audioService.destroy === 'function') {
       this.audioService.destroy();
     }
     if (
       this.particleManager &&
-      typeof this.particleManager.destroy === "function"
+      typeof this.particleManager.destroy === 'function'
     ) {
       this.particleManager.destroy();
     }
@@ -2038,7 +2038,7 @@ export class GameScene extends Scene {
     disableMemoryTracking();
 
     // Force garbage collection hint
-    if (typeof window !== "undefined" && (window as any).gc) {
+    if (typeof window !== 'undefined' && (window as any).gc) {
       (window as any).gc();
     }
   }

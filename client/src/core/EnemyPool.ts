@@ -1,14 +1,14 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 import {
   Enemy,
   Slime,
   FlyingEnemy,
   Archer,
   AdvancedEnemy,
-} from "../entities/Enemy";
+} from '../entities/Enemy';
 
-export type EnemyType = "slime" | "flying" | "archer" | "advanced" | "custom";
+export type EnemyType = 'slime' | 'flying' | 'archer' | 'advanced' | 'custom';
 
 export interface EnemySpawnParams {
   x: number;
@@ -32,14 +32,14 @@ export class EnemyPool {
     this.scene = scene;
     this.maxPerType = maxPerType;
 
-    this.factories.set("slime", (s, x, y, cfg) => new Slime(s, x, y, cfg));
+    this.factories.set('slime', (s, x, y, cfg) => new Slime(s, x, y, cfg));
     this.factories.set(
-      "flying",
+      'flying',
       (s, x, y, cfg) => new FlyingEnemy(s, x, y, cfg),
     );
-    this.factories.set("archer", (s, x, y, cfg) => new Archer(s, x, y, cfg));
+    this.factories.set('archer', (s, x, y, cfg) => new Archer(s, x, y, cfg));
     this.factories.set(
-      "advanced",
+      'advanced',
       (s, x, y, cfg) => new AdvancedEnemy(s, x, y, cfg),
     );
   }
@@ -49,7 +49,7 @@ export class EnemyPool {
     const factory =
       params.customFactory ||
       this.factories.get(type) ||
-      this.factories.get("slime") ||
+      this.factories.get('slime') ||
       (() => new Slime(this.scene, params.x, params.y, params.config || {}));
 
     let pool = this.pool.get(type);
@@ -166,7 +166,7 @@ export class EnemyPool {
   public preallocate(type: EnemyType, count: number, config?: any): void {
     const factory =
       this.factories.get(type) ||
-      this.factories.get("slime") ||
+      this.factories.get('slime') ||
       (() => new Slime(this.scene, -1000, -1000, config || {}));
     let pool = this.pool.get(type);
     if (!pool) {
@@ -208,11 +208,11 @@ export class EnemyPool {
   }
 
   private getEnemyType(enemy: Enemy): EnemyType {
-    if (enemy instanceof Slime) return "slime";
-    if (enemy instanceof FlyingEnemy) return "flying";
-    if (enemy instanceof Archer) return "archer";
-    if (enemy instanceof AdvancedEnemy) return "advanced";
-    return "custom";
+    if (enemy instanceof Slime) return 'slime';
+    if (enemy instanceof FlyingEnemy) return 'flying';
+    if (enemy instanceof Archer) return 'archer';
+    if (enemy instanceof AdvancedEnemy) return 'advanced';
+    return 'custom';
   }
 }
 

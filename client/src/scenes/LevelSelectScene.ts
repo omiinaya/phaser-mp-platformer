@@ -1,7 +1,7 @@
-import { Scene } from "phaser";
-import { InputManager, InputConfig } from "../core/InputManager";
-import { SceneService } from "../core/SceneManager";
-import { LEVEL_CONFIGS } from "../core/LevelManager";
+import { Scene } from 'phaser';
+import { InputManager, InputConfig } from '../core/InputManager';
+import { SceneService } from '../core/SceneManager';
+import { LEVEL_CONFIGS } from '../core/LevelManager';
 
 export interface LevelSelectSceneData {
   unlockedLevels?: number[];
@@ -16,7 +16,7 @@ export class LevelSelectScene extends Scene {
   private levelCards: Phaser.GameObjects.Container[] = [];
 
   constructor() {
-    super({ key: "LevelSelectScene" });
+    super({ key: 'LevelSelectScene' });
   }
 
   init(data: LevelSelectSceneData) {
@@ -31,12 +31,12 @@ export class LevelSelectScene extends Scene {
 
     // Title
     this.add
-      .text(width / 2, 60, "SELECT LEVEL", {
-        fontSize: "48px",
-        color: "#fff",
-        fontFamily: "Arial",
-        fontStyle: "bold",
-        stroke: "#000",
+      .text(width / 2, 60, 'SELECT LEVEL', {
+        fontSize: '48px',
+        color: '#fff',
+        fontFamily: 'Arial',
+        fontStyle: 'bold',
+        stroke: '#000',
         strokeThickness: 4,
       })
       .setOrigin(0.5);
@@ -46,69 +46,69 @@ export class LevelSelectScene extends Scene {
 
     // Back button
     const backButton = this.add
-      .text(width / 2, height - 60, "Back to Menu", {
-        fontSize: "24px",
-        color: "#fff",
-        fontFamily: "Arial",
-        stroke: "#000",
+      .text(width / 2, height - 60, 'Back to Menu', {
+        fontSize: '24px',
+        color: '#fff',
+        fontFamily: 'Arial',
+        stroke: '#000',
         strokeThickness: 2,
       })
       .setOrigin(0.5)
       .setInteractive();
 
-    backButton.on("pointerdown", () => {
+    backButton.on('pointerdown', () => {
       this.goBack();
     });
 
-    backButton.on("pointerover", () => {
-      backButton.setColor("#ff0");
+    backButton.on('pointerover', () => {
+      backButton.setColor('#ff0');
     });
 
-    backButton.on("pointerout", () => {
-      backButton.setColor("#fff");
+    backButton.on('pointerout', () => {
+      backButton.setColor('#fff');
     });
 
     // Initialize InputManager
     const inputConfig: InputConfig = {
       actions: [
         {
-          id: "select",
-          keys: ["Enter", "Space"],
+          id: 'select',
+          keys: ['Enter', 'Space'],
         },
         {
-          id: "back",
-          keys: ["Escape"],
+          id: 'back',
+          keys: ['Escape'],
         },
         {
-          id: "left",
-          keys: ["Left", "A"],
+          id: 'left',
+          keys: ['Left', 'A'],
         },
         {
-          id: "right",
-          keys: ["Right", "D"],
+          id: 'right',
+          keys: ['Right', 'D'],
         },
         {
-          id: "up",
-          keys: ["Up", "W"],
+          id: 'up',
+          keys: ['Up', 'W'],
         },
         {
-          id: "down",
-          keys: ["Down", "S"],
+          id: 'down',
+          keys: ['Down', 'S'],
         },
       ],
     };
     this.inputManager = new InputManager(this, inputConfig);
     this.inputManager.onInputEvent((event) => {
-      if (event.action === "select" && event.active) {
+      if (event.action === 'select' && event.active) {
         this.startLevel(this.selectedLevel);
       }
-      if (event.action === "back" && event.active) {
+      if (event.action === 'back' && event.active) {
         this.goBack();
       }
-      if (event.action === "left" && event.active) {
+      if (event.action === 'left' && event.active) {
         this.navigateLevel(-1);
       }
-      if (event.action === "right" && event.active) {
+      if (event.action === 'right' && event.active) {
         this.navigateLevel(1);
       }
     });
@@ -149,31 +149,31 @@ export class LevelSelectScene extends Scene {
       // Level number
       const levelText = this.add
         .text(-50, -70, `Level ${level}`, {
-          fontSize: "20px",
-          color: "#fff",
-          fontFamily: "Arial",
-          fontStyle: "bold",
+          fontSize: '20px',
+          color: '#fff',
+          fontFamily: 'Arial',
+          fontStyle: 'bold',
         })
         .setOrigin(0.5);
       card.add(levelText);
 
       // Level theme name
       const themeText = this.add
-        .text(0, 0, config.theme?.toUpperCase() || "", {
-          fontSize: "14px",
-          color: "#fff",
-          fontFamily: "Arial",
+        .text(0, 0, config.theme?.toUpperCase() || '', {
+          fontSize: '14px',
+          color: '#fff',
+          fontFamily: 'Arial',
         })
         .setOrigin(0.5);
       card.add(themeText);
 
       // Status indicator
       const statusText = this.add
-        .text(0, 70, isUnlocked ? "UNLOCKED" : "LOCKED", {
-          fontSize: "12px",
-          color: isUnlocked ? "#fff" : "#95a5a6",
-          fontFamily: "Arial",
-          fontStyle: "bold",
+        .text(0, 70, isUnlocked ? 'UNLOCKED' : 'LOCKED', {
+          fontSize: '12px',
+          color: isUnlocked ? '#fff' : '#95a5a6',
+          fontFamily: 'Arial',
+          fontStyle: 'bold',
         })
         .setOrigin(0.5);
       card.add(statusText);
@@ -181,8 +181,8 @@ export class LevelSelectScene extends Scene {
       // Lock icon for locked levels
       if (!isUnlocked) {
         const lock = this.add
-          .text(0, 30, "🔒", {
-            fontSize: "30px",
+          .text(0, 30, '🔒', {
+            fontSize: '30px',
           })
           .setOrigin(0.5);
         card.add(lock);
@@ -193,20 +193,20 @@ export class LevelSelectScene extends Scene {
         card.setSize(cardWidth, cardHeight);
         card.setInteractive({ useHandCursor: true });
 
-        card.on("pointerdown", () => {
+        card.on('pointerdown', () => {
           this.selectLevel(level);
         });
 
-        card.on("pointerover", () => {
+        card.on('pointerover', () => {
           if (this.unlockedLevels.includes(level)) {
             bg.setFillStyle(0xf1c40f);
-            levelText.setColor("#000");
+            levelText.setColor('#000');
           }
         });
 
-        card.on("pointerout", () => {
+        card.on('pointerout', () => {
           bg.setFillStyle(isUnlocked ? 0x2ecc71 : 0x7f8c8d);
-          levelText.setColor("#fff");
+          levelText.setColor('#fff');
         });
       }
 
@@ -262,25 +262,25 @@ export class LevelSelectScene extends Scene {
 
     this.sceneService = new SceneService(this.game);
     this.sceneService?.startScene({
-      target: "GameScene",
+      target: 'GameScene',
       stopCurrent: true,
       data: { level },
     });
   }
 
   private goBack(): void {
-    this.scene.start("MainMenuScene");
+    this.scene.start('MainMenuScene');
   }
 
   private playSelectSound(): void {
-    if (this.cache.audio.exists("ui_select")) {
-      this.sound.play("ui_select");
+    if (this.cache.audio.exists('ui_select')) {
+      this.sound.play('ui_select');
     }
   }
 
   private playLockedSound(): void {
-    if (this.cache.audio.exists("ui_locked")) {
-      this.sound.play("ui_locked");
+    if (this.cache.audio.exists('ui_locked')) {
+      this.sound.play('ui_locked');
     }
   }
 

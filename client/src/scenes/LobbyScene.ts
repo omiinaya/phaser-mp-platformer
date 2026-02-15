@@ -1,7 +1,7 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
-import { InputManager } from "../core/InputManager";
-import { NetworkService } from "../services/NetworkService";
+import { Scene } from 'phaser';
+import { InputManager } from '../core/InputManager';
+import { NetworkService } from '../services/NetworkService';
 
 export interface LobbySceneData {
   fromMenu?: boolean;
@@ -12,16 +12,16 @@ export class LobbyScene extends Scene {
   private roomCodeText?: Phaser.GameObjects.Text;
   private playerListText?: Phaser.GameObjects.Text;
   private statusText?: Phaser.GameObjects.Text;
-  private roomId: string = "";
+  private roomId: string = '';
   private inRoom: boolean = false;
   private players: string[] = [];
 
   constructor() {
-    super({ key: "LobbyScene" });
+    super({ key: 'LobbyScene' });
   }
 
   init(data: LobbySceneData) {
-    logger.info("LobbyScene init:", data);
+    logger.info('LobbyScene init:', data);
   }
 
   create() {
@@ -32,12 +32,12 @@ export class LobbyScene extends Scene {
 
     // Title
     this.add
-      .text(width / 2, 80, "MULTIPLAYER LOBBY", {
-        fontSize: "48px",
-        color: "#fff",
-        fontFamily: "Arial",
-        fontStyle: "bold",
-        stroke: "#000",
+      .text(width / 2, 80, 'MULTIPLAYER LOBBY', {
+        fontSize: '48px',
+        color: '#fff',
+        fontFamily: 'Arial',
+        fontStyle: 'bold',
+        stroke: '#000',
         strokeThickness: 4,
       })
       .setOrigin(0.5);
@@ -50,142 +50,142 @@ export class LobbyScene extends Scene {
 
     // Connect to server
     this.statusText = this.add
-      .text(width / 2, 200, "Connecting...", {
-        fontSize: "24px",
-        color: "#ffff00",
-        fontFamily: "Arial",
+      .text(width / 2, 200, 'Connecting...', {
+        fontSize: '24px',
+        color: '#ffff00',
+        fontFamily: 'Arial',
       })
       .setOrigin(0.5);
 
     this.networkService.connect().catch((err) => {
-      this.statusText?.setText("Connection Failed");
-      this.statusText?.setColor("#ff0000");
-      logger.error("Failed to connect:", err);
+      this.statusText?.setText('Connection Failed');
+      this.statusText?.setColor('#ff0000');
+      logger.error('Failed to connect:', err);
     });
 
     // Room code display
     this.add
-      .text(width / 2, 300, "Room Code:", {
-        fontSize: "20px",
-        color: "#aaa",
-        fontFamily: "Arial",
+      .text(width / 2, 300, 'Room Code:', {
+        fontSize: '20px',
+        color: '#aaa',
+        fontFamily: 'Arial',
       })
       .setOrigin(0.5);
 
     this.roomCodeText = this.add
-      .text(width / 2, 340, "...", {
-        fontSize: "36px",
-        color: "#fff",
-        fontFamily: "Arial",
-        fontStyle: "bold",
-        stroke: "#000",
+      .text(width / 2, 340, '...', {
+        fontSize: '36px',
+        color: '#fff',
+        fontFamily: 'Arial',
+        fontStyle: 'bold',
+        stroke: '#000',
         strokeThickness: 3,
       })
       .setOrigin(0.5)
       .setInteractive();
 
-    this.roomCodeText.on("pointerdown", () => {
+    this.roomCodeText.on('pointerdown', () => {
       this.copyRoomCode();
     });
 
     this.add
-      .text(width / 2, 385, "(Click to copy)", {
-        fontSize: "12px",
-        color: "#888",
-        fontFamily: "Arial",
+      .text(width / 2, 385, '(Click to copy)', {
+        fontSize: '12px',
+        color: '#888',
+        fontFamily: 'Arial',
       })
       .setOrigin(0.5);
 
     // Player list
     this.add
-      .text(width / 2, 450, "Players:", {
-        fontSize: "20px",
-        color: "#aaa",
-        fontFamily: "Arial",
+      .text(width / 2, 450, 'Players:', {
+        fontSize: '20px',
+        color: '#aaa',
+        fontFamily: 'Arial',
       })
       .setOrigin(0.5);
 
     this.playerListText = this.add
-      .text(width / 2, 490, "Waiting...", {
-        fontSize: "18px",
-        color: "#fff",
-        fontFamily: "Arial",
+      .text(width / 2, 490, 'Waiting...', {
+        fontSize: '18px',
+        color: '#fff',
+        fontFamily: 'Arial',
       })
       .setOrigin(0.5);
 
     // Start Game button (initially hidden/disabled)
     const startButton = this.add
-      .text(width / 2, 600, "START GAME", {
-        fontSize: "32px",
-        color: "#555",
-        fontFamily: "Arial",
-        fontStyle: "bold",
-        stroke: "#000",
+      .text(width / 2, 600, 'START GAME', {
+        fontSize: '32px',
+        color: '#555',
+        fontFamily: 'Arial',
+        fontStyle: 'bold',
+        stroke: '#000',
         strokeThickness: 3,
       })
       .setOrigin(0.5)
       .setAlpha(0.5);
 
-    startButton.on("pointerdown", () => {
+    startButton.on('pointerdown', () => {
       if (this.inRoom && this.players.length >= 1) {
         this.startGame();
       }
     });
 
-    startButton.setData("startButton", startButton);
-    this.events.on("enableStartButton", () => {
+    startButton.setData('startButton', startButton);
+    this.events.on('enableStartButton', () => {
       startButton.setAlpha(1);
-      startButton.setColor("#4CAF50");
+      startButton.setColor('#4CAF50');
       startButton.setInteractive();
 
-      startButton.on("pointerover", () => {
-        startButton.setColor("#8BC34A");
+      startButton.on('pointerover', () => {
+        startButton.setColor('#8BC34A');
       });
 
-      startButton.on("pointerout", () => {
-        startButton.setColor("#4CAF50");
+      startButton.on('pointerout', () => {
+        startButton.setColor('#4CAF50');
       });
     });
 
     // Back button
     const backButton = this.add
-      .text(width / 2, 700, "Back to Menu", {
-        fontSize: "24px",
-        color: "#fff",
-        fontFamily: "Arial",
-        stroke: "#000",
+      .text(width / 2, 700, 'Back to Menu', {
+        fontSize: '24px',
+        color: '#fff',
+        fontFamily: 'Arial',
+        stroke: '#000',
         strokeThickness: 2,
       })
       .setOrigin(0.5)
       .setInteractive();
 
-    backButton.on("pointerdown", () => {
+    backButton.on('pointerdown', () => {
       this.networkService?.disconnect();
-      this.scene.start("MainMenuScene");
+      this.scene.start('MainMenuScene');
     });
 
-    backButton.on("pointerover", () => {
-      backButton.setColor("#ff0");
+    backButton.on('pointerover', () => {
+      backButton.setColor('#ff0');
     });
 
-    backButton.on("pointerout", () => {
-      backButton.setColor("#fff");
+    backButton.on('pointerout', () => {
+      backButton.setColor('#fff');
     });
 
     // Create room on connection
-    this.networkService.on("connected", (data: { playerId: string }) => {
-      logger.info("Connected with player ID:", data.playerId);
-      this.statusText?.setText("Creating Room...");
-      this.statusText?.setColor("#00ff00");
+    this.networkService.on('connected', (data: { playerId: string }) => {
+      logger.info('Connected with player ID:', data.playerId);
+      this.statusText?.setText('Creating Room...');
+      this.statusText?.setColor('#00ff00');
 
       // Room created will happen when we emit create_room
       this.networkService?.once(
-        "room_created",
+        'room_created',
         (roomData: { roomId: string }) => {
           this.roomId = roomData.roomId;
           this.inRoom = true;
           this.roomCodeText?.setText(this.roomId);
-          this.statusText?.setText("Waiting for players...");
+          this.statusText?.setText('Waiting for players...');
         },
       );
 
@@ -198,12 +198,12 @@ export class LobbyScene extends Scene {
     if (!this.networkService) return;
 
     this.networkService.on(
-      "room_joined",
+      'room_joined',
       (data: { roomId: string; players?: any[] }) => {
         this.roomId = data.roomId;
         this.inRoom = true;
         this.roomCodeText?.setText(data.roomId);
-        this.statusText?.setText("Joined room. Waiting for players...");
+        this.statusText?.setText('Joined room. Waiting for players...');
 
         if (data.players) {
           this.players = data.players;
@@ -213,12 +213,12 @@ export class LobbyScene extends Scene {
     );
 
     this.networkService.on(
-      "room_created",
+      'room_created',
       (data: { roomId: string; gameMode: string; players: any[] }) => {
         this.roomId = data.roomId;
         this.inRoom = true;
         this.roomCodeText?.setText(data.roomId);
-        this.statusText?.setText("Room created. Share the code!");
+        this.statusText?.setText('Room created. Share the code!');
 
         if (data.players) {
           this.players = data.players;
@@ -228,36 +228,36 @@ export class LobbyScene extends Scene {
     );
 
     this.networkService.on(
-      "player_joined",
+      'player_joined',
       (data: { playerId: string; socketId: string; roomId: string }) => {
         if (!this.players.includes(data.playerId)) {
           this.players.push(data.playerId);
           this.updatePlayerList();
-          this.showPlayerName(data.playerId, "joined");
+          this.showPlayerName(data.playerId, 'joined');
         }
 
         if (this.players.length >= 2) {
-          this.events.emit("enableStartButton");
+          this.events.emit('enableStartButton');
         }
       },
     );
 
     this.networkService.on(
-      "player_left",
+      'player_left',
       (data: { playerId: string; roomId: string }) => {
         const index = this.players.indexOf(data.playerId);
         if (index > -1) {
           this.players.splice(index, 1);
           this.updatePlayerList();
-          this.showPlayerName(data.playerId, "left");
+          this.showPlayerName(data.playerId, 'left');
 
           if (this.players.length < 2) {
             const startBtn = this.children.getByName(
-              "startButton",
+              'startButton',
             ) as Phaser.GameObjects.Text;
             if (startBtn) {
               startBtn.setAlpha(0.5);
-              startBtn.setColor("#555");
+              startBtn.setColor('#555');
               startBtn.disableInteractive();
             }
           }
@@ -265,15 +265,15 @@ export class LobbyScene extends Scene {
       },
     );
 
-    this.networkService.on("error", (error: { message: string }) => {
+    this.networkService.on('error', (error: { message: string }) => {
       this.statusText?.setText(`Error: ${error.message}`);
-      this.statusText?.setColor("#ff0000");
+      this.statusText?.setColor('#ff0000');
     });
   }
 
   private createNewRoom(): void {
     this.networkService?.requestMatchmaking({
-      gameMode: "platformer",
+      gameMode: 'platformer',
       maxPlayers: 4,
     });
   }
@@ -282,14 +282,14 @@ export class LobbyScene extends Scene {
     if (!this.playerListText) return;
 
     if (this.players.length === 0) {
-      this.playerListText.setText("Waiting for players...");
+      this.playerListText.setText('Waiting for players...');
     } else {
       const playerTexts = this.players
         .map((id, index) => {
           const isMe = id === this.networkService?.getPlayerId();
-          return `${index + 1}. ${id.substring(0, 12)}${isMe ? " (You)" : ""}`;
+          return `${index + 1}. ${id.substring(0, 12)}${isMe ? ' (You)' : ''}`;
         })
-        .join("\n");
+        .join('\n');
       this.playerListText.setText(playerTexts);
     }
   }
@@ -298,11 +298,11 @@ export class LobbyScene extends Scene {
     const { width } = this.cameras.main;
     const text = this.add
       .text(width / 2, 520, `Player ${playerId.substring(0, 8)} ${action}`, {
-        fontSize: "20px",
-        color: action === "joined" ? "#4CAF50" : "#f44336",
-        fontFamily: "Arial",
-        fontStyle: "bold",
-        stroke: "#000",
+        fontSize: '20px',
+        color: action === 'joined' ? '#4CAF50' : '#f44336',
+        fontFamily: 'Arial',
+        fontStyle: 'bold',
+        stroke: '#000',
         strokeThickness: 2,
       })
       .setOrigin(0.5);
@@ -312,7 +312,7 @@ export class LobbyScene extends Scene {
       y: 500,
       alpha: 0,
       duration: 2000,
-      ease: "Sine.easeIn",
+      ease: 'Sine.easeIn',
       onComplete: () => text.destroy(),
     });
   }
@@ -323,11 +323,11 @@ export class LobbyScene extends Scene {
         .writeText(this.roomId)
         .then(() => {
           const copyText = this.add
-            .text(this.cameras.main.width / 2, 420, "Copied!", {
-              fontSize: "16px",
-              color: "#4CAF50",
-              fontFamily: "Arial",
-              fontStyle: "bold",
+            .text(this.cameras.main.width / 2, 420, 'Copied!', {
+              fontSize: '16px',
+              color: '#4CAF50',
+              fontFamily: 'Arial',
+              fontStyle: 'bold',
             })
             .setOrigin(0.5);
 
@@ -336,19 +336,19 @@ export class LobbyScene extends Scene {
             alpha: 0,
             y: 400,
             duration: 1500,
-            ease: "Sine.easeOut",
+            ease: 'Sine.easeOut',
             onComplete: () => copyText.destroy(),
           });
         })
         .catch((err) => {
-          logger.error("Failed to copy:", err);
+          logger.error('Failed to copy:', err);
         });
     }
   }
 
   private startGame(): void {
     if (this.inRoom) {
-      this.scene.start("GameScene", {
+      this.scene.start('GameScene', {
         level: 1,
         roomId: this.roomId,
       });

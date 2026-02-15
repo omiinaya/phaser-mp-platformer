@@ -17,7 +17,7 @@ export class PlayerUnlockRepository extends BaseRepository<PlayerUnlock> {
   async hasUnlocked(playerId: string, unlockableId: string): Promise<boolean> {
     const count = await this.safeOperation(
       this.count({ where: { playerId, unlockableId } }),
-      `Failed to check unlock status`
+      'Failed to check unlock status'
     );
     return count > 0;
   }
@@ -42,7 +42,7 @@ export class PlayerUnlockRepository extends BaseRepository<PlayerUnlock> {
   async markAsNotified(playerId: string, unlockableId: string): Promise<void> {
     await this.safeOperation(
       this.update({ playerId, unlockableId }, { notified: true }),
-      `Failed to mark unlock as notified`
+      'Failed to mark unlock as notified'
     );
   }
 

@@ -1,5 +1,5 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
+import { Scene } from 'phaser';
 
 export class PooledEmitter {
   private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
@@ -225,7 +225,7 @@ export class ParticlePool {
     }
     if (
       config.quantity !== undefined &&
-      typeof config.quantity === "number" &&
+      typeof config.quantity === 'number' &&
       config.quantity > 0
     ) {
       return config.quantity;

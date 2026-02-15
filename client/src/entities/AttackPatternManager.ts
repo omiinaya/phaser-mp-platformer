@@ -1,22 +1,22 @@
-import { Enemy } from "./Enemy";
-import { Player } from "./Player";
+import { Enemy } from './Enemy';
+import { Player } from './Player';
 
 /**
  * Attack pattern types for enemies.
  */
 export enum AttackPatternType {
   /** Basic melee swipe attack. */
-  MELEE = "melee",
+  MELEE = 'melee',
   /** Charge rush attack. */
-  CHARGE = "charge",
+  CHARGE = 'charge',
   /** Projectile attack. */
-  PROJECTILE = "projectile",
+  PROJECTILE = 'projectile',
   /** Area of effect attack. */
-  AOE = "aoe",
+  AOE = 'aoe',
   /** Summon minions attack. */
-  SUMMON = "summon",
+  SUMMON = 'summon',
   /** Teleport attack. */
-  TELEPORT = "teleport",
+  TELEPORT = 'teleport',
 }
 
 /**
@@ -241,7 +241,7 @@ export class AttackPatternManager {
     };
 
     // Emit telegraph event for visual effects
-    this.enemy.scene.events.emit("enemy:attack-telegraph", {
+    this.enemy.scene.events.emit('enemy:attack-telegraph', {
       enemy: this.enemy,
       target,
       config,
@@ -266,27 +266,27 @@ export class AttackPatternManager {
     let alpha = 0.5;
 
     switch (config.type) {
-      case AttackPatternType.MELEE:
-        telegraphColor = 0xff6600;
-        break;
-      case AttackPatternType.CHARGE:
-        telegraphColor = 0xff3300;
-        alpha = 0.6;
-        break;
-      case AttackPatternType.PROJECTILE:
-        telegraphColor = 0xffff00;
-        alpha = 0.4;
-        break;
-      case AttackPatternType.AOE:
-        telegraphColor = 0xff0000;
-        alpha = 0.7;
-        break;
-      case AttackPatternType.TELEPORT:
-        telegraphColor = 0x9900ff;
-        break;
-      case AttackPatternType.SUMMON:
-        telegraphColor = 0x00ff66;
-        break;
+    case AttackPatternType.MELEE:
+      telegraphColor = 0xff6600;
+      break;
+    case AttackPatternType.CHARGE:
+      telegraphColor = 0xff3300;
+      alpha = 0.6;
+      break;
+    case AttackPatternType.PROJECTILE:
+      telegraphColor = 0xffff00;
+      alpha = 0.4;
+      break;
+    case AttackPatternType.AOE:
+      telegraphColor = 0xff0000;
+      alpha = 0.7;
+      break;
+    case AttackPatternType.TELEPORT:
+      telegraphColor = 0x9900ff;
+      break;
+    case AttackPatternType.SUMMON:
+      telegraphColor = 0x00ff66;
+      break;
     }
 
     // Create telegraphic indicator
@@ -313,7 +313,7 @@ export class AttackPatternManager {
       targets: indicator,
       alpha: 0,
       duration: config.telegraphTime,
-      ease: "Sine.easeOut",
+      ease: 'Sine.easeOut',
       onComplete: () => {
         indicator.destroy();
       },
@@ -354,7 +354,7 @@ export class AttackPatternManager {
 
         // Emit attack start event
         const target = this.activeAttack;
-        this.enemy.scene.events.emit("enemy:attack-start", {
+        this.enemy.scene.events.emit('enemy:attack-start', {
           enemy: this.enemy,
           config,
         });
@@ -395,13 +395,13 @@ export class AttackPatternManager {
 
     // Use custom attack function if provided
     if (config.customAttack) {
-      const target = this.enemy["target"] as Player | undefined;
+      const target = this.enemy['target'] as Player | undefined;
       config.customAttack(this.enemy, target!);
       return;
     }
 
     // Default attack behavior based on type
-    const target = this.enemy["target"] as Player | undefined;
+    const target = this.enemy['target'] as Player | undefined;
     if (!target) return;
 
     const distance = Phaser.Math.Distance.Between(
@@ -412,63 +412,63 @@ export class AttackPatternManager {
     );
 
     switch (config.type) {
-      case AttackPatternType.MELEE:
-      case AttackPatternType.CHARGE:
-      case AttackPatternType.AOE:
+    case AttackPatternType.MELEE:
+    case AttackPatternType.CHARGE:
+    case AttackPatternType.AOE:
+      if (distance <= config.range) {
+        target.takeDamage(config.damage);
+      }
+      break;
+
+    case AttackPatternType.PROJECTILE:
+      // Emit event for projectile creation
+      this.enemy.scene.events.emit('enemy:projectile-fired', {
+        enemy: this.enemy,
+        target,
+        damage: config.damage,
+      });
+      break;
+
+    case AttackPatternType.SUMMON:
+      // Emit event for summoning minions
+      this.enemy.scene.events.emit('enemy:summon', {
+        enemy: this.enemy,
+        target,
+      });
+      break;
+
+    case AttackPatternType.TELEPORT:
+      // Teleport to a random position near target
+      const angle = Phaser.Math.FloatBetween(0, Math.PI * 2);
+      const teleportDistance = Phaser.Math.Between(50, 150);
+      const newX = target.x + Math.cos(angle) * teleportDistance;
+      const newY = target.y + Math.sin(angle) * teleportDistance;
+
+      // Teleport effect
+      this.enemy.scene.tweens.add({
+        targets: this.enemy,
+        scaleX: 0.1,
+        scaleY: 0.1,
+        alpha: 0.5,
+        duration: 200,
+        yoyo: true,
+        onYoyo: () => {
+          this.enemy.x = newX;
+          this.enemy.y = newY;
+        },
+      });
+
+      // Teleport to and attack
+      setTimeout(() => {
         if (distance <= config.range) {
           target.takeDamage(config.damage);
         }
-        break;
-
-      case AttackPatternType.PROJECTILE:
-        // Emit event for projectile creation
-        this.enemy.scene.events.emit("enemy:projectile-fired", {
-          enemy: this.enemy,
-          target,
-          damage: config.damage,
-        });
-        break;
-
-      case AttackPatternType.SUMMON:
-        // Emit event for summoning minions
-        this.enemy.scene.events.emit("enemy:summon", {
-          enemy: this.enemy,
-          target,
-        });
-        break;
-
-      case AttackPatternType.TELEPORT:
-        // Teleport to a random position near target
-        const angle = Phaser.Math.FloatBetween(0, Math.PI * 2);
-        const teleportDistance = Phaser.Math.Between(50, 150);
-        const newX = target.x + Math.cos(angle) * teleportDistance;
-        const newY = target.y + Math.sin(angle) * teleportDistance;
-
-        // Teleport effect
-        this.enemy.scene.tweens.add({
-          targets: this.enemy,
-          scaleX: 0.1,
-          scaleY: 0.1,
-          alpha: 0.5,
-          duration: 200,
-          yoyo: true,
-          onYoyo: () => {
-            this.enemy.x = newX;
-            this.enemy.y = newY;
-          },
-        });
-
-        // Teleport to and attack
-        setTimeout(() => {
-          if (distance <= config.range) {
-            target.takeDamage(config.damage);
-          }
-        }, 200); // Attack after appearing
-        break;
+      }, 200); // Attack after appearing
+      break;
     }
 
     // Emit damage event
-    this.enemy.scene.events.emit("enemy:attack-hit", {
+    this.enemy.scene.events.emit('enemy:attack-hit', {
       enemy: this.enemy,
       target,
       damage: config.damage,

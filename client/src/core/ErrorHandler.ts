@@ -1,14 +1,14 @@
 import { logger } from '../utils/logger';
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 /**
  * Error severity levels.
  */
 export enum ErrorSeverity {
-  INFO = "info",
-  WARNING = "warning",
-  ERROR = "error",
-  CRITICAL = "critical",
+  INFO = 'info',
+  WARNING = 'warning',
+  ERROR = 'error',
+  CRITICAL = 'critical',
 }
 
 /**
@@ -136,10 +136,10 @@ export class ErrorHandler {
       -60,
       this.getSeverityTitle(this.activeError.severity),
       {
-        fontSize: "20px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-        fontStyle: "bold",
+        fontSize: '20px',
+        color: '#ffffff',
+        fontFamily: 'Arial',
+        fontStyle: 'bold',
       },
     );
     title.setOrigin(0.5);
@@ -150,50 +150,50 @@ export class ErrorHandler {
       -20,
       this.wrapText(this.activeError.message, 50),
       {
-        fontSize: "16px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-        align: "center",
+        fontSize: '16px',
+        color: '#ffffff',
+        fontFamily: 'Arial',
+        align: 'center',
       },
     );
     this.errorText.setOrigin(0.5);
 
     // Retry button (if retryable)
     if (this.activeError.retryable) {
-      this.retryButton = this.scene.add.text(-60, 40, "Retry", {
-        fontSize: "18px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-        backgroundColor: "#3498db",
+      this.retryButton = this.scene.add.text(-60, 40, 'Retry', {
+        fontSize: '18px',
+        color: '#ffffff',
+        fontFamily: 'Arial',
+        backgroundColor: '#3498db',
         padding: { x: 20, y: 10 },
       });
       this.retryButton.setOrigin(0.5);
       this.retryButton.setInteractive({ useHandCursor: true });
-      this.retryButton.on("pointerdown", () => this.handleRetry());
-      this.retryButton.on("pointerover", () => this.retryButton?.setScale(1.1));
-      this.retryButton.on("pointerout", () => this.retryButton?.setScale(1));
+      this.retryButton.on('pointerdown', () => this.handleRetry());
+      this.retryButton.on('pointerover', () => this.retryButton?.setScale(1.1));
+      this.retryButton.on('pointerout', () => this.retryButton?.setScale(1));
     }
 
     // Dismiss button
     this.dismissButton = this.scene.add.text(
       this.activeError.retryable ? 60 : 0,
       40,
-      "Dismiss",
+      'Dismiss',
       {
-        fontSize: "18px",
-        color: "#ffffff",
-        fontFamily: "Arial",
-        backgroundColor: "#e74c3c",
+        fontSize: '18px',
+        color: '#ffffff',
+        fontFamily: 'Arial',
+        backgroundColor: '#e74c3c',
         padding: { x: 20, y: 10 },
       },
     );
     this.dismissButton.setOrigin(0.5);
     this.dismissButton.setInteractive({ useHandCursor: true });
-    this.dismissButton.on("pointerdown", () => this.handleDismiss());
-    this.dismissButton.on("pointerover", () =>
+    this.dismissButton.on('pointerdown', () => this.handleDismiss());
+    this.dismissButton.on('pointerover', () =>
       this.dismissButton?.setScale(1.1),
     );
-    this.dismissButton.on("pointerout", () => this.dismissButton?.setScale(1));
+    this.dismissButton.on('pointerout', () => this.dismissButton?.setScale(1));
 
     // Position container
     this.errorContainer.setPosition(centerX, centerY);
@@ -213,7 +213,7 @@ export class ErrorHandler {
       targets: this.errorContainer,
       scale: 1,
       duration: 200,
-      ease: "Back.easeOut",
+      ease: 'Back.easeOut',
     });
   }
 
@@ -222,16 +222,16 @@ export class ErrorHandler {
    */
   private getSeverityColor(severity: ErrorSeverity): number {
     switch (severity) {
-      case ErrorSeverity.INFO:
-        return 0x3498db;
-      case ErrorSeverity.WARNING:
-        return 0xf1c40f;
-      case ErrorSeverity.ERROR:
-        return 0xe74c3c;
-      case ErrorSeverity.CRITICAL:
-        return 0x8e44ad;
-      default:
-        return 0x95a5a6;
+    case ErrorSeverity.INFO:
+      return 0x3498db;
+    case ErrorSeverity.WARNING:
+      return 0xf1c40f;
+    case ErrorSeverity.ERROR:
+      return 0xe74c3c;
+    case ErrorSeverity.CRITICAL:
+      return 0x8e44ad;
+    default:
+      return 0x95a5a6;
     }
   }
 
@@ -240,16 +240,16 @@ export class ErrorHandler {
    */
   private getSeverityTitle(severity: ErrorSeverity): string {
     switch (severity) {
-      case ErrorSeverity.INFO:
-        return "Information";
-      case ErrorSeverity.WARNING:
-        return "Warning";
-      case ErrorSeverity.ERROR:
-        return "Error";
-      case ErrorSeverity.CRITICAL:
-        return "Critical Error";
-      default:
-        return "Error";
+    case ErrorSeverity.INFO:
+      return 'Information';
+    case ErrorSeverity.WARNING:
+      return 'Warning';
+    case ErrorSeverity.ERROR:
+      return 'Error';
+    case ErrorSeverity.CRITICAL:
+      return 'Critical Error';
+    default:
+      return 'Error';
     }
   }
 
@@ -259,21 +259,21 @@ export class ErrorHandler {
   private wrapText(text: string, maxLength: number): string {
     if (text.length <= maxLength) return text;
 
-    const words = text.split(" ");
+    const words = text.split(' ');
     const lines: string[] = [];
-    let currentLine = "";
+    let currentLine = '';
 
     for (const word of words) {
       if ((currentLine + word).length > maxLength) {
         lines.push(currentLine.trim());
-        currentLine = word + " ";
+        currentLine = word + ' ';
       } else {
-        currentLine += word + " ";
+        currentLine += word + ' ';
       }
     }
     lines.push(currentLine.trim());
 
-    return lines.join("\n");
+    return lines.join('\n');
   }
 
   /**
@@ -286,7 +286,7 @@ export class ErrorHandler {
 
     if (this.activeError.retryCount >= this.activeError.maxRetries) {
       this.showError(
-        "Max retry attempts reached. Please try again later.",
+        'Max retry attempts reached. Please try again later.',
         ErrorSeverity.ERROR,
         false,
         false,
@@ -300,7 +300,7 @@ export class ErrorHandler {
         this.hideError();
       } catch (error) {
         this.showError(
-          `Retry failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+          `Retry failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
           ErrorSeverity.ERROR,
           true,
           true,
@@ -328,7 +328,7 @@ export class ErrorHandler {
         targets: this.errorContainer,
         scale: 0,
         duration: 150,
-        ease: "Back.easeIn",
+        ease: 'Back.easeIn',
         onComplete: () => {
           this.errorContainer?.removeAll(true);
           this.errorBg?.destroy();
@@ -435,7 +435,7 @@ export function showGameError(
  */
 export function showConnectionError(retryAction: () => void): void {
   showGameError(
-    "Connection lost. Please check your internet connection and try again.",
+    'Connection lost. Please check your internet connection and try again.',
     ErrorSeverity.ERROR,
     true,
     true,
@@ -448,7 +448,7 @@ export function showConnectionError(retryAction: () => void): void {
  */
 export function showSaveError(): void {
   showGameError(
-    "Failed to save game progress. Your progress may be lost if you continue.",
+    'Failed to save game progress. Your progress may be lost if you continue.',
     ErrorSeverity.WARNING,
     true,
     false,
@@ -461,7 +461,7 @@ export function showSaveError(): void {
  */
 export function showDisconnectionError(onReturnToMenu: () => void): void {
   showGameError(
-    "Disconnected from server. You have been returned to the main menu.",
+    'Disconnected from server. You have been returned to the main menu.',
     ErrorSeverity.ERROR,
     false,
     false,

@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 /**
  * Data to store about a checkpoint.
@@ -75,7 +75,7 @@ export class Checkpoint {
     this.sprite = scene.add.sprite(
       x,
       y,
-      "platform",
+      'platform',
     ) as Phaser.GameObjects.Sprite;
     this.sprite.setTint(0xff8800); // Orange color for checkpoints
     this.sprite.setAlpha(0.8);
@@ -94,7 +94,7 @@ export class Checkpoint {
       duration: 1000,
       yoyo: true,
       repeat: -1,
-      ease: "Sine.easeInOut",
+      ease: 'Sine.easeInOut',
     });
   }
 
@@ -114,7 +114,7 @@ export class Checkpoint {
     this.createActivationEffect();
 
     // Emit checkpoint reached event
-    this.scene.events.emit("checkpoint:reached", {
+    this.scene.events.emit('checkpoint:reached', {
       checkpoint: this.data,
     });
 
@@ -141,7 +141,7 @@ export class Checkpoint {
       scaleY: 3,
       alpha: 0,
       duration: 500,
-      ease: "Sine.easeOut",
+      ease: 'Sine.easeOut',
       onComplete: () => {
         ring.destroy();
       },
@@ -154,7 +154,7 @@ export class Checkpoint {
       scaleY: 1.3,
       duration: 200,
       yoyo: true,
-      ease: "Sine.easeInOut",
+      ease: 'Sine.easeInOut',
     });
   }
 
@@ -178,7 +178,7 @@ export class Checkpoint {
         alpha: 0,
         scale: 0.5,
         duration: 800,
-        ease: "Sine.easeOut",
+        ease: 'Sine.easeOut',
         onComplete: () => {
           particle.destroy();
         },

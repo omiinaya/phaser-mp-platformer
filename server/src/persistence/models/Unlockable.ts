@@ -12,32 +12,32 @@ export enum UnlockableType {
 @Entity('unlockables')
 export class Unlockable {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+    id: string;
 
   @Column()
-  name: string;
+    name: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string | null;
+    description: string | null;
 
   @Column({ type: 'enum', enum: UnlockableType, default: UnlockableType.OTHER })
-  type: UnlockableType;
+    type: UnlockableType;
 
   @Column({ name: 'required_level', default: 1 })
-  requiredLevel: number;
+    requiredLevel: number;
 
   @Column({ name: 'required_achievement_id', nullable: true })
-  requiredAchievementId: string | null;
+    requiredAchievementId: string | null;
 
   @Column({ name: 'is_secret', default: false })
-  isSecret: boolean;
+    isSecret: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any> | null;
+    metadata: Record<string, any> | null;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+    createdAt: Date;
 
   @OneToMany(() => PlayerUnlock, unlock => unlock.unlockable)
-  playerUnlocks: PlayerUnlock[];
+    playerUnlocks: PlayerUnlock[];
 }

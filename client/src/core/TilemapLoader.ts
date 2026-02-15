@@ -1,6 +1,6 @@
 import { logger } from '../utils/logger';
-import { Scene } from "phaser";
-import { LevelConfig } from "./LevelManager";
+import { Scene } from 'phaser';
+import { LevelConfig } from './LevelManager';
 
 export interface LoadedTilemapData {
   layers: {
@@ -82,7 +82,7 @@ export class TilemapLoader {
     map.objects.forEach((objectLayer) => {
       const layerName = objectLayer.name.toLowerCase();
 
-      if (layerName === "platforms") {
+      if (layerName === 'platforms') {
         objectLayer.objects.forEach((obj) => {
           result.objects.platforms.push({
             x: obj.x ?? 0,
@@ -93,27 +93,27 @@ export class TilemapLoader {
           });
         });
         result.layers.platforms = objectLayer;
-      } else if (layerName === "enemies") {
+      } else if (layerName === 'enemies') {
         objectLayer.objects.forEach((obj) => {
           result.objects.enemies.push({
             x: obj.x ?? 0,
             y: obj.y ?? 0,
-            type: obj.type || "slime",
+            type: obj.type || 'slime',
           });
         });
         result.layers.enemies = objectLayer;
-      } else if (layerName === "items") {
+      } else if (layerName === 'items') {
         objectLayer.objects.forEach((obj) => {
           result.objects.items.push({
             x: obj.x ?? 0,
             y: obj.y ?? 0,
-            type: obj.type || "coin",
+            type: obj.type || 'coin',
           });
         });
         result.layers.items = objectLayer;
-      } else if (layerName === "player") {
+      } else if (layerName === 'player') {
         const spawnObj = objectLayer.objects.find(
-          (obj) => obj.type === "spawn",
+          (obj) => obj.type === 'spawn',
         );
         if (spawnObj) {
           result.objects.playerSpawn = {
