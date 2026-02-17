@@ -69,6 +69,7 @@ jest.mock('phaser', () => {
     add: jest.fn().mockReturnThis(),
     setSize: jest.fn().mockReturnThis(),
     setInteractive: jest.fn().mockReturnThis(),
+    on: jest.fn().mockReturnThis(),
     first: { setFillStyle: jest.fn(), setStrokeStyle: jest.fn(), setScale: jest.fn(), setColor: jest.fn() },
   });
 

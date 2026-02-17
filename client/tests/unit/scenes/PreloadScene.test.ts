@@ -11,7 +11,7 @@ jest.mock('../../../src/core/AssetManager', () => ({
   AssetManager: jest.fn().mockImplementation(() => ({
     onProgress: jest.fn(),
     loadAssets: jest.fn(),
-    startLoad: jest.fn(),
+    startLoad: jest.fn().mockResolvedValue(undefined),
   })),
 }));
 
