@@ -215,9 +215,9 @@ describe('LobbyScene', () => {
 
     it('should start game button as disabled initially', () => {
       scene.create();
-      // Find the call for START GAME
+      // Find the call for START GAME (text is 3rd arg: x, y, text, style)
       const startButtonCall = mockAddText.mock.calls.find(
-        call => call[1] === 'START GAME'
+        call => call[2] === 'START GAME'
       );
       expect(startButtonCall).toBeDefined();
       // Get the returned text object from that call
@@ -423,7 +423,7 @@ describe('LobbyScene', () => {
       (scene as any).updatePlayerList();
 
       expect((scene as any).playerListText.setText).toHaveBeenCalledWith(
-        '1. verylongplay.'
+        '1. verylongplay'
       );
     });
   });
@@ -477,6 +477,11 @@ describe('LobbyScene', () => {
   });
 
   describe('destroy', () => {
+    beforeEach(() => {
+      // Create the scene first so networkService is initialized
+      scene.create();
+    });
+
     it('should disconnect network service', () => {
       scene.destroy();
       expect(mockNetworkService.disconnect).toHaveBeenCalled();
