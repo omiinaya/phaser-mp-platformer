@@ -1,0 +1,17 @@
+# Code Owners
+# This file defines who owns what parts of the codebase
+
+# Default owner for everything not matched below
+* @omiinaya
+
+# Server code
+/server/* @omiinaya
+
+# Client code  
+/client/* @omiinaya
+
+# Shared code
+/shared/* @omiinaya
+
+# GitHub workflows
+/.github/workflows/* @omiinaya
