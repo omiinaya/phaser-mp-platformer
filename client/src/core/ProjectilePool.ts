@@ -1,6 +1,5 @@
 import { logger } from '../utils/logger';
 import 'phaser';
-import { Scene } from 'phaser';
 import { Enemy } from '../entities/Enemy';
 
 let globalProjectilePool: ProjectilePool | null = null;

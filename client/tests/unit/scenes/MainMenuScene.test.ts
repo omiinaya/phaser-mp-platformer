@@ -129,8 +129,8 @@ describe('MainMenuScene', () => {
 
   describe('input handling', () => {
     beforeEach(() => {
+      // Create the scene which registers the input callback
       scene.create();
-      mockInputManager.onInputEvent.mockClear();
     });
 
     it('should start game on start action with sceneService', () => {
@@ -153,7 +153,8 @@ describe('MainMenuScene', () => {
     });
 
     it('should quit game on quit action', () => {
-      const quitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {} as never);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      const quitSpy = jest.spyOn(process, 'exit').mockImplementation((() => {}) as any);
       const inputCallback = mockInputManager.onInputEvent.mock.calls[0][0];
       inputCallback({ action: 'quit', active: true, source: 'keyboard' });
 

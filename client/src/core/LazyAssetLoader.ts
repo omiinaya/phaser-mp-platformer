@@ -201,7 +201,7 @@ export class LazyAssetLoader {
         resolve();
       };
 
-      const onError = (fileObject: any) => {
+      const onError = (_fileObject: any) => {
         reject(new Error(`Failed to load ${type}: ${path}`));
       };
 

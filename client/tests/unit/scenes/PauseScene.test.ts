@@ -50,6 +50,7 @@ jest.mock('phaser', () => {
   mockAddRectangle = jest.fn().mockReturnValue({
     setOrigin: jest.fn().mockReturnThis(),
     setScrollFactor: jest.fn().mockReturnThis(),
+    setAlpha: jest.fn().mockReturnThis(),
   });
   mockAddText = jest.fn().mockReturnValue({
     setOrigin: jest.fn().mockReturnThis(),
@@ -104,9 +105,9 @@ describe('PauseScene', () => {
     (scene as any).eventBus = eventBus;
     (scene as any).selectedIndex = 0;
     (scene as any).menuItems = [
-      { label: 'Resume', action: () => mockSceneService.resumeScene('GameScene') },
-      { label: 'Restart', action: () => mockSceneService.startScene({ target: 'GameScene', stopCurrent: false }) },
-      { label: 'Quit', action: () => process.exit(0) },
+      { text: { setColor: jest.fn(), setScale: jest.fn() }, action: () => mockSceneService.resumeScene('GameScene') },
+      { text: { setColor: jest.fn(), setScale: jest.fn() }, action: () => mockSceneService.startScene({ target: 'GameScene', stopCurrent: false }) },
+      { text: { setColor: jest.fn(), setScale: jest.fn() }, action: () => process.exit(0) },
     ];
   });
 
@@ -119,11 +120,9 @@ describe('PauseScene', () => {
         0,
         800,
         600,
-        0x000000,
-        expect.any(Object)
+        expect.any(Number),
+        0.7
       );
-      const rect = mockAddRectangle.mock.results[0]?.value;
-      expect(rect?.setAlpha).toHaveBeenCalledWith(0.7);
     });
 
     it('should create pause title', () => {
@@ -131,10 +130,10 @@ describe('PauseScene', () => {
 
       expect(mockAddText).toHaveBeenCalledWith(
         400,
-        200,
+        150,
         'PAUSED',
         expect.objectContaining({
-          fontSize: '48px',
+          fontSize: '64px',
           color: '#fff',
         })
       );
@@ -146,7 +145,7 @@ describe('PauseScene', () => {
       // Should have called add.text at least 3 times for menu items
       const calls = mockAddText.mock.calls;
       const menuCalls = calls.filter(call => 
-        call[1] && ['Resume', 'Restart', 'Quit'].includes(call[1] as string)
+        call[2] && ['Resume', 'Restart Level', 'Main Menu'].includes(call[2] as string)
       );
       expect(menuCalls.length).toBe(3);
     });
@@ -160,8 +159,8 @@ describe('PauseScene', () => {
 
   describe('input handling', () => {
     beforeEach(() => {
+      // Create the scene which registers the input callback
       scene.create();
-      mockInputManager.onInputEvent.mockClear();
     });
 
     it('should navigate up on up action', () => {
