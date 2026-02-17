@@ -10,7 +10,7 @@
 ### Hard Skills (30%)
 | Metric | Score | Status |
 |--------|-------|--------|
-| Reliability (Tests) | 100% | ✅ All 822 tests pass |
+| Reliability (Tests) | 100% | ✅ All 821 tests pass |
 | Security | 100% | ✅ |
 | Maintainability | 100% | ✅ |
 
@@ -57,7 +57,7 @@
 2. ✅ Added comprehensive tests for EventHandler (23 new tests)
    - Tests cover matchmaking, room management, gameplay events, chat, and ping
    - Improved network/events coverage from 0% to 96.51%
-3. ✅ All 822 tests passing (502 client + 320 server)
+3. ✅ All 821 tests passing (502 client + 319 server)
 4. ✅ 0 lint warnings
 5. ✅ Created CURISM_ANALYSIS.md documentation
 6. ✅ Continuous integration passing
@@ -73,7 +73,7 @@
 
 - Client: ~27% statements (complex Phaser game objects)
 - Server: ~75% statements (improved from 66%)
-- Total tests: 822 passing
+- Total tests: 821 passing
 
 ---
 
