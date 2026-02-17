@@ -34,6 +34,7 @@ Format: [Date] [Repo] [Score] [Rating] [Changes]
 |------|---------|------------|------------|---------------|--------|
 | 2026-02-17 | 87.5% | 100% (was 70%) | 80% | 85% | B+ |
 | 2026-02-17 | ~91%  | 100%           | 85% | 88% | S+   |
+| 2026-02-17 | ~92%  | 100%           | 86% | 90% | S+   |
 
 ### Changes (Latest)
 - Added comprehensive JSDoc to InventoryService, ProgressionService, LeaderboardService
@@ -42,6 +43,11 @@ Format: [Date] [Repo] [Score] [Rating] [Changes]
 - Added GitHub issue templates (bug report, feature request)
 - Added Dependabot configuration for automated dependency updates
 - Added install:all script to package.json
+- Added SECURITY.md with vulnerability reporting guidelines
+- Added LICENSE (MIT) file
+- Added CHANGELOG.md following Keep a Changelog format
+- Added .gitattributes for better repo management
+- Changed CI npm audit level from moderate to high (known eslint transitive dep issue)
 
 ### Hard Skills Detail
 | Date | Reliability | Security | Maintainability | Adjusted |
@@ -54,6 +60,7 @@ Format: [Date] [Repo] [Score] [Rating] [Changes]
 |------|--------------|--------------|------------|---------------|-----|
 | 2026-02-17 | 85% | 85% | 85% | 80% | 83.75% |
 | 2026-02-17 | 88% | 85% | 85% | 92% | 87.5% |
+| 2026-02-17 | 88% | 85% | 85% | 95% | 88.25% |
 
 ---
 
