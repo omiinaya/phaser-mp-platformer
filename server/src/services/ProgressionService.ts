@@ -9,8 +9,18 @@ import { logger } from '../utils/logger';
 
 /**
  * Service for managing player progression, stats, unlocks, and achievements.
+ * Handles player leveling, stat tracking, unlockable content, and achievement progress.
  */
 export class ProgressionService {
+  /**
+   * Creates a new ProgressionService instance.
+   * @param dataSource - The TypeORM data source for database transactions.
+   * @param profileRepo - Repository for player profile data.
+   * @param statsRepo - Repository for player statistics.
+   * @param unlockRepo - Repository for player unlocks.
+   * @param achievementProgressRepo - Repository for achievement progress.
+   * @param unlockableRepo - Repository for unlockable content.
+   */
   constructor(
     private dataSource: DataSource,
     private profileRepo: PlayerProfileRepository,
@@ -20,6 +30,12 @@ export class ProgressionService {
     private unlockableRepo: UnlockableRepository
   ) {}
 
+  /**
+   * Initializes a new player's progression data.
+   * Creates necessary records in the database if they don't exist.
+   * @param playerId - The unique identifier of the player.
+   * @throws Error if player profile doesn't exist.
+   */
   async initializePlayer(playerId: string): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
       const profile = await this.profileRepo.findOne({ where: { id: playerId } });
@@ -35,6 +51,11 @@ export class ProgressionService {
     });
   }
 
+  /**
+   * Applies stat updates to a player's stats object.
+   * @param stats - The stats object to update.
+   * @param updates - Partial stats containing fields to update.
+   */
   private applyStatUpdates(stats: any, updates: any): void {
     if (updates.kills) {
       stats.kills += updates.kills;
@@ -59,6 +80,12 @@ export class ProgressionService {
     }
   }
 
+  /**
+   * Updates a player's statistics with incremental values.
+   * @param playerId - The unique identifier of the player.
+   * @param updates - Object containing stat fields to update (kills, deaths, score, etc.).
+   * @throws Error if player stats don't exist.
+   */
   async updateStats(playerId: string, updates: Partial<{
     kills?: number;
     deaths?: number;
@@ -77,6 +104,12 @@ export class ProgressionService {
     });
   }
 
+  /**
+   * Grants an unlockable item to a player.
+   * @param playerId - The unique identifier of the player.
+   * @param unlockableId - The unique identifier of the unlockable content.
+   * @returns Promise resolving to true if successful, false otherwise.
+   */
   async grantUnlock(playerId: string, unlockableId: string): Promise<boolean> {
     try {
       await this.unlockRepo.unlock(playerId, unlockableId);
@@ -88,6 +121,11 @@ export class ProgressionService {
     }
   }
 
+  /**
+   * Checks if a player has leveled up based on experience and grants appropriate unlocks.
+   * @param playerId - The unique identifier of the player.
+   * @returns Promise resolving to true if player leveled up, false otherwise.
+   */
   async checkAndGrantLevelUp(playerId: string): Promise<boolean> {
     const profile = await this.profileRepo.findOne({ where: { id: playerId } });
     if (!profile) return false;
@@ -106,6 +144,12 @@ export class ProgressionService {
     return false;
   }
 
+  /**
+   * Increments progress toward an achievement.
+   * @param playerId - The unique identifier of the player.
+   * @param achievementCode - The code of the achievement to progress.
+   * @param amount - The amount to increment progress by (default: 1).
+   */
   async incrementAchievementProgress(playerId: string, achievementCode: string, amount: number = 1): Promise<void> {
     const achievement = await this.unlockableRepo.manager.findOne(Achievement, { where: { code: achievementCode } });
     if (!achievement) {
@@ -115,6 +159,12 @@ export class ProgressionService {
     await this.achievementProgressRepo.incrementProgress(playerId, achievement.id, amount);
   }
 
+  /**
+   * Gets a comprehensive summary of a player's progression.
+   * Includes profile, stats, unlocks, and achievements.
+   * @param playerId - The unique identifier of the player.
+   * @returns Promise resolving to an object containing profile, stats, unlocks, and achievements.
+   */
   async getPlayerSummary(playerId: string): Promise<any> {
     const profile = await this.profileRepo.findOne({ where: { id: playerId } });
     const stats = await this.statsRepo.findByPlayerId(playerId);

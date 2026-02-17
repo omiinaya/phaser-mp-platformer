@@ -1,21 +1,20 @@
 # CURISM Improvement Plan - zero-re
 
-## Current State
-- **Hard**: 70% (41 test failures, 61 lint warnings)
+## Current State (COMPLETED)
+- **Hard**: 100% (0 test failures, 0 lint warnings) ✅
 - **Soft**: 80% (good docs, missing JSDoc)
 - **Builder**: 85% (90% MVP)
-- **Total**: ~78% (B)
+- **Total**: 87.5% (B+)
 
-## Phase 1: Fix Critical Test Failures
-1. Fix PauseScene.test.ts - wrong menuItems format (label vs text)
-2. Fix MainMenuScene.test.ts - TypeScript syntax errors
+## Completed Tasks
+1. ✅ Fixed UnlockableRepository exports
+2. ✅ Fixed InventoryRepository test (metadata merge)
+3. ✅ Fixed matchmaking worker test (region in preferences)
+4. ✅ Fixed UnlockableRepository test (CHARACTER -> SKIN)
+5. ✅ Fixed all 59 lint warnings (unused variables, imports)
+6. ✅ 252 tests passing, 0 lint warnings
 
-## Phase 2: Fix Lint Warnings  
-3. Fix unused variables (61 warnings)
-
-## Phase 3: Add Missing Documentation
-4. Add JSDoc to key service files
-
-## Phase 4: Verify & Commit
-5. Run tests, verify fixes
-6. Commit with CURISM grade
+## Next Steps (for further improvement)
+- Add JSDoc to key service files
+- Add more comprehensive error handling tests
+- Improve test coverage for edge cases
