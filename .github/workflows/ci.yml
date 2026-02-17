@@ -27,7 +27,7 @@ jobs:
       run: npm run install:all
 
     - name: Check for security vulnerabilities
-      run: npm audit --audit-level=moderate
+      run: npm audit --audit-level=high
 
     - name: Run client unit tests
       run: npm run test:client:unit
