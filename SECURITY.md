@@ -41,6 +41,15 @@ This project implements the following security measures:
 - The `.env.example` file shows required environment variables without exposing secrets
 - Default development settings are not suitable for production use
 
+## Dependency Security
+
+Our CI runs `npm audit --audit-level=high` to catch high and critical vulnerabilities.
+
+**Note:** There are known moderate vulnerabilities in ESLint's transitive dependencies (ajv via @eslint/eslintrc) that only affect development tools, not production code. These are:
+- Ignored in CI via `--audit-level=high`
+- Do not affect runtime security
+- Will be resolved when ESLint 9.x adoption becomes more widespread
+
 ## Updating Dependencies
 
 To ensure security updates are applied:
