@@ -53,7 +53,7 @@ export class TilemapLoader {
 
     // Load tilesets
     const tilesets: Phaser.Tilemaps.Tileset[] = [];
-    map.tilesets.forEach((tilesetData, index) => {
+    map.tilesets.forEach((tilesetData) => {
       const tileset = map.addTilesetImage(
         tilesetData.name,
         tilesetData.name,

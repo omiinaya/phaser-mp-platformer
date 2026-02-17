@@ -143,7 +143,7 @@ export class Hazard extends GameObject {
     }
   }
 
-  protected updateMovement(delta: number): void {
+  protected updateMovement(_delta: number): void {
     const body = this.body as Phaser.Physics.Arcade.Body;
     if (!body) return;
 

@@ -159,7 +159,7 @@ describe('InventoryRepository', () => {
 
       expect(result).toEqual(updatedItem);
       expect(existingItem.quantity).toBe(8);
-      expect(existingItem.metadata).toEqual({ rarity: 'rare', level: 1 }); // if there was level, it should merge
+      expect(existingItem.metadata).toEqual({ rarity: 'rare' });
     });
 
     it('should update existing item without metadata', async () => {

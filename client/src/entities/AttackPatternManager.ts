@@ -132,7 +132,7 @@ export class AttackPatternManager {
     const now = Date.now();
     const available: string[] = [];
 
-    for (const [name, config] of this.attacks.entries()) {
+    for (const [name] of this.attacks.entries()) {
       const cooldownUntil = this.cooldowns.get(name) ?? 0;
       if (now >= cooldownUntil) {
         available.push(name);
@@ -258,7 +258,7 @@ export class AttackPatternManager {
    * @param config Attack configuration.
    * @param target Target player.
    */
-  private createTelegraphEffect(config: AttackConfig, target?: Player): void {
+  private createTelegraphEffect(config: AttackConfig, _target?: Player): void {
     const scene = this.enemy.scene;
 
     // Color based on attack danger
@@ -353,7 +353,6 @@ export class AttackPatternManager {
         this.activeAttack!.timer = 0;
 
         // Emit attack start event
-        const target = this.activeAttack;
         this.enemy.scene.events.emit('enemy:attack-start', {
           enemy: this.enemy,
           config,

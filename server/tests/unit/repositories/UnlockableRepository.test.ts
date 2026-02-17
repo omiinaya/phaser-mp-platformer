@@ -50,14 +50,14 @@ describe('UnlockableRepository', () => {
   describe('findByType', () => {
     it('should return unlockables of a specific type', async () => {
       const mockUnlockables = [
-        { id: '1', type: UnlockableType.CHARACTER, name: 'Character 1' },
-        { id: '2', type: UnlockableType.CHARACTER, name: 'Character 2' },
+        { id: '1', type: UnlockableType.SKIN, name: 'Skin 1' },
+        { id: '2', type: UnlockableType.SKIN, name: 'Skin 2' },
       ];
       mockFind.mockResolvedValue(mockUnlockables);
 
-      const result = await repository.findByType(UnlockableType.CHARACTER);
+      const result = await repository.findByType(UnlockableType.SKIN);
 
-      expect(mockFind).toHaveBeenCalledWith({ where: { type: UnlockableType.CHARACTER } });
+      expect(mockFind).toHaveBeenCalledWith({ where: { type: UnlockableType.SKIN } });
       expect(result).toEqual(mockUnlockables);
     });
 

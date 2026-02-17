@@ -432,7 +432,7 @@ export class ParticleManager {
   /**
    * Preload particle textures (call in scene preload).
    */
-  public static preloadTextures(scene: Scene): void {
+  public static preloadTextures(_scene: Scene): void {
     // Placeholder - textures are created programmatically in createParticleTextures
   }
 

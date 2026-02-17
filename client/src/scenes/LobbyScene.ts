@@ -1,6 +1,5 @@
 import { logger } from '../utils/logger';
 import { Scene } from 'phaser';
-import { InputManager } from '../core/InputManager';
 import { NetworkService } from '../services/NetworkService';
 
 export interface LobbySceneData {

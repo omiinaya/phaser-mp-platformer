@@ -1,6 +1,5 @@
 import 'phaser';
 import { GameObject } from '../entities/GameObject';
-import { Character } from '../entities/Character';
 import { Player, PlayerConfig } from '../entities/Player';
 import {
   Enemy,
@@ -10,7 +9,6 @@ import {
   Archer,
 } from '../entities/Enemy';
 import {
-  Item,
   ItemConfig,
   HealthPotion,
   Coin,
@@ -37,7 +35,6 @@ import {
   PlatformMovement,
 } from '../entities/Platform';
 import {
-  PowerUp,
   PowerUpManager,
   DoubleJumpPowerUp,
   ShieldPowerUp,
@@ -123,7 +120,7 @@ export class EntityFactory {
    * @returns The created slime instance.
    */
   public createSlime(x: number, y: number, config?: EnemyAIConfig): Slime {
-    const texture = this.config.textures!.slime!;
+    
     const slime = new Slime(this.scene, x, y, config);
     this.scene.add.existing(slime);
     return slime;
@@ -141,7 +138,7 @@ export class EntityFactory {
     y: number,
     config?: EnemyAIConfig,
   ): FlyingEnemy {
-    const texture = this.config.textures!.flying!;
+    
     const enemy = new FlyingEnemy(this.scene, x, y, config);
     this.scene.add.existing(enemy);
     return enemy;
@@ -155,7 +152,7 @@ export class EntityFactory {
    * @returns The created archer instance.
    */
   public createArcher(x: number, y: number, config?: EnemyAIConfig): Archer {
-    const texture = this.config.textures!.archer!;
+    
     const archer = new Archer(this.scene, x, y, config);
     this.scene.add.existing(archer);
     return archer;

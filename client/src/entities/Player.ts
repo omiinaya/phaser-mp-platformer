@@ -228,7 +228,7 @@ export class Player extends Character {
   /**
    * Callback when exiting an animation state.
    */
-  private onAnimationExit(state: string): void {
+  private onAnimationExit(_state: string): void {
     // Cleanup if needed
   }
 

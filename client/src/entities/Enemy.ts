@@ -9,7 +9,6 @@ import {
 } from './AttackPatternManager';
 import {
   getGlobalProjectilePool,
-  PooledProjectile,
 } from '../core/ProjectilePool';
 
 /**
@@ -128,7 +127,7 @@ export abstract class Enemy extends Character {
    * Update enemy AI and state each frame.
    * @param delta Time delta in milliseconds.
    */
-  public update(delta: number): void {
+  public update(_delta: number): void {
     super.update(delta);
 
     this.stateTimer += delta;
@@ -217,7 +216,7 @@ export abstract class Enemy extends Character {
    * Update idle state.
    * @param delta Time delta.
    */
-  protected updateIdle(delta: number): void {
+  protected updateIdle(_delta: number): void {
     // After a while, start patrolling
     if (this.stateTimer > 2000) {
       this.setState('patrol');
@@ -228,7 +227,7 @@ export abstract class Enemy extends Character {
    * Update patrol state.
    * @param delta Time delta.
    */
-  protected updatePatrol(delta: number): void {
+  protected updatePatrol(_delta: number): void {
     // Move in patrol direction
     this.move(this.patrolDirection);
 
@@ -249,7 +248,7 @@ export abstract class Enemy extends Character {
    * Update chase state.
    * @param delta Time delta.
    */
-  protected updateChase(delta: number): void {
+  protected updateChase(_delta: number): void {
     if (!this.target) {
       this.setAIState('patrol');
       return;
@@ -285,7 +284,7 @@ export abstract class Enemy extends Character {
    * Update attack state.
    * @param delta Time delta.
    */
-  protected updateAttack(delta: number): void {
+  protected updateAttack(_delta: number): void {
     if (!this.target) {
       this.setAIState('patrol');
       return;
@@ -327,7 +326,7 @@ export abstract class Enemy extends Character {
    * Update flee state (e.g., when health is low).
    * @param delta Time delta.
    */
-  protected updateFlee(delta: number): void {
+  protected updateFlee(_delta: number): void {
     // Move away from target
     if (this.target) {
       const direction = this.target.x > this.x ? -1 : 1;
@@ -411,21 +410,8 @@ export abstract class Enemy extends Character {
    * Update animation based on state.
    */
   protected updateAnimation(): void {
-    // Base implementation: set animation based on state and velocity
-    let animName = '';
-    if (this.aiState === 'dead') {
-      animName = 'dead';
-    } else if (this.aiState === 'attack') {
-      animName = 'attack';
-    } else if (!this.isOnGround) {
-      animName = 'jump';
-    } else if (Math.abs(this.velocity.x) > 10) {
-      animName = 'walk';
-    } else {
-      animName = 'idle';
-    }
-
-    // Flip sprite based on facing direction
+    // Base implementation: flip sprite based on facing direction
+    // Subclasses override this to actually play animations
     this.flipX = this.facing === -1;
 
     // Subclasses should implement actual animation playing
@@ -484,14 +470,14 @@ export class FlyingEnemy extends Enemy {
     this.maxHealth = this.health;
   }
 
-  public update(delta: number): void {
+  public update(_delta: number): void {
     // Override to ignore ground detection
     super.update(delta);
     // Flying enemies ignore ground collisions
     this.isOnGround = false;
   }
 
-  protected updatePatrol(delta: number): void {
+  protected updatePatrol(_delta: number): void {
     // Flying patrol: move in a sine wave pattern
     this.velocity.x = this.patrolDirection * this.aiConfig.patrolSpeed!;
     this.velocity.y = Math.sin(this.stateTimer / 500) * 50;
@@ -542,7 +528,7 @@ export class Projectile extends Phaser.Physics.Arcade.Sprite {
     this.flipX = direction === -1;
   }
 
-  public update(delta: number): void {
+  public update(_delta: number): void {
     this.lifetimeTimer += delta;
     if (this.lifetimeTimer >= this.lifetime) {
       this.destroy();
@@ -600,7 +586,7 @@ export class Archer extends Enemy {
       attackDuration: 500,
       cooldown: 2000,
       priority: 2,
-      customAttack: (enemy, target) => {
+      customAttack: (_enemy, _target) => {
         this.shoot();
       },
     };
@@ -608,7 +594,7 @@ export class Archer extends Enemy {
     this.attackManager?.addAttack('shoot', projectileAttack);
   }
 
-  protected updateChase(delta: number): void {
+  protected updateChase(_delta: number): void {
     if (!this.target) {
       this.setAIState('patrol');
       return;
@@ -646,7 +632,7 @@ export class Archer extends Enemy {
     this.move(direction);
   }
 
-  protected updateAttack(delta: number): void {
+  protected updateAttack(_delta: number): void {
     // Use parent's attack manager handling
     // Check if too close or too far
     if (!this.target) {
@@ -699,7 +685,7 @@ export class Archer extends Enemy {
     }
   }
 
-  protected updateFlee(delta: number): void {
+  protected updateFlee(_delta: number): void {
     if (!this.target) {
       this.setAIState('patrol');
       return;
@@ -824,7 +810,7 @@ export class AdvancedEnemy extends Enemy {
   /**
    * Override attack selection to vary attacks based on health.
    */
-  protected updateAttack(delta: number): void {
+  protected updateAttack(_delta: number): void {
     if (!this.target) {
       this.setAIState('patrol');
       return;

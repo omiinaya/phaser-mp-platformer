@@ -1,5 +1,5 @@
-import { parentPort, workerData } from 'worker_threads';
-import { MatchmakingRequest, MatchmakingPreferences } from '../types/matchmaking';
+import { parentPort } from 'worker_threads';
+import { MatchmakingRequest } from '../types/matchmaking';
 
 export interface MatchmakingResult {
   matchedRequests: MatchmakingRequest[];

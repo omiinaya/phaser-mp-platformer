@@ -154,7 +154,7 @@ export class Minimap {
    * Calculate X position based on position config.
    */
   private calculatePositionX(): number {
-    const { width, height, position, margin } = this.config;
+    const { width, position, margin } = this.config;
     const screenWidth = this.scene.cameras.main.width;
 
     switch (position) {

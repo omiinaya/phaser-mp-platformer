@@ -48,7 +48,7 @@ export class InventoryService {
   }
 
   async transferItem(fromPlayerId: string, toPlayerId: string, itemId: string, quantity: number = 1): Promise<boolean> {
-    return this.dataSource.transaction(async (manager) => {
+    return this.dataSource.transaction(async (_manager) => {
       const fromRepo = new InventoryRepository(this.dataSource);
       const toRepo = new InventoryRepository(this.dataSource);
       const removed = await fromRepo.removeItem(fromPlayerId, itemId, quantity);

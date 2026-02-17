@@ -1,5 +1,3 @@
-import { logger } from '../utils/logger';
-
 /**
  * Snapshot of an entity state at a specific timestamp.
  */

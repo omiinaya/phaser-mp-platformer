@@ -87,7 +87,7 @@ export class PowerUpManager {
     this.onEffectRemove = callback;
   }
 
-  public update(delta: number): void {
+  public update(_delta: number): void {
     const now = Date.now();
     const expired: PowerUpType[] = [];
 
@@ -184,7 +184,7 @@ export class PowerUp extends GameObject {
     }
   }
 
-  public collect(player: Player): void {
+  public collect(_player: Player): void {
     if (this.collected) return;
     this.collected = true;
 

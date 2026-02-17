@@ -79,7 +79,7 @@ export class ProgressionService {
 
   async grantUnlock(playerId: string, unlockableId: string): Promise<boolean> {
     try {
-      const unlock = await this.unlockRepo.unlock(playerId, unlockableId);
+      await this.unlockRepo.unlock(playerId, unlockableId);
       logger.info(`Player ${playerId} unlocked ${unlockableId}`);
       return true;
     } catch (error) {

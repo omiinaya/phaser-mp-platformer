@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne, OneToMany } from 'typeorm';
 import { PlayerStats } from './PlayerStats';
 import { PlayerUnlock } from './PlayerUnlock';
 import { Inventory } from './Inventory';

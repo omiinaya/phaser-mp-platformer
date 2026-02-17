@@ -1,5 +1,5 @@
 import 'phaser';
-import { Enemy, EnemyAIConfig, EnemyState, Slime } from './Enemy';
+import { Enemy, EnemyAIConfig, Slime } from './Enemy';
 import { Player } from './Player';
 
 export type BossPhase = 'idle' | 'phase1' | 'phase2' | 'phase3' | 'dying';
@@ -242,11 +242,11 @@ export class Boss extends Enemy {
     });
   }
 
-  protected updatePatrol(delta: number): void {
+  protected updatePatrol(_delta: number): void {
     // Boss doesn't patrol
   }
 
-  protected updateChase(delta: number): void {
+  protected updateChase(_delta: number): void {
     if (!this.target) {
       this.setAIState('attack');
       return;

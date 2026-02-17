@@ -116,7 +116,7 @@ export class LevelSelectScene extends Scene {
     this.updateSelection();
   }
 
-  private createLevelCards(width: number, height: number): void {
+  private createLevelCards(width: number, _height: number): void {
     const totalLevels = Object.keys(LEVEL_CONFIGS).length;
     const levelsPerRow = 3;
     const cardWidth = 120;

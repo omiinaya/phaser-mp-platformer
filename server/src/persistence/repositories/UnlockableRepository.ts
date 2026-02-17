@@ -2,6 +2,8 @@ import { DataSource } from 'typeorm';
 import { BaseRepository } from './BaseRepository';
 import { Unlockable, UnlockableType } from '../models/Unlockable';
 
+export { Unlockable, UnlockableType };
+
 export class UnlockableRepository extends BaseRepository<Unlockable> {
   constructor(dataSource: DataSource) {
     super(dataSource, Unlockable);

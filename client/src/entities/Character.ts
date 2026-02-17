@@ -155,7 +155,7 @@ export abstract class Character extends GameObject {
      * Attack action. Override in subclasses.
      * @param target Optional target character.
      */
-  public attack(target?: Character): void {
+  public attack(_target?: Character): void {
     // Base implementation does nothing
   }
 

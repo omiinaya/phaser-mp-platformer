@@ -143,6 +143,7 @@ describe('matchmaking.worker', () => {
       preferences: {
         gameMode,
         maxPlayers: MAX_PLAYERS,
+        region,
         ...preferences,
       },
       queuedAt: now,

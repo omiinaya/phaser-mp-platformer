@@ -36,11 +36,11 @@ import {
 } from '../core/ProjectilePool';
 import { EntityFactory } from '../factories/EntityFactory';
 import { Player } from '../entities/Player';
-import { Enemy, Projectile, Archer } from '../entities/Enemy';
+import { Enemy } from '../entities/Enemy';
 import { Item } from '../entities/Item';
 import { Platform } from '../entities/Platform';
-import { LevelManager, LevelConfig } from '../core/LevelManager';
-import { TilemapLoader, LoadedTilemapData } from '../core/TilemapLoader';
+import { LevelManager } from '../core/LevelManager';
+import { TilemapLoader } from '../core/TilemapLoader';
 import { SceneService } from '../core/SceneManager';
 import { PauseSceneData } from './PauseScene';
 import { GameOverSceneData } from './GameOverScene';
@@ -225,7 +225,7 @@ export class GameScene extends Scene {
       .setOrigin(0);
 
     // Set up level callbacks
-    this.levelManager.setScoreCallback((score) => {
+    this.levelManager.setScoreCallback((_score) => {
       this.updateUI();
     });
     this.levelManager.setLevelCompleteCallback(() => {
@@ -334,7 +334,7 @@ export class GameScene extends Scene {
 
     // Create items with callbacks and particle effects
     const healthPotion = this.entityFactory.createHealthPotion(150, 350);
-    healthPotion.onCollide = (player) => {
+    healthPotion.onCollide = (_player) => {
       this.levelManager?.collectItem('health_potion');
       // Health pickup particles
       this.particleManager?.createHealthPickupEffect(
@@ -348,7 +348,7 @@ export class GameScene extends Scene {
     this.items.push(healthPotion);
 
     const coin = this.entityFactory.createCoin(250, 350);
-    coin.onCollide = (player) => {
+    coin.onCollide = (_player) => {
       this.levelManager?.collectCoin();
       // Coin collection particles
       this.particleManager?.createCoinSparkles(coin.x, coin.y);
@@ -360,7 +360,7 @@ export class GameScene extends Scene {
 
     // Add more coins for scoring
     const coin2 = this.entityFactory.createCoin(400, 250);
-    coin2.onCollide = (player) => {
+    coin2.onCollide = (_player) => {
       this.levelManager?.collectCoin();
       this.particleManager?.createCoinSparkles(coin2.x, coin2.y);
       this.audioService?.playSFX('coin');
@@ -369,7 +369,7 @@ export class GameScene extends Scene {
     this.items.push(coin2);
 
     const coin3 = this.entityFactory.createCoin(600, 300);
-    coin3.onCollide = (player) => {
+    coin3.onCollide = (_player) => {
       this.levelManager?.collectCoin();
       this.particleManager?.createCoinSparkles(coin3.x, coin3.y);
       this.audioService?.playSFX('coin');
@@ -439,10 +439,9 @@ export class GameScene extends Scene {
     this.physicsManager.setCollision(
       this.player,
       slime,
-      (playerObj, enemyObj) => {
+      (playerObj, _enemyObj) => {
         // Player takes damage when colliding with enemy
         const player = playerObj as Player;
-        const enemy = enemyObj as Enemy;
 
         if (player.takeDamage(1)) {
           // Screen shake
@@ -457,7 +456,7 @@ export class GameScene extends Scene {
     this.physicsManager.setCollision(
       this.player,
       flyingEnemy,
-      (playerObj, enemyObj) => {
+      (playerObj, _enemyObj) => {
         // Player takes damage when colliding with enemy
         const player = playerObj as Player;
 
@@ -542,7 +541,7 @@ export class GameScene extends Scene {
     eventBus.on('game:resume', this.resumeGame.bind(this));
   }
 
-  update(time: number, delta: number) {
+  update(_time: number, _delta: number) {
     // Update input manager
     if (this.inputManager && !this.isPaused) {
       this.inputManager.update();
@@ -717,7 +716,7 @@ export class GameScene extends Scene {
     }
   }
 
-  private handleInput(delta: number): void {
+  private handleInput(_delta: number): void {
     // Input handling is now delegated to Player via InputManager binding
     // Additional global input (e.g., pause) can be handled here
 
@@ -1055,7 +1054,7 @@ export class GameScene extends Scene {
     // Combo reset event
     this.events.on(
       'player:combo-reset',
-      (data: { player: Player; reason: string }) => {
+      (_data: { player: Player; reason: string }) => {
         this.currentComboCount = 0;
         this.currentComboMultiplier = 1.0;
         this.hideComboUI();
@@ -1063,7 +1062,7 @@ export class GameScene extends Scene {
     );
 
     // Parry start event
-    this.events.on('player:parry', (data: { player: Player }) => {
+    this.events.on('player:parry', (_data: { player: Player }) => {
       this.audioService?.playSFX('defense');
     });
 
@@ -1356,11 +1355,11 @@ export class GameScene extends Scene {
     }
   }
 
-  private updateRemotePlayers(delta: number): void {
+  private updateRemotePlayers(_delta: number): void {
     const now = Date.now();
     const lerpFactor = 0.15;
 
-    for (const [playerId, playerData] of this.remotePlayers.entries()) {
+    for (const [, playerData] of this.remotePlayers.entries()) {
       const { sprite, nameText, targetPosition, lastUpdateTime } = playerData;
 
       if (targetPosition) {

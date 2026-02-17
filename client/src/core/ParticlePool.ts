@@ -105,7 +105,7 @@ export class ParticlePool {
 
   constructor(
     scene: Scene,
-    initialSize: number = 5,
+    _initialSize: number = 5,
     maxPerConfig: number = 10,
   ) {
     this.scene = scene;
@@ -155,8 +155,8 @@ export class ParticlePool {
     emitter.reset();
   }
 
-  public update(delta: number): void {
-    for (const [key, emitters] of this.pool.entries()) {
+  public update(_delta: number): void {
+    for (const [, emitters] of this.pool.entries()) {
       for (const emitter of emitters) {
         if (emitter.getIsInUse()) {
           const emitterObj = emitter.getEmitter();
