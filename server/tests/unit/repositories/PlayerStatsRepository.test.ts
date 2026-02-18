@@ -113,7 +113,22 @@ describe('PlayerStatsRepository', () => {
 
       await repository.incrementKills('player-1', 5);
 
-      expect(mockQueryBuilder.set).toHaveBeenCalled();
+      expect(mockQueryBuilder.set).toHaveBeenCalledWith({ kills: expect.any(Function) });
+    });
+
+    it('should call set with correct kills increment', async () => {
+      const mockQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 1 }),
+      };
+      mockBaseRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+
+      await repository.incrementKills('player-1', 3);
+      
+      const setCall = mockQueryBuilder.set.mock.calls[0][0];
+      expect(setCall.kills()).toBe('kills + 3');
     });
 
     it('should throw error when increment fails', async () => {
@@ -154,7 +169,22 @@ describe('PlayerStatsRepository', () => {
 
       await repository.incrementDeaths('player-1', 3);
 
-      expect(mockQueryBuilder.set).toHaveBeenCalled();
+      expect(mockQueryBuilder.set).toHaveBeenCalledWith({ deaths: expect.any(Function) });
+    });
+
+    it('should call set with correct deaths increment', async () => {
+      const mockQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 1 }),
+      };
+      mockBaseRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+
+      await repository.incrementDeaths('player-1', 2);
+      
+      const setCall = mockQueryBuilder.set.mock.calls[0][0];
+      expect(setCall.deaths()).toBe('deaths + 2');
     });
 
     it('should throw error when increment fails', async () => {
@@ -194,7 +224,22 @@ describe('PlayerStatsRepository', () => {
 
       await repository.updateScore('player-1', -50);
 
-      expect(mockQueryBuilder.set).toHaveBeenCalled();
+      expect(mockQueryBuilder.set).toHaveBeenCalledWith({ score: expect.any(Function) });
+    });
+
+    it('should call set with correct score delta', async () => {
+      const mockQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 1 }),
+      };
+      mockBaseRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+
+      await repository.updateScore('player-1', 250);
+      
+      const setCall = mockQueryBuilder.set.mock.calls[0][0];
+      expect(setCall.score()).toBe('score + 250');
     });
 
     it('should throw error when update fails', async () => {
@@ -220,7 +265,22 @@ describe('PlayerStatsRepository', () => {
 
       await repository.updatePlayTime('player-1', 3600);
 
-      expect(mockQueryBuilder.set).toHaveBeenCalled();
+      expect(mockQueryBuilder.set).toHaveBeenCalledWith({ playTimeSeconds: expect.any(Function) });
+    });
+
+    it('should call set with correct play time increment', async () => {
+      const mockQueryBuilder = {
+        update: jest.fn().mockReturnThis(),
+        set: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        execute: jest.fn().mockResolvedValue({ affected: 1 }),
+      };
+      mockBaseRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+
+      await repository.updatePlayTime('player-1', 1800);
+      
+      const setCall = mockQueryBuilder.set.mock.calls[0][0];
+      expect(setCall.playTimeSeconds()).toBe('play_time_seconds + 1800');
     });
 
     it('should throw error when update fails', async () => {

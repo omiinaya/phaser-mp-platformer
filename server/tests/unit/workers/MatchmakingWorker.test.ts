@@ -39,6 +39,31 @@ describe('MatchmakingWorker', () => {
   });
 
   describe('process', () => {
+    it('should successfully process queue when worker is available', async () => {
+      worker = new MatchmakingWorker();
+      const mockWorker = (worker as any).worker;
+      mockWorker.postMessage = jest.fn();
+      
+      // Call process - should succeed
+      const request = {
+        requestId: 'req-1',
+        playerId: 'player1',
+        socketId: 'socket-1',
+        preferences: { gameMode: 'deathmatch', region: 'us' },
+        queuedAt: new Date(),
+      };
+      const promise = worker.process([request]);
+      
+      // Worker should now be busy
+      expect((worker as any).busy).toBe(true);
+      expect((worker as any).queue).toEqual([request]);
+      expect(mockWorker.postMessage).toHaveBeenCalledWith([request]);
+      
+      // Clean up - resolve the promise
+      (worker as any).resolveCallback([]);
+      await promise;
+    });
+
     it('should reject if worker is busy', async () => {
       worker = new MatchmakingWorker();
       // First call sets busy to true

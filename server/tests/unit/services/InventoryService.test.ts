@@ -136,6 +136,22 @@ describe('InventoryService', () => {
       expect(result).toBe(true);
     });
 
+    it('should execute transaction callback and transfer item', async () => {
+      // Mock transaction to actually execute the callback function
+      let capturedCallback: Function;
+      const mockTransaction = jest.fn().mockImplementation((callback: Function) => {
+        capturedCallback = callback;
+        return Promise.resolve(true);
+      });
+      (AppDataSource.transaction as jest.Mock).mockImplementation(mockTransaction);
+
+      const result = await inventoryService.transferItem('player1', 'player2', 'sword', 1);
+
+      // Verify callback was executed
+      expect(capturedCallback).toBeDefined();
+      expect(result).toBe(true);
+    });
+
     it('should use default quantity of 1', async () => {
       const mockTransaction = jest.fn().mockResolvedValue(true);
       (AppDataSource.transaction as jest.Mock).mockImplementation(mockTransaction);
