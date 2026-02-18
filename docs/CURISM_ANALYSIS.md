@@ -9,7 +9,7 @@
 ### Hard Skills (30%)
 | Metric | Score | Status |
 |--------|-------|--------|
-| Reliability (Tests) | 100% | ✅ All 889 tests pass (338 server + 550 client, 1 skipped) |
+| Reliability (Tests) | 100% | ✅ All 903 tests pass (353 server + 550 client, 1 skipped) |
 | Security | 100% | ✅ 0 vulnerabilities in production deps |
 | Maintainability | 100% | ✅ 0 lint warnings |
 
@@ -50,8 +50,8 @@
 
 ## Recent Improvements (2026-02-18)
 
-1. ✅ Added GameSync edge case tests (+3 tests)
-2. ✅ Test count: 889 total (338 server + 550 client + 1 skipped)
+1. ✅ Updated test count: 903 total (353 server + 550 client, 1 skipped)
+2. ✅ All tests passing
 3. ✅ Server coverage: ~80% statements
 4. ✅ EventHandler coverage: 96.51%
 5. ✅ RoomManager coverage: 92.5%
@@ -108,10 +108,10 @@
 
 | Type | Count | Status |
 |------|-------|--------|
-| Server Unit | 338 | ✅ All pass |
+| Server Unit | 353 | ✅ All pass |
 | Client Unit | 550 | ✅ All pass |
 | Skipped | 1 | ℹ️ Intentional |
-| **Total** | **889** | **✅ 100% pass** |
+| **Total** | **903** | **✅ 100% pass** |
 
 ---
 
