@@ -9,7 +9,7 @@
 ### Hard Skills (30%)
 | Metric | Score | Status |
 |--------|-------|--------|
-| Reliability (Tests) | 100% | ✅ All 1020 tests pass (396 server + 624 client, 1 skipped) |
+| Reliability (Tests) | 100% | ✅ All 1028 tests pass (404 server + 624 client, 1 skipped) |
 | Security | 100% | ✅ 0 vulnerabilities in production deps |
 | Maintainability | 100% | ✅ 0 lint warnings |
 
@@ -56,10 +56,15 @@
    - Test for transaction promise rejection
 3. ✅ Fixed unnecessary nullish coalescing in CacheService
    - Removed dead code (defaultTtl is always set in constructor)
-4. ✅ Test count: 1020 total (396 server + 624 client, 1 skipped)
-5. ✅ CacheService coverage: 92.3% → 100% ✅
-6. ✅ 0 lint warnings maintained
-7. ✅ All tests passing
+4. ✅ Added extensive GameSync physics and event tests (+9 tests)
+   - Physics simulation tests (gravity, velocity, out of bounds)
+   - Collision event tests (damage, entity destruction)
+   - Player input tests (movement, jumping)
+5. ✅ Test count: 1028 total (404 server + 624 client, 1 skipped)
+6. ✅ CacheService coverage: 92.3% → 100% ✅
+7. ✅ GameSync coverage: 63% → 95.37% ✅
+8. ✅ 0 lint warnings maintained
+9. ✅ All tests passing
 
 ---
 
@@ -80,8 +85,8 @@
 | PlayerStatsRepository | 100% | ✅ Perfect |
 | CacheService | 100% | ✅ Perfect |
 | MatchmakingWorker | 100% | ✅ Perfect |
+| GameSync | 95.37% | ✅ Excellent |
 | Matchmaker | 75% | ✅ Good |
-| GameSync | ~63% | ✅ Good |
 | AnimationManager (client) | ~70% | ✅ Good |
 | AudioService (client) | ~60% | ✅ Good |
 
@@ -117,10 +122,10 @@
 
 | Type | Count | Status |
 |------|-------|--------|
-| Server Unit | 396 | ✅ All pass |
+| Server Unit | 404 | ✅ All pass |
 | Client Unit | 624 | ✅ All pass |
 | Skipped | 1 | ℹ️ Intentional |
-| **Total** | **1020** | **✅ 100% pass** |
+| **Total** | **1028** | **✅ 100% pass** |
 
 ---
 

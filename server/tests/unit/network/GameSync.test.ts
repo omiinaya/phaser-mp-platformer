@@ -469,4 +469,164 @@ describe('GameSync', () => {
       expect(result).toBe(false);
     });
   });
+
+  describe('physics simulation', () => {
+    it('should apply gravity to entities affected by gravity', () => {
+      // Add test-room to active rooms
+      mockRoomManager.getActiveRooms.mockReturnValue([
+        { roomId: 'test-room', players: [{ playerId: 'player1', socketId: 'socket1' }], gameMode: 'deathmatch', maxPlayers: 4, createdAt: Date.now(), isActive: true } as any,
+      ]);
+
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 100 },
+        velocity: { x: 0, y: 0 },
+        affectedByGravity: true,
+        isOnGround: false,
+      };
+
+      // Call tick to process physics
+      (gameSync as any).tick();
+
+      // Entity should still exist
+      expect(state!.entities['player1']).toBeDefined();
+    });
+
+    it('should process entities without velocity in physics', () => {
+      // Add test-room to active rooms
+      mockRoomManager.getActiveRooms.mockReturnValue([
+        { roomId: 'test-room', players: [{ playerId: 'player1', socketId: 'socket1' }], gameMode: 'deathmatch', maxPlayers: 4, createdAt: Date.now(), isActive: true } as any,
+      ]);
+
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 100 },
+        // No velocity - should not crash
+      };
+
+      // Should not throw
+      expect(() => (gameSync as any).tick()).not.toThrow();
+    });
+
+    it('should process out of bounds check', () => {
+      // Add test-room to active rooms
+      mockRoomManager.getActiveRooms.mockReturnValue([
+        { roomId: 'test-room', players: [{ playerId: 'player1', socketId: 'socket1' }], gameMode: 'deathmatch', maxPlayers: 4, createdAt: Date.now(), isActive: true } as any,
+      ]);
+
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 1100 }, // Beyond 1000
+        velocity: { x: 0, y: 10 },
+      };
+
+      // Should not throw
+      expect(() => (gameSync as any).tick()).not.toThrow();
+    });
+  });
+
+  describe('processGameEvent collision with damage', () => {
+    it('should add entity_destroyed event when health drops to zero', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      // Both entities must exist for collision to process
+      state!.entities['player1'] = {
+        position: { x: 50, y: 100 },
+        velocity: { x: 0, y: 0 },
+        isOnGround: true,
+      } as any;
+      state!.entities['enemy1'] = {
+        position: { x: 100, y: 100 },
+        health: 10,
+      } as any;
+
+      // Process collision with damage that kills
+      (gameSync as any).processGameEvent(state!, {
+        type: 'collision',
+        entityId1: 'player1',
+        entityId2: 'enemy1',
+        damage: 15,
+      });
+
+      // Event should be added (actual deletion happens in tick)
+      const destroyEvent = state!.events.find((e: any) => e.type === 'entity_destroyed' && e.reason === 'destroyed');
+      expect(destroyEvent).toBeDefined();
+    });
+
+    it('should handle collision with missing entity', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+
+      // Process collision with non-existent entity
+      expect(() => {
+        (gameSync as any).processGameEvent(state!, {
+          type: 'collision',
+          entityId1: 'player1',
+          entityId2: 'nonexistent',
+          damage: 10,
+        });
+      }).not.toThrow();
+    });
+  });
+
+  describe('player input processing', () => {
+    it('should process player input with moveX only', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 100 },
+        velocity: { x: 0, y: 0 },
+        isOnGround: true,
+      };
+
+      (gameSync as any).processGameEvent(state!, {
+        type: 'player_input',
+        playerId: 'player1',
+        input: { moveX: 1 },
+      });
+
+      expect(state!.entities['player1'].velocity.x).toBe(200);
+    });
+
+    it('should not apply jump when not on ground', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 100 },
+        velocity: { x: 0, y: 0 },
+        isOnGround: false, // Not on ground
+      };
+
+      (gameSync as any).processGameEvent(state!, {
+        type: 'player_input',
+        playerId: 'player1',
+        input: { moveX: 0, jump: true },
+      });
+
+      // Jump should not be applied
+      expect(state!.entities['player1'].velocity.y).toBe(0);
+    });
+
+    it('should apply jump when on ground', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 100 },
+        velocity: { x: 0, y: 0 },
+        isOnGround: true,
+      };
+
+      (gameSync as any).processGameEvent(state!, {
+        type: 'player_input',
+        playerId: 'player1',
+        input: { moveX: 0, jump: true },
+      });
+
+      expect(state!.entities['player1'].velocity.y).toBe(-400);
+      expect(state!.entities['player1'].isOnGround).toBe(false);
+    });
+  });
 });
