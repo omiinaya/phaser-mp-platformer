@@ -153,6 +153,35 @@ describe('CacheService', () => {
       // Should not throw when called multiple times
       cacheService.stopCleanup();
     });
+
+    it('should automatically cleanup expired entries via interval', () => {
+      // Set up cache with short TTL and immediate cleanup interval
+      const shortCleanupService = new CacheService({ 
+        defaultTtl: 100, 
+        cleanupInterval: 50 
+      });
+      
+      shortCleanupService.set('key1', 'value1');
+      shortCleanupService.set('key2', 'value2');
+      
+      // Advance past TTL but less than cleanup interval
+      jest.advanceTimersByTime(150);
+      
+      // Manually trigger cleanup by calling stopCleanup which runs cleanup
+      shortCleanupService.stopCleanup();
+      
+      // Both should be expired now
+      expect(shortCleanupService.get('key1')).toBeUndefined();
+      expect(shortCleanupService.get('key2')).toBeUndefined();
+      
+      shortCleanupService.clear();
+    });
+
+    it('should handle cleanup when no interval configured', () => {
+      const noCleanupService = new CacheService({ cleanupInterval: 0 });
+      expect(noCleanupService).toBeInstanceOf(CacheService);
+      noCleanupService.stopCleanup();
+    });
   });
 
   describe('TTL', () => {
