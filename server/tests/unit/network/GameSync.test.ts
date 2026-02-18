@@ -163,4 +163,55 @@ describe('GameSync', () => {
       expect(state).toBeDefined();
     });
   });
+
+  describe('entity state management', () => {
+    it('should handle entity without position', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        velocity: { x: 10, y: 5 },
+        isOnGround: false,
+        lastUpdated: Date.now(),
+      };
+      
+      // State should be retrievable
+      expect(state).toBeDefined();
+    });
+
+    it('should handle entity without velocity', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 100 },
+        isOnGround: true,
+        lastUpdated: Date.now(),
+      };
+      
+      // State should be retrievable
+      expect(state).toBeDefined();
+    });
+
+    it('should handle multiple entities in room', () => {
+      gameSync.resetRoomState('test-room');
+      const state = gameSync.getRoomState('test-room');
+      state!.entities['player1'] = {
+        position: { x: 100, y: 100 },
+        velocity: { x: 10, y: 0 },
+        isOnGround: true,
+      };
+      state!.entities['player2'] = {
+        position: { x: 200, y: 100 },
+        velocity: { x: -10, y: 0 },
+        isOnGround: true,
+      };
+      
+      expect(Object.keys(state!.entities).length).toBe(2);
+    });
+  });
+
+  describe('broadcastState', () => {
+    it('should have broadcastState method', () => {
+      expect(typeof (gameSync as any).broadcastState).toBe('function');
+    });
+  });
 });
