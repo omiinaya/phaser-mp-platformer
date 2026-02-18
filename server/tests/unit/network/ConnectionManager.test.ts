@@ -1,5 +1,8 @@
 import { ConnectionManager } from '../../../src/network/ConnectionManager';
 import { Server, Socket } from 'socket.io';
+import jwt from 'jsonwebtoken';
+import { ProgressionService } from '../../../src/services/ProgressionService';
+import { logger } from '../../../src/utils/logger';
 
 // Mock dependencies
 jest.mock('../../../src/utils/logger', () => ({
@@ -12,11 +15,13 @@ jest.mock('../../../src/utils/logger', () => ({
 }));
 
 jest.mock('jsonwebtoken');
+jest.mock('../../../src/services/ProgressionService');
 
 describe('ConnectionManager', () => {
   let mockServer: jest.Mocked<Server>;
   let mockSocket: jest.Mocked<Socket>;
   let connectionManager: ConnectionManager;
+  let mockProgressionService: jest.Mocked<ProgressionService>;
 
   beforeEach(() => {
     mockServer = {
@@ -39,11 +44,16 @@ describe('ConnectionManager', () => {
       }),
     } as any;
 
+    mockProgressionService = {
+      initializePlayer: jest.fn().mockResolvedValue(undefined),
+    } as any;
+
     connectionManager = new ConnectionManager(mockServer);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
+    delete process.env.JWT_SECRET;
   });
 
   describe('setupEventHandlers', () => {
