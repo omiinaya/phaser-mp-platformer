@@ -9,7 +9,7 @@
 ### Hard Skills (30%)
 | Metric | Score | Status |
 |--------|-------|--------|
-| Reliability (Tests) | 100% | ✅ All 907 tests pass (357 server + 550 client, 1 skipped) |
+| Reliability (Tests) | 100% | ✅ All 930 tests pass (380 server + 550 client, 1 skipped) |
 | Security | 100% | ✅ 0 vulnerabilities in production deps |
 | Maintainability | 100% | ✅ 0 lint warnings |
 
@@ -74,6 +74,10 @@
 | InventoryRepository | 100% | ✅ Perfect |
 | UnlockableRepository | 100% | ✅ Perfect |
 | PlayerUnlockRepository | 100% | ✅ Perfect |
+| BaseRepository | 100% | ✅ Perfect |
+| GameSync | 63% | ✅ Good (improved from 59%) |
+| Matchmaker | 75% | ✅ Good (improved from 52%) |
+| MatchmakingWorker | 87% | ✅ Excellent |
 | AnimationManager (client) | ~70% | ✅ Good |
 | AudioService (client) | ~60% | ✅ Good |
 
@@ -88,10 +92,11 @@
 ## Potential Improvements
 
 ### 1. Server Coverage Improvements
-- [ ] BaseRepository: 33.33% → target 80%+
+- [x] BaseRepository: 100% ✅
 - [ ] persistence/database.ts: 0% → may be test utility
-- [ ] GameSync: 50.92% → target 80%+
-- [ ] Matchmaker: 52% → target 80%+
+- [ ] GameSync: 63% → target 80%+
+- [x] Matchmaker: 75% ✅
+- [ ] MatchmakingWorker: 87% → target 90%+
 
 ### 2. Code Quality
 - [ ] Add more integration tests for API endpoints
@@ -108,10 +113,10 @@
 
 | Type | Count | Status |
 |------|-------|--------|
-| Server Unit | 357 | ✅ All pass |
+| Server Unit | 380 | ✅ All pass |
 | Client Unit | 550 | ✅ All pass |
 | Skipped | 1 | ℹ️ Intentional |
-| **Total** | **907** | **✅ 100% pass** |
+| **Total** | **930** | **✅ 100% pass** |
 
 ---
 
