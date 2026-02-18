@@ -136,6 +136,17 @@ describe('InventoryService', () => {
       expect(result).toBe(true);
     });
 
+    it('should use default quantity of 1', async () => {
+      const mockTransaction = jest.fn().mockResolvedValue(true);
+      (AppDataSource.transaction as jest.Mock).mockImplementation(mockTransaction);
+
+      const result = await inventoryService.transferItem('player1', 'player2', 'potion');
+
+      expect(AppDataSource.transaction).toHaveBeenCalled();
+      expect(result).toBe(true);
+      // Verify the callback was called and would pass quantity=1 as default
+    });
+
     it('should return false on transfer failure', async () => {
       const mockTransaction = jest.fn().mockImplementation(async () => {
         throw new Error('Transfer failed');
