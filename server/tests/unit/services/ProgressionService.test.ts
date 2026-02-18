@@ -154,6 +154,63 @@ describe('ProgressionService', () => {
       expect(mockStats.highestScore).toBe(150);
       expect(mockSave).toHaveBeenCalledWith(mockStats);
     });
+
+    it('should apply all stat updates including deaths, playTime, gamesPlayed, gamesWon', async () => {
+      const mockStats = {
+        kills: 10,
+        deaths: 2,
+        score: 100,
+        highestScore: 100,
+        playTimeSeconds: 3600,
+        gamesPlayed: 5,
+        gamesWon: 3,
+      };
+      mockStatsRepo.findByPlayerId.mockResolvedValue(mockStats);
+      const mockSave = jest.fn();
+      mockDataSource.transaction.mockImplementation(async (cb: any) => {
+        return cb({
+          save: mockSave,
+        });
+      });
+
+      await service.updateStats('player1', { 
+        deaths: 1, 
+        playTimeSeconds: 600, 
+        gamesPlayed: 1, 
+        gamesWon: 1 
+      });
+
+      expect(mockStats.deaths).toBe(3);
+      expect(mockStats.playTimeSeconds).toBe(4200);
+      expect(mockStats.gamesPlayed).toBe(6);
+      expect(mockStats.gamesWon).toBe(4);
+      expect(mockSave).toHaveBeenCalledWith(mockStats);
+    });
+
+    it('should not update highestScore when score is lower', async () => {
+      const mockStats = {
+        kills: 10,
+        deaths: 2,
+        score: 50,
+        highestScore: 100,
+        playTimeSeconds: 3600,
+        gamesPlayed: 5,
+        gamesWon: 3,
+      };
+      mockStatsRepo.findByPlayerId.mockResolvedValue(mockStats);
+      const mockSave = jest.fn();
+      mockDataSource.transaction.mockImplementation(async (cb: any) => {
+        return cb({
+          save: mockSave,
+        });
+      });
+
+      await service.updateStats('player1', { score: -10 });
+
+      expect(mockStats.score).toBe(40);
+      expect(mockStats.highestScore).toBe(100); // Should NOT change
+      expect(mockSave).toHaveBeenCalledWith(mockStats);
+    });
   });
 
   describe('grantUnlock', () => {
