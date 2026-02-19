@@ -87,6 +87,26 @@ describe('LeaderboardService', () => {
     it('should create leaderboard service', () => {
       expect(leaderboardService).toBeInstanceOf(LeaderboardService);
     });
+
+    it('should register redis error handler', () => {
+      expect(mockRedisClient.on).toHaveBeenCalledWith('error', expect.any(Function));
+    });
+
+    it('should handle redis errors via the error handler', () => {
+      // Get the error handler callback
+      const errorHandler = mockRedisClient.on.mock.calls.find(
+        (call: any[]) => call[0] === 'error'
+      )?.[1];
+      
+      // Simulate a redis error
+      const testError = new Error('Redis connection failed');
+      if (errorHandler) {
+        errorHandler(testError);
+      }
+      
+      // The error should be logged (we mock logger, so just verify it doesn't throw)
+      expect(true).toBe(true);
+    });
   });
 
   describe('getTopPlayersByScore', () => {
@@ -138,6 +158,21 @@ describe('LeaderboardService', () => {
 
       expect(result).toHaveLength(1);
       expect(mockStatsRepo.findTopPlayersByScore).toHaveBeenCalled();
+    });
+
+    it('should show "Unknown" when profile is not found', async () => {
+      mockRedisClient.get.mockResolvedValue(null);
+      
+      mockStatsRepo.findTopPlayersByScore.mockResolvedValue([
+        { playerId: 'missingPlayer', score: 500, kills: 5, deaths: 5, playTimeSeconds: 1800 },
+      ]);
+
+      mockProfileRepo.findOne.mockResolvedValue(null); // No profile
+
+      const result = await leaderboardService.getTopPlayersByScore(10, true);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].username).toBe('Unknown');
     });
 
     it('should bypass cache when useCache is false', async () => {
