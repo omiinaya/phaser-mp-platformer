@@ -3,8 +3,10 @@ import client from 'prom-client';
 // Create a Registry to register the metrics
 const register = new client.Registry();
 
-// Add default metrics (CPU, memory, etc.)
-client.collectDefaultMetrics({ register });
+// Add default metrics (CPU, memory, etc.) - skip in test environment
+if (process.env.NODE_ENV !== 'test') {
+  client.collectDefaultMetrics({ register });
+}
 
 // Custom metrics
 export const httpRequestDuration = new client.Histogram({
