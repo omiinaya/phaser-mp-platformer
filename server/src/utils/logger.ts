@@ -54,3 +54,10 @@ export const logger = {
   error: (message: string, meta?: any) => winstonLogger.error(message, meta),
   debug: (message: string, meta?: any) => winstonLogger.debug(message, meta),
 };
+
+/**
+ * Close all logger transports - useful for test cleanup
+ */
+export function closeLogger(): void {
+  winstonLogger.close();
+}

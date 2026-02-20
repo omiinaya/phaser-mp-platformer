@@ -1,6 +1,17 @@
 // Jest setup file for server tests
 import { jest } from '@jest/globals';
 
+// Mock logger first to prevent file handles from being opened
+jest.mock('./utils/logger', () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+    debug: jest.fn(),
+  },
+  closeLogger: jest.fn(),
+}));
+
 // Mock database connections
 jest.mock('./persistence/database', () => ({
   initialize: jest.fn(),
