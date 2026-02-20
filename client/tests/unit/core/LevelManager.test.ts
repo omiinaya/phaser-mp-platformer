@@ -1,4 +1,8 @@
-import { LevelManager, LevelConfig, LEVEL_CONFIGS } from '../../../src/core/LevelManager';
+import {
+  LevelManager,
+  LevelConfig,
+  LEVEL_CONFIGS,
+} from '../../../src/core/LevelManager';
 
 // Mock logger
 jest.mock('../../../src/utils/logger', () => ({

@@ -70,12 +70,21 @@ describe('ConnectionManager', () => {
   describe('setupEventHandlers', () => {
     it('should set up connection handler on initialization', () => {
       connectionManager = new ConnectionManager(mockServer);
-      expect(mockServer.on).toHaveBeenCalledWith('connection', expect.any(Function));
+      expect(mockServer.on).toHaveBeenCalledWith(
+        'connection',
+        expect.any(Function),
+      );
     });
 
     it('should set up connection handler with ProgressionService', () => {
-      connectionManager = new ConnectionManager(mockServer, mockProgressionService);
-      expect(mockServer.on).toHaveBeenCalledWith('connection', expect.any(Function));
+      connectionManager = new ConnectionManager(
+        mockServer,
+        mockProgressionService,
+      );
+      expect(mockServer.on).toHaveBeenCalledWith(
+        'connection',
+        expect.any(Function),
+      );
     });
   });
 
@@ -88,7 +97,7 @@ describe('ConnectionManager', () => {
       const mockPlayerId = 'player-456';
       const mockToken = 'valid-token';
       process.env.JWT_SECRET = 'test-secret';
-      
+
       mockSocket.handshake.auth = { token: mockToken };
       (jwt.verify as jest.Mock).mockReturnValue({ playerId: mockPlayerId });
 
@@ -126,7 +135,10 @@ describe('ConnectionManager', () => {
       const connectionHandler = eventHandlers.get('connection')!;
       connectionHandler(mockSocket);
 
-      expect(mockSocket.on).toHaveBeenCalledWith('disconnect', expect.any(Function));
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        'disconnect',
+        expect.any(Function),
+      );
     });
   });
 
@@ -144,7 +156,9 @@ describe('ConnectionManager', () => {
       const disconnectHandler = eventHandlers.get('socket-123:disconnect')!;
       disconnectHandler();
 
-      expect(logger.info).toHaveBeenCalledWith('Client disconnected: socket-123');
+      expect(logger.info).toHaveBeenCalledWith(
+        'Client disconnected: socket-123',
+      );
       expect(connectionManager.getConnectedCount()).toBe(0);
     });
 
@@ -246,7 +260,9 @@ describe('ConnectionManager', () => {
       // Should have assigned guest session since auth failed
       const session = connectionManager.getSession('socket-123');
       expect(session?.playerId).toBe('guest_socket-123');
-      expect(logger.error).toHaveBeenCalledWith('JWT_SECRET environment variable not set');
+      expect(logger.error).toHaveBeenCalledWith(
+        'JWT_SECRET environment variable not set',
+      );
     });
 
     it('should return null for invalid token', () => {
@@ -295,10 +311,14 @@ describe('ConnectionManager', () => {
       const connectionHandler = eventHandlers.get('connection')!;
       connectionHandler(mockSocket);
 
-      const reconnectHandler = eventHandlers.get('socket-123:reconnect_attempt')!;
+      const reconnectHandler = eventHandlers.get(
+        'socket-123:reconnect_attempt',
+      )!;
       reconnectHandler();
 
-      expect(logger.debug).toHaveBeenCalledWith('Reconnect attempt by socket-123');
+      expect(logger.debug).toHaveBeenCalledWith(
+        'Reconnect attempt by socket-123',
+      );
     });
   });
 
@@ -338,7 +358,10 @@ describe('ConnectionManager', () => {
       pingHandler();
 
       // Should not have emitted pong since session doesn't exist
-      expect(mockSocket.emit).not.toHaveBeenCalledWith('pong', expect.any(Object));
+      expect(mockSocket.emit).not.toHaveBeenCalledWith(
+        'pong',
+        expect.any(Object),
+      );
     });
   });
 
@@ -353,7 +376,8 @@ describe('ConnectionManager', () => {
       const connectionHandler = eventHandlers.get('connection')!;
       connectionHandler(mockSocket);
 
-      const session = connectionManager.getSessionByPlayerId('guest_socket-123');
+      const session =
+        connectionManager.getSessionByPlayerId('guest_socket-123');
       expect(session).toBeDefined();
       expect(session?.playerId).toBe('guest_socket-123');
     });
@@ -413,26 +437,34 @@ describe('ConnectionManager', () => {
       mockSocket.handshake.auth = { token: 'valid-token' };
       (jwt.verify as jest.Mock).mockReturnValue({ playerId: mockPlayerId });
 
-      connectionManager = new ConnectionManager(mockServer, mockProgressionService);
+      connectionManager = new ConnectionManager(
+        mockServer,
+        mockProgressionService,
+      );
       const connectionHandler = eventHandlers.get('connection')!;
       connectionHandler(mockSocket);
 
       // Wait for async progression service call
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(mockProgressionService.initializePlayer).toHaveBeenCalledWith(mockPlayerId);
+      expect(mockProgressionService.initializePlayer).toHaveBeenCalledWith(
+        mockPlayerId,
+      );
     });
 
     it('should not initialize progression for guest players', async () => {
       mockSocket.handshake.auth = {};
       mockSocket.handshake.query = {};
 
-      connectionManager = new ConnectionManager(mockServer, mockProgressionService);
+      connectionManager = new ConnectionManager(
+        mockServer,
+        mockProgressionService,
+      );
       const connectionHandler = eventHandlers.get('connection')!;
       connectionHandler(mockSocket);
 
       // Wait for async progression service call
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(mockProgressionService.initializePlayer).not.toHaveBeenCalled();
     });

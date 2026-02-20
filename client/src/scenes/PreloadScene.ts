@@ -21,7 +21,7 @@ export class PreloadScene extends Scene {
     ];
 
     // Register progress callback
-    this.assetManager.onProgress(event => {
+    this.assetManager.onProgress((event) => {
       const percent = Math.floor(event.progress * 100);
       logger.info(`Loading: ${percent}%`);
       // Could update a progress bar here
@@ -31,12 +31,15 @@ export class PreloadScene extends Scene {
     this.assetManager.loadAssets(assets);
 
     // Start loading
-    this.assetManager.startLoad().then(() => {
-      // Loading complete, move to create (but create will be called automatically)
-      logger.info('All assets loaded');
-    }).catch(error => {
-      logger.error('Failed to load assets:', error);
-    });
+    this.assetManager
+      .startLoad()
+      .then(() => {
+        // Loading complete, move to create (but create will be called automatically)
+        logger.info('All assets loaded');
+      })
+      .catch((error) => {
+        logger.error('Failed to load assets:', error);
+      });
   }
 
   create() {

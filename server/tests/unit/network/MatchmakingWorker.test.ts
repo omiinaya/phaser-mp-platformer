@@ -35,10 +35,18 @@ describe('MatchmakingWorker', () => {
 
       expect(result).toHaveLength(1);
       expect(result[0].matchedRequests).toHaveLength(4);
-      expect(result[0].matchedRequests.map(r => r.playerId)).toContain('player1');
-      expect(result[0].matchedRequests.map(r => r.playerId)).toContain('player2');
-      expect(result[0].matchedRequests.map(r => r.playerId)).toContain('player3');
-      expect(result[0].matchedRequests.map(r => r.playerId)).toContain('player4');
+      expect(result[0].matchedRequests.map((r) => r.playerId)).toContain(
+        'player1',
+      );
+      expect(result[0].matchedRequests.map((r) => r.playerId)).toContain(
+        'player2',
+      );
+      expect(result[0].matchedRequests.map((r) => r.playerId)).toContain(
+        'player3',
+      );
+      expect(result[0].matchedRequests.map((r) => r.playerId)).toContain(
+        'player4',
+      );
     });
 
     it('should create separate matches for different regions', async () => {
@@ -98,7 +106,7 @@ function createMockRequest(
   playerId: string,
   gameMode: string,
   region: string,
-  maxPlayers: number = 4
+  maxPlayers: number = 4,
 ): MatchmakingRequest {
   return {
     requestId: `req_${playerId}`,

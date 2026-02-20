@@ -41,7 +41,7 @@ describe('EventHandler', () => {
       mockConnectionManager,
       mockMatchmaker,
       mockRoomManager,
-      mockGameSync
+      mockGameSync,
     );
 
     mockSocket = {
@@ -78,35 +78,44 @@ describe('EventHandler', () => {
       // Verify that socket.on was called for each event
       expect(mockSocket.on).toHaveBeenCalledWith(
         EventNames.MATCHMAKING_REQUEST,
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(mockSocket.on).toHaveBeenCalledWith(
         EventNames.MATCHMAKING_CANCEL,
-        expect.any(Function)
+        expect.any(Function),
       );
-      expect(mockSocket.on).toHaveBeenCalledWith('join_room', expect.any(Function));
-      expect(mockSocket.on).toHaveBeenCalledWith('leave_room', expect.any(Function));
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        'join_room',
+        expect.any(Function),
+      );
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        'leave_room',
+        expect.any(Function),
+      );
       expect(mockSocket.on).toHaveBeenCalledWith(
         EventNames.PLAYER_INPUT,
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(mockSocket.on).toHaveBeenCalledWith(
         EventNames.PLAYER_JUMP,
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(mockSocket.on).toHaveBeenCalledWith(
         EventNames.PLAYER_SKILL,
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(mockSocket.on).toHaveBeenCalledWith(
         EventNames.PLAYER_COLLECT_ITEM,
-        expect.any(Function)
+        expect.any(Function),
       );
       expect(mockSocket.on).toHaveBeenCalledWith(
         EventNames.CHAT_MESSAGE,
-        expect.any(Function)
+        expect.any(Function),
       );
-      expect(mockSocket.on).toHaveBeenCalledWith(EventNames.PING, expect.any(Function));
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        EventNames.PING,
+        expect.any(Function),
+      );
     });
   });
 
@@ -114,10 +123,13 @@ describe('EventHandler', () => {
     it('should enqueue player for matchmaking', () => {
       eventHandler.registerSocket(mockSocket);
       const data = { gameMode: 'deathmatch', region: 'us' };
-      
+
       mockSocket._callbacks[EventNames.MATCHMAKING_REQUEST](data);
 
-      expect(mockMatchmaker.enqueuePlayer).toHaveBeenCalledWith(mockSocket, data);
+      expect(mockMatchmaker.enqueuePlayer).toHaveBeenCalledWith(
+        mockSocket,
+        data,
+      );
     });
 
     it('should emit error on matchmaking failure', () => {
@@ -127,10 +139,12 @@ describe('EventHandler', () => {
 
       eventHandler.registerSocket(mockSocket);
       const data = { gameMode: 'deathmatch' };
-      
+
       mockSocket._callbacks[EventNames.MATCHMAKING_REQUEST](data);
 
-      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, { message: 'Matchmaking failed' });
+      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, {
+        message: 'Matchmaking failed',
+      });
     });
   });
 
@@ -167,11 +181,19 @@ describe('EventHandler', () => {
       eventHandler.registerSocket(mockSocket);
       mockSocket._callbacks['join_room']('room-1');
 
-      expect(mockConnectionManager.getSession).toHaveBeenCalledWith(mockSocket.id);
+      expect(mockConnectionManager.getSession).toHaveBeenCalledWith(
+        mockSocket.id,
+      );
       expect(mockRoomManager.getRoom).toHaveBeenCalledWith('room-1');
-      expect(mockRoomManager.addPlayer).toHaveBeenCalledWith('room-1', 'player-1', mockSocket.id);
+      expect(mockRoomManager.addPlayer).toHaveBeenCalledWith(
+        'room-1',
+        'player-1',
+        mockSocket.id,
+      );
       expect(mockSocket.join).toHaveBeenCalledWith('room-1');
-      expect(mockSocket.emit).toHaveBeenCalledWith('room_join_success', { roomId: 'room-1' });
+      expect(mockSocket.emit).toHaveBeenCalledWith('room_join_success', {
+        roomId: 'room-1',
+      });
     });
 
     it('should emit error when session not found', () => {
@@ -180,7 +202,9 @@ describe('EventHandler', () => {
       eventHandler.registerSocket(mockSocket);
       mockSocket._callbacks['join_room']('room-1');
 
-      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, { message: 'Session not found' });
+      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, {
+        message: 'Session not found',
+      });
     });
 
     it('should emit error when room does not exist', () => {
@@ -194,7 +218,9 @@ describe('EventHandler', () => {
       eventHandler.registerSocket(mockSocket);
       mockSocket._callbacks['join_room']('room-1');
 
-      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, { message: 'Room does not exist' });
+      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, {
+        message: 'Room does not exist',
+      });
     });
 
     it('should emit error when addPlayer fails', () => {
@@ -209,7 +235,9 @@ describe('EventHandler', () => {
       eventHandler.registerSocket(mockSocket);
       mockSocket._callbacks['join_room']('room-1');
 
-      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, { message: 'Cannot join room' });
+      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.ERROR, {
+        message: 'Cannot join room',
+      });
     });
   });
 
@@ -224,10 +252,17 @@ describe('EventHandler', () => {
       eventHandler.registerSocket(mockSocket);
       mockSocket._callbacks['leave_room']('room-1');
 
-      expect(mockConnectionManager.getSession).toHaveBeenCalledWith(mockSocket.id);
-      expect(mockRoomManager.removePlayer).toHaveBeenCalledWith('room-1', 'player-1');
+      expect(mockConnectionManager.getSession).toHaveBeenCalledWith(
+        mockSocket.id,
+      );
+      expect(mockRoomManager.removePlayer).toHaveBeenCalledWith(
+        'room-1',
+        'player-1',
+      );
       expect(mockSocket.leave).toHaveBeenCalledWith('room-1');
-      expect(mockSocket.emit).toHaveBeenCalledWith('room_left', { roomId: 'room-1' });
+      expect(mockSocket.emit).toHaveBeenCalledWith('room_left', {
+        roomId: 'room-1',
+      });
     });
 
     it('should do nothing when session not found', () => {
@@ -267,7 +302,11 @@ describe('EventHandler', () => {
       eventHandler.registerSocket(mockSocket);
       mockSocket._callbacks[EventNames.PLAYER_INPUT](inputData);
 
-      expect(mockGameSync.applyPlayerInput).toHaveBeenCalledWith('room-1', 'player-1', inputData);
+      expect(mockGameSync.applyPlayerInput).toHaveBeenCalledWith(
+        'room-1',
+        'player-1',
+        inputData,
+      );
       expect(mockSocket.to).toHaveBeenCalledWith('room-1');
     });
 
@@ -275,7 +314,11 @@ describe('EventHandler', () => {
       mockConnectionManager.getSession.mockReturnValue(undefined);
 
       eventHandler.registerSocket(mockSocket);
-      mockSocket._callbacks[EventNames.PLAYER_INPUT]({ sequence: 1, input: {}, timestamp: 123 });
+      mockSocket._callbacks[EventNames.PLAYER_INPUT]({
+        sequence: 1,
+        input: {},
+        timestamp: 123,
+      });
 
       expect(mockGameSync.applyPlayerInput).not.toHaveBeenCalled();
     });
@@ -288,7 +331,11 @@ describe('EventHandler', () => {
       });
 
       eventHandler.registerSocket(mockSocket);
-      mockSocket._callbacks[EventNames.PLAYER_INPUT]({ sequence: 1, input: {}, timestamp: 123 });
+      mockSocket._callbacks[EventNames.PLAYER_INPUT]({
+        sequence: 1,
+        input: {},
+        timestamp: 123,
+      });
 
       expect(mockGameSync.applyPlayerInput).not.toHaveBeenCalled();
     });
@@ -348,7 +395,10 @@ describe('EventHandler', () => {
       });
 
       eventHandler.registerSocket(mockSocket);
-      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({ message: 'Hello', channel: 'room' });
+      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({
+        message: 'Hello',
+        channel: 'room',
+      });
 
       expect(mockSocket.to).toHaveBeenCalledWith('room-1');
     });
@@ -361,9 +411,15 @@ describe('EventHandler', () => {
       });
 
       eventHandler.registerSocket(mockSocket);
-      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({ message: 'Hello', channel: 'global' });
+      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({
+        message: 'Hello',
+        channel: 'global',
+      });
 
-      expect(mockSocket.broadcast.emit).toHaveBeenCalledWith(EventNames.CHAT_MESSAGE, expect.any(Object));
+      expect(mockSocket.broadcast.emit).toHaveBeenCalledWith(
+        EventNames.CHAT_MESSAGE,
+        expect.any(Object),
+      );
     });
 
     it('should send whisper message', () => {
@@ -378,16 +434,25 @@ describe('EventHandler', () => {
       });
 
       eventHandler.registerSocket(mockSocket);
-      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({ message: 'Secret', channel: 'whisper', targetPlayerId: 'player-2' });
+      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({
+        message: 'Secret',
+        channel: 'whisper',
+        targetPlayerId: 'player-2',
+      });
 
-      expect(mockConnectionManager.getSessionByPlayerId).toHaveBeenCalledWith('player-2');
+      expect(mockConnectionManager.getSessionByPlayerId).toHaveBeenCalledWith(
+        'player-2',
+      );
     });
 
     it('should do nothing when session not found', () => {
       mockConnectionManager.getSession.mockReturnValue(undefined);
 
       eventHandler.registerSocket(mockSocket);
-      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({ message: 'Hello', channel: 'room' });
+      mockSocket._callbacks[EventNames.CHAT_MESSAGE]({
+        message: 'Hello',
+        channel: 'room',
+      });
 
       expect(mockSocket.to).not.toHaveBeenCalled();
     });
@@ -398,9 +463,12 @@ describe('EventHandler', () => {
       eventHandler.registerSocket(mockSocket);
       mockSocket._callbacks[EventNames.PING]();
 
-      expect(mockSocket.emit).toHaveBeenCalledWith(EventNames.PONG, expect.objectContaining({
-        serverTime: expect.any(Number),
-      }));
+      expect(mockSocket.emit).toHaveBeenCalledWith(
+        EventNames.PONG,
+        expect.objectContaining({
+          serverTime: expect.any(Number),
+        }),
+      );
     });
   });
 });

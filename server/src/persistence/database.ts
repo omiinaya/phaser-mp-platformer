@@ -9,10 +9,12 @@ import { AchievementProgress } from './models/AchievementProgress';
 
 // Validate required environment variables at startup
 const requiredEnvVars = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
-const missingEnvVars = requiredEnvVars.filter(key => !process.env[key]);
+const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
 
 if (missingEnvVars.length > 0) {
-  throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  throw new Error(
+    `Missing required environment variables: ${missingEnvVars.join(', ')}`,
+  );
 }
 
 export const AppDataSource = new DataSource({

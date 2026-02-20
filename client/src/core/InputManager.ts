@@ -105,7 +105,7 @@ export class InputManager {
     }
 
     // Register actions
-    this.config.actions.forEach(action => this.registerAction(action));
+    this.config.actions.forEach((action) => this.registerAction(action));
   }
 
   /**
@@ -167,15 +167,15 @@ export class InputManager {
    * Update input state. Should be called in the scene's update loop.
    */
   public update(): void {
-    this.actions.forEach(action => {
+    this.actions.forEach((action) => {
       const previousActive = action.active;
       let active = false;
       let source: 'keyboard' | 'mouse' | 'gamepad' | undefined;
 
       // Check keyboard
       if (this.keyboard && action.keys) {
-        const keys = action.keys.map(key => this.keyboard!.addKey(key));
-        if (keys.some(key => key.isDown)) {
+        const keys = action.keys.map((key) => this.keyboard!.addKey(key));
+        if (keys.some((key) => key.isDown)) {
           active = true;
           source = 'keyboard';
         }
@@ -193,7 +193,7 @@ export class InputManager {
       if (!active && this.gamepad && action.gamepadButtons) {
         const pad = this.gamepad.getPad(this.gamepadIndex);
         if (pad) {
-          if (action.gamepadButtons.some(btn => pad.buttons[btn].pressed)) {
+          if (action.gamepadButtons.some((btn) => pad.buttons[btn].pressed)) {
             active = true;
             source = 'gamepad';
           }
@@ -245,7 +245,7 @@ export class InputManager {
    * @param event Input event.
    */
   private emitEvent(event: InputEvent): void {
-    this.eventCallbacks.forEach(callback => callback(event));
+    this.eventCallbacks.forEach((callback) => callback(event));
   }
 
   /**

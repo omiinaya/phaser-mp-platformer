@@ -2,7 +2,7 @@
 import 'jest-canvas-mock';
 
 // Mock Phaser - comprehensive mock for game development
-const mockSprite = jest.fn().mockImplementation(function(this: any) {
+const mockSprite = jest.fn().mockImplementation(function (this: any) {
   this.x = 0;
   this.y = 0;
   this.width = 32;
@@ -143,8 +143,8 @@ const Phaser = {
   Math: {
     Vector2: MockVector2,
     Vector3: MockVector3,
-    DegToRad: (deg: number) => deg * Math.PI / 180,
-    RadToDeg: (rad: number) => rad * 180 / Math.PI,
+    DegToRad: (deg: number) => (deg * Math.PI) / 180,
+    RadToDeg: (rad: number) => (rad * 180) / Math.PI,
     Distance: {
       Between: jest.fn(),
     },
@@ -182,13 +182,16 @@ Object.defineProperty(phaserModule, 'default', {
 
 // Make Phaser available globally when the module is imported
 jest.mock('phaser', () => {
-  return new Proxy({}, {
-    get: (target, prop) => {
-      if (prop === 'default') return Phaser;
-      if (prop === '__esModule') return true;
-      return (Phaser as any)[prop];
+  return new Proxy(
+    {},
+    {
+      get: (target, prop) => {
+        if (prop === 'default') return Phaser;
+        if (prop === '__esModule') return true;
+        return (Phaser as any)[prop];
+      },
     },
-  });
+  );
 });
 
 // Mock socket.io-client

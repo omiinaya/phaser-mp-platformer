@@ -30,9 +30,10 @@ export interface AssetConfig {
   xhrSettings?: Phaser.Types.Loader.XHRSettingsObject;
   // Additional options per type can be added as needed.
   textureURL?: string; // for atlas: image URL
-  atlasURL?: string;   // for atlas: JSON URL
-  audioSprites?: {     // for audioSprite: mapping of sprite names to time ranges
-    [key: string]: { start: number; end: number; };
+  atlasURL?: string; // for atlas: JSON URL
+  audioSprites?: {
+    // for audioSprite: mapping of sprite names to time ranges
+    [key: string]: { start: number; end: number };
   };
 }
 
@@ -89,7 +90,16 @@ export class AssetManager {
    * @param config Asset configuration.
    */
   public loadAsset(config: AssetConfig): this {
-    const { key, type, url, frameConfig, xhrSettings, textureURL, atlasURL, audioSprites } = config;
+    const {
+      key,
+      type,
+      url,
+      frameConfig,
+      xhrSettings,
+      textureURL,
+      atlasURL,
+      audioSprites,
+    } = config;
 
     switch (type) {
     case 'image':
@@ -103,7 +113,7 @@ export class AssetManager {
         key,
           url as string,
           frameConfig as Phaser.Types.Loader.FileTypes.ImageFrameConfig,
-          xhrSettings
+          xhrSettings,
       );
       break;
     case 'tilemap':
@@ -119,14 +129,21 @@ export class AssetManager {
       } else {
         // Assume url is a single string pointing to a texture, and atlas data is inline? Not supported.
         // Fallback to default atlas loader (requires texture and JSON)
-        logger.warn('Atlas loading requires textureURL and atlasURL. Using default.');
+        logger.warn(
+          'Atlas loading requires textureURL and atlasURL. Using default.',
+        );
         this.loader.atlas(key, url as string, undefined, xhrSettings);
       }
       break;
     case 'audioSprite':
       // Audio sprite loading: url is audio file, audioSprites defines sprites
       if (audioSprites) {
-        (this.loader as any).audioSprite(key, url as string, audioSprites, xhrSettings);
+        (this.loader as any).audioSprite(
+          key,
+            url as string,
+            audioSprites,
+            xhrSettings,
+        );
       } else {
         logger.warn('Audio sprite missing audioSprites configuration.');
       }
@@ -162,7 +179,7 @@ export class AssetManager {
    * @param configs Array of asset configurations.
    */
   public loadAssets(configs: AssetConfig[]): this {
-    configs.forEach(config => this.loadAsset(config));
+    configs.forEach((config) => this.loadAsset(config));
     return this;
   }
 
@@ -185,14 +202,18 @@ export class AssetManager {
     }
     const config = this.lazyAssets.get(key);
     if (!config) {
-      return Promise.reject(new Error(`No lazy asset registered with key: ${key}`));
+      return Promise.reject(
+        new Error(`No lazy asset registered with key: ${key}`),
+      );
     }
     return new Promise((resolve, reject) => {
       this.loadAsset(config);
-      this.startLoad().then(() => {
-        this.loadedKeys.add(key);
-        resolve();
-      }).catch(reject);
+      this.startLoad()
+        .then(() => {
+          this.loadedKeys.add(key);
+          resolve();
+        })
+        .catch(reject);
     });
   }
 
@@ -208,12 +229,12 @@ export class AssetManager {
         // Use loader's progress event data
         const bytesLoaded = (this.loader as any).totalBytesLoaded || 0;
         const bytesTotal = (this.loader as any).totalBytes || 0;
-        this.progressCallbacks.forEach(callback =>
+        this.progressCallbacks.forEach((callback) =>
           callback({
             progress: value,
             bytesLoaded,
             bytesTotal,
-          })
+          }),
         );
       });
 

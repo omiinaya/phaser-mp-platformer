@@ -27,7 +27,7 @@ export class ProgressionService {
     private statsRepo: PlayerStatsRepository,
     private unlockRepo: PlayerUnlockRepository,
     private achievementProgressRepo: AchievementProgressRepository,
-    private unlockableRepo: UnlockableRepository
+    private unlockableRepo: UnlockableRepository,
   ) {}
 
   /**
@@ -38,7 +38,9 @@ export class ProgressionService {
    */
   async initializePlayer(playerId: string): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
-      const profile = await this.profileRepo.findOne({ where: { id: playerId } });
+      const profile = await this.profileRepo.findOne({
+        where: { id: playerId },
+      });
       if (!profile) {
         throw new Error(`Player profile ${playerId} not found`);
       }
@@ -86,14 +88,17 @@ export class ProgressionService {
    * @param updates - Object containing stat fields to update (kills, deaths, score, etc.).
    * @throws Error if player stats don't exist.
    */
-  async updateStats(playerId: string, updates: Partial<{
-    kills?: number;
-    deaths?: number;
-    score?: number;
-    playTimeSeconds?: number;
-    gamesPlayed?: number;
-    gamesWon?: number;
-  }>): Promise<void> {
+  async updateStats(
+    playerId: string,
+    updates: Partial<{
+      kills?: number;
+      deaths?: number;
+      score?: number;
+      playTimeSeconds?: number;
+      gamesPlayed?: number;
+      gamesWon?: number;
+    }>,
+  ): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
       const stats = await this.statsRepo.findByPlayerId(playerId);
       if (!stats) {
@@ -135,7 +140,8 @@ export class ProgressionService {
       profile.level = newLevel;
       await this.profileRepo.save(profile);
       // Grant unlockables that require this level
-      const unlockables = await this.unlockableRepo.findUnlockablesByRequiredLevel(newLevel);
+      const unlockables =
+        await this.unlockableRepo.findUnlockablesByRequiredLevel(newLevel);
       for (const unlockable of unlockables) {
         await this.grantUnlock(playerId, unlockable.id);
       }
@@ -150,13 +156,23 @@ export class ProgressionService {
    * @param achievementCode - The code of the achievement to progress.
    * @param amount - The amount to increment progress by (default: 1).
    */
-  async incrementAchievementProgress(playerId: string, achievementCode: string, amount: number = 1): Promise<void> {
-    const achievement = await this.unlockableRepo.manager.findOne(Achievement, { where: { code: achievementCode } });
+  async incrementAchievementProgress(
+    playerId: string,
+    achievementCode: string,
+    amount: number = 1,
+  ): Promise<void> {
+    const achievement = await this.unlockableRepo.manager.findOne(Achievement, {
+      where: { code: achievementCode },
+    });
     if (!achievement) {
       logger.warn(`Achievement ${achievementCode} not found`);
       return;
     }
-    await this.achievementProgressRepo.incrementProgress(playerId, achievement.id, amount);
+    await this.achievementProgressRepo.incrementProgress(
+      playerId,
+      achievement.id,
+      amount,
+    );
   }
 
   /**
@@ -169,15 +185,16 @@ export class ProgressionService {
     const profile = await this.profileRepo.findOne({ where: { id: playerId } });
     const stats = await this.statsRepo.findByPlayerId(playerId);
     const unlocks = await this.unlockRepo.findByPlayerId(playerId);
-    const achievements = await this.achievementProgressRepo.findByPlayerId(playerId);
+    const achievements =
+      await this.achievementProgressRepo.findByPlayerId(playerId);
     return {
       profile,
       stats,
-      unlocks: unlocks.map(u => ({
+      unlocks: unlocks.map((u) => ({
         id: u.unlockableId,
         unlockedAt: u.unlockedAt,
       })),
-      achievements: achievements.map(a => ({
+      achievements: achievements.map((a) => ({
         achievementId: a.achievementId,
         progress: a.progress,
         completed: a.completed,

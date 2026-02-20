@@ -9,7 +9,7 @@ jest.mock('../../../src/persistence/repositories/BaseRepository', () => {
       protected dataSource: DataSource;
       protected target: any;
       public manager: any;
-      
+
       constructor(dataSource: DataSource, target: any) {
         this.dataSource = dataSource;
         this.target = target;
@@ -17,15 +17,17 @@ jest.mock('../../../src/persistence/repositories/BaseRepository', () => {
           findOne: jest.fn(),
         };
       }
-      
-      protected safeOperation = jest.fn().mockImplementation(async (operation, errorMsg) => {
-        try {
-          return await operation;
-        } catch (error) {
-          throw new Error(errorMsg);
-        }
-      });
-      
+
+      protected safeOperation = jest
+        .fn()
+        .mockImplementation(async (operation, errorMsg) => {
+          try {
+            return await operation;
+          } catch (error) {
+            throw new Error(errorMsg);
+          }
+        });
+
       findOne = jest.fn();
       find = jest.fn();
       create = jest.fn();
@@ -45,7 +47,7 @@ describe('AchievementProgressRepository', () => {
     mockDataSource = {
       getRepository: jest.fn(),
     } as unknown as DataSource;
-    
+
     repository = new AchievementProgressRepository(mockDataSource);
     mockBaseRepository = repository as any;
   });
@@ -81,18 +83,22 @@ describe('AchievementProgressRepository', () => {
 
     it('should throw error when query fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to find achievement progress by playerId: player-1')
+        new Error('Failed to find achievement progress by playerId: player-1'),
       );
 
       await expect(repository.findByPlayerId('player-1')).rejects.toThrow(
-        'Failed to find achievement progress by playerId: player-1'
+        'Failed to find achievement progress by playerId: player-1',
       );
     });
   });
 
   describe('findByAchievementId', () => {
     it('should find achievement progress by player and achievement', async () => {
-      const mockProgress = { id: '1', playerId: 'player-1', achievementId: 'ach-1' };
+      const mockProgress = {
+        id: '1',
+        playerId: 'player-1',
+        achievementId: 'ach-1',
+      };
       mockBaseRepository.findOne.mockResolvedValue(mockProgress);
 
       const result = await repository.findByAchievementId('player-1', 'ach-1');
@@ -113,20 +119,27 @@ describe('AchievementProgressRepository', () => {
 
     it('should throw error when query fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to find achievement progress')
+        new Error('Failed to find achievement progress'),
       );
 
-      await expect(repository.findByAchievementId('player-1', 'ach-1')).rejects.toThrow(
-        'Failed to find achievement progress'
-      );
+      await expect(
+        repository.findByAchievementId('player-1', 'ach-1'),
+      ).rejects.toThrow('Failed to find achievement progress');
     });
   });
 
   describe('incrementProgress', () => {
     it('should create new progress when none exists', async () => {
       // Override findByAchievementId on the repository
-      (repository as any).findByAchievementId = jest.fn().mockResolvedValue(null);
-      const mockNewProgress = { id: '1', playerId: 'player-1', achievementId: 'ach-1', progress: 1 };
+      (repository as any).findByAchievementId = jest
+        .fn()
+        .mockResolvedValue(null);
+      const mockNewProgress = {
+        id: '1',
+        playerId: 'player-1',
+        achievementId: 'ach-1',
+        progress: 1,
+      };
       mockBaseRepository.create.mockReturnValue(mockNewProgress);
       mockBaseRepository.save.mockResolvedValue(mockNewProgress);
 
@@ -144,14 +157,16 @@ describe('AchievementProgressRepository', () => {
 
     it('should update existing progress', async () => {
       // Override findByAchievementId on the repository
-      const existingProgress = { 
-        id: '1', 
-        playerId: 'player-1', 
-        achievementId: 'ach-1', 
+      const existingProgress = {
+        id: '1',
+        playerId: 'player-1',
+        achievementId: 'ach-1',
         progress: 5,
         completed: false,
       };
-      (repository as any).findByAchievementId = jest.fn().mockResolvedValue(existingProgress);
+      (repository as any).findByAchievementId = jest
+        .fn()
+        .mockResolvedValue(existingProgress);
       mockBaseRepository.save.mockResolvedValue(existingProgress);
 
       await repository.incrementProgress('player-1', 'ach-1', 2);
@@ -162,17 +177,24 @@ describe('AchievementProgressRepository', () => {
 
     it('should mark as completed when threshold reached', async () => {
       // Override findByAchievementId on the repository
-      const existingProgress = { 
-        id: '1', 
-        playerId: 'player-1', 
-        achievementId: 'ach-1', 
+      const existingProgress = {
+        id: '1',
+        playerId: 'player-1',
+        achievementId: 'ach-1',
         progress: 9,
         completed: false,
         completedAt: null,
       };
-      (repository as any).findByAchievementId = jest.fn().mockResolvedValue(existingProgress);
-      mockBaseRepository.manager.findOne.mockResolvedValue({ id: 'ach-1', requiredValue: 10 });
-      mockBaseRepository.save.mockImplementation((p: any) => Promise.resolve(p));
+      (repository as any).findByAchievementId = jest
+        .fn()
+        .mockResolvedValue(existingProgress);
+      mockBaseRepository.manager.findOne.mockResolvedValue({
+        id: 'ach-1',
+        requiredValue: 10,
+      });
+      mockBaseRepository.save.mockImplementation((p: any) =>
+        Promise.resolve(p),
+      );
 
       const result = await repository.incrementProgress('player-1', 'ach-1', 2);
 
@@ -182,12 +204,12 @@ describe('AchievementProgressRepository', () => {
 
     it('should throw error when operation fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to update achievement progress')
+        new Error('Failed to update achievement progress'),
       );
 
-      await expect(repository.incrementProgress('player-1', 'ach-1', 1)).rejects.toThrow(
-        'Failed to update achievement progress'
-      );
+      await expect(
+        repository.incrementProgress('player-1', 'ach-1', 1),
+      ).rejects.toThrow('Failed to update achievement progress');
     });
   });
 
@@ -199,18 +221,18 @@ describe('AchievementProgressRepository', () => {
 
       expect(mockBaseRepository.update).toHaveBeenCalledWith(
         { playerId: 'player-1', achievementId: 'ach-1' },
-        { completed: true, completedAt: expect.any(Date) }
+        { completed: true, completedAt: expect.any(Date) },
       );
     });
 
     it('should throw error when operation fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to mark achievement as completed')
+        new Error('Failed to mark achievement as completed'),
       );
 
-      await expect(repository.markCompleted('player-1', 'ach-1')).rejects.toThrow(
-        'Failed to mark achievement as completed'
-      );
+      await expect(
+        repository.markCompleted('player-1', 'ach-1'),
+      ).rejects.toThrow('Failed to mark achievement as completed');
     });
   });
 
@@ -228,12 +250,12 @@ describe('AchievementProgressRepository', () => {
 
     it('should throw error when operation fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to count completed achievements')
+        new Error('Failed to count completed achievements'),
       );
 
-      await expect(repository.countCompletedAchievements('player-1')).rejects.toThrow(
-        'Failed to count completed achievements'
-      );
+      await expect(
+        repository.countCompletedAchievements('player-1'),
+      ).rejects.toThrow('Failed to count completed achievements');
     });
   });
 });

@@ -1,4 +1,8 @@
-import { InterpolationService, EntitySnapshot, InterpolationConfig } from '../../../src/services/InterpolationService';
+import {
+  InterpolationService,
+  EntitySnapshot,
+  InterpolationConfig,
+} from '../../../src/services/InterpolationService';
 
 describe('InterpolationService', () => {
   let interpolationService: InterpolationService;
@@ -54,12 +58,28 @@ describe('InterpolationService', () => {
         maxSnapshots: 3,
       };
       const service = new InterpolationService(config);
-      
-      service.addSnapshot('player-1', { timestamp: 1000, entityId: 'player-1', state: { x: 10 } });
-      service.addSnapshot('player-1', { timestamp: 2000, entityId: 'player-1', state: { x: 20 } });
-      service.addSnapshot('player-1', { timestamp: 3000, entityId: 'player-1', state: { x: 30 } });
-      service.addSnapshot('player-1', { timestamp: 4000, entityId: 'player-1', state: { x: 40 } });
-      
+
+      service.addSnapshot('player-1', {
+        timestamp: 1000,
+        entityId: 'player-1',
+        state: { x: 10 },
+      });
+      service.addSnapshot('player-1', {
+        timestamp: 2000,
+        entityId: 'player-1',
+        state: { x: 20 },
+      });
+      service.addSnapshot('player-1', {
+        timestamp: 3000,
+        entityId: 'player-1',
+        state: { x: 30 },
+      });
+      service.addSnapshot('player-1', {
+        timestamp: 4000,
+        entityId: 'player-1',
+        state: { x: 40 },
+      });
+
       // Should still work with trimmed snapshots
       const state = service.getInterpolatedState('player-1', 4500);
       expect(state).toBeDefined();
@@ -68,7 +88,10 @@ describe('InterpolationService', () => {
 
   describe('getInterpolatedState', () => {
     it('should return null for unknown entity', () => {
-      const state = interpolationService.getInterpolatedState('unknown', Date.now());
+      const state = interpolationService.getInterpolatedState(
+        'unknown',
+        Date.now(),
+      );
       expect(state).toBeNull();
     });
 
@@ -93,7 +116,7 @@ describe('InterpolationService', () => {
         entityId: 'player-1',
         state: { x: 20 },
       });
-      
+
       const state = interpolationService.getInterpolatedState('player-1', 500);
       expect(state.x).toBe(10);
     });
@@ -109,7 +132,7 @@ describe('InterpolationService', () => {
         entityId: 'player-1',
         state: { x: 20 },
       });
-      
+
       const state = interpolationService.getInterpolatedState('player-1', 3000);
       expect(state.x).toBe(20);
     });
@@ -127,9 +150,9 @@ describe('InterpolationService', () => {
         entityId: 'player-1',
         state: { x: 20 },
       });
-      
+
       interpolationService.pruneOlderThan(1500);
-      
+
       const state = interpolationService.getInterpolatedState('player-1', 2500);
       expect(state.x).toBe(20);
     });
@@ -140,9 +163,9 @@ describe('InterpolationService', () => {
         entityId: 'player-1',
         state: { x: 10 },
       });
-      
+
       interpolationService.pruneOlderThan(2000);
-      
+
       const state = interpolationService.getInterpolatedState('player-1', 2500);
       expect(state).toBeNull();
     });
@@ -155,9 +178,9 @@ describe('InterpolationService', () => {
         entityId: 'player-1',
         state: { x: 10 },
       });
-      
+
       interpolationService.clearEntity('player-1');
-      
+
       const state = interpolationService.getInterpolatedState('player-1', 1500);
       expect(state).toBeNull();
     });
@@ -175,11 +198,15 @@ describe('InterpolationService', () => {
         entityId: 'player-2',
         state: { x: 20 },
       });
-      
+
       interpolationService.clear();
-      
-      expect(interpolationService.getInterpolatedState('player-1', 1500)).toBeNull();
-      expect(interpolationService.getInterpolatedState('player-2', 1500)).toBeNull();
+
+      expect(
+        interpolationService.getInterpolatedState('player-1', 1500),
+      ).toBeNull();
+      expect(
+        interpolationService.getInterpolatedState('player-2', 1500),
+      ).toBeNull();
     });
   });
 });

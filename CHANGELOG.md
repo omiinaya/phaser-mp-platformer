@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - CODE_STANDARDS.md with comprehensive coding guidelines
 - TESTING_STRATEGY.md covering unit, integration, and E2E testing
 - DEPLOYMENT_GUIDE.md for production deployment
@@ -16,10 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional API documentation
 
 ### Changed
+
 - Pinned ESLint to 8.57.0 for consistency
 - Updated CI to use --audit-level=high
 
 ### Documentation
+
 - Comprehensive code standards guide covering TypeScript, code style, component structure
 - Testing strategy document with test types, organization, and best practices
 - Production deployment guide with Docker, health checks, monitoring
@@ -28,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0-alpha] - 2024-XX-XX
 
 ### Added
+
 - Multiplayer platformer game with Phaser 3, Node.js, Socket.IO, and TypeScript
 - Three themed maps (Forest, Cave, Sky)
 - Four enemy types (Slime, Flying, Archer, Boss)
@@ -46,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Input sequence-based client prediction
 
 ### Security
+
 - Added SECURITY.md with vulnerability reporting guidelines
 - Dependency vulnerability scanning in CI (npm audit)
 - JWT-based authentication for API routes
@@ -54,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parameterized queries via TypeORM for SQL injection prevention
 
 ### Documentation
+
 - Comprehensive README.md with quick start guide
 - API documentation generated with TypeDoc
 - Developer guides for extending the game

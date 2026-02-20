@@ -9,7 +9,9 @@ export interface MatchmakingResult {
 /**
  * Group requests by gameMode and region.
  */
-function groupByGameMode(requests: MatchmakingRequest[]): Map<string, MatchmakingRequest[]> {
+function groupByGameMode(
+  requests: MatchmakingRequest[],
+): Map<string, MatchmakingRequest[]> {
   const map = new Map<string, MatchmakingRequest[]>();
   for (const req of requests) {
     const key = `${req.preferences.gameMode}_${req.preferences.region || 'any'}`;

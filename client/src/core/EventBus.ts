@@ -28,7 +28,11 @@ export class EventBus {
    * @param once Whether to listen only once (default false).
    * @returns A function to unsubscribe.
    */
-  public on<T = any>(event: string, callback: (data: T) => void, once = false): () => void {
+  public on<T = any>(
+    event: string,
+    callback: (data: T) => void,
+    once = false,
+  ): () => void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
@@ -37,7 +41,7 @@ export class EventBus {
 
     // Return unsubscribe function
     return () => {
-      const index = listeners.findIndex(l => l.callback === callback);
+      const index = listeners.findIndex((l) => l.callback === callback);
       if (index >= 0) {
         listeners.splice(index, 1);
       }
@@ -63,7 +67,7 @@ export class EventBus {
     const listeners = this.listeners.get(event);
     if (!listeners) return;
 
-    const index = listeners.findIndex(l => l.callback === callback);
+    const index = listeners.findIndex((l) => l.callback === callback);
     if (index >= 0) {
       listeners.splice(index, 1);
     }
@@ -88,12 +92,12 @@ export class EventBus {
       }
     });
     // Remove once listeners from original array (in reverse order)
-    toRemove.reverse().forEach(index => {
+    toRemove.reverse().forEach((index) => {
       listeners.splice(index, 1);
     });
 
     // Call all listeners
-    toCall.forEach(listener => {
+    toCall.forEach((listener) => {
       try {
         listener.callback(data);
       } catch (error) {

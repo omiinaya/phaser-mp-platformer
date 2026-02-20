@@ -3,8 +3,21 @@
 describe('AttackPatternManager Types', () => {
   describe('AttackPatternType', () => {
     it('should have all attack pattern types', () => {
-      type AttackPatternType = 'melee' | 'charge' | 'projectile' | 'aoe' | 'summon' | 'teleport';
-      const types: AttackPatternType[] = ['melee', 'charge', 'projectile', 'aoe', 'summon', 'teleport'];
+      type AttackPatternType =
+        | 'melee'
+        | 'charge'
+        | 'projectile'
+        | 'aoe'
+        | 'summon'
+        | 'teleport';
+      const types: AttackPatternType[] = [
+        'melee',
+        'charge',
+        'projectile',
+        'aoe',
+        'summon',
+        'teleport',
+      ];
       expect(types).toHaveLength(6);
     });
   });

@@ -10,7 +10,11 @@ jest.mock('phaser', () => ({
     Vector2: class {
       x = 0;
       y = 0;
-      set(x: number, y: number) { this.x = x; this.y = y; return this; }
+      set(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        return this;
+      }
     },
   },
 }));
@@ -20,7 +24,13 @@ describe('EnemyPool Types', () => {
   describe('EnemyType', () => {
     it('should define all enemy types', () => {
       type EnemyType = 'slime' | 'flying' | 'archer' | 'advanced' | 'custom';
-      const types: EnemyType[] = ['slime', 'flying', 'archer', 'advanced', 'custom'];
+      const types: EnemyType[] = [
+        'slime',
+        'flying',
+        'archer',
+        'advanced',
+        'custom',
+      ];
       expect(types).toHaveLength(5);
     });
   });

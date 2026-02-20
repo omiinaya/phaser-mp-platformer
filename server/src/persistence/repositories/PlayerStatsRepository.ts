@@ -10,7 +10,7 @@ export class PlayerStatsRepository extends BaseRepository<PlayerStats> {
   async findByPlayerId(playerId: string): Promise<PlayerStats | null> {
     return this.safeOperation(
       this.findOne({ where: { playerId } }),
-      `Failed to find player stats by playerId: ${playerId}`
+      `Failed to find player stats by playerId: ${playerId}`,
     );
   }
 
@@ -21,7 +21,7 @@ export class PlayerStatsRepository extends BaseRepository<PlayerStats> {
         .set({ kills: () => `kills + ${count}` })
         .where('player_id = :playerId', { playerId })
         .execute(),
-      `Failed to increment kills for player ${playerId}`
+      `Failed to increment kills for player ${playerId}`,
     );
   }
 
@@ -32,7 +32,7 @@ export class PlayerStatsRepository extends BaseRepository<PlayerStats> {
         .set({ deaths: () => `deaths + ${count}` })
         .where('player_id = :playerId', { playerId })
         .execute(),
-      `Failed to increment deaths for player ${playerId}`
+      `Failed to increment deaths for player ${playerId}`,
     );
   }
 
@@ -43,7 +43,7 @@ export class PlayerStatsRepository extends BaseRepository<PlayerStats> {
         .set({ score: () => `score + ${scoreDelta}` })
         .where('player_id = :playerId', { playerId })
         .execute(),
-      `Failed to update score for player ${playerId}`
+      `Failed to update score for player ${playerId}`,
     );
   }
 
@@ -54,7 +54,7 @@ export class PlayerStatsRepository extends BaseRepository<PlayerStats> {
         .set({ playTimeSeconds: () => `play_time_seconds + ${seconds}` })
         .where('player_id = :playerId', { playerId })
         .execute(),
-      `Failed to update play time for player ${playerId}`
+      `Failed to update play time for player ${playerId}`,
     );
   }
 
@@ -64,7 +64,7 @@ export class PlayerStatsRepository extends BaseRepository<PlayerStats> {
         order: { score: 'DESC' },
         take: limit,
       }),
-      'Failed to find top players by score'
+      'Failed to find top players by score',
     );
   }
 }

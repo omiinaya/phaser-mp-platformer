@@ -8,20 +8,22 @@ jest.mock('../../../src/persistence/repositories/BaseRepository', () => {
     BaseRepository: class {
       protected dataSource: DataSource;
       protected target: any;
-      
+
       constructor(dataSource: DataSource, target: any) {
         this.dataSource = dataSource;
         this.target = target;
       }
-      
-      protected safeOperation = jest.fn().mockImplementation(async (operation, errorMsg) => {
-        try {
-          return await operation;
-        } catch (error) {
-          throw new Error(errorMsg);
-        }
-      });
-      
+
+      protected safeOperation = jest
+        .fn()
+        .mockImplementation(async (operation, errorMsg) => {
+          try {
+            return await operation;
+          } catch (error) {
+            throw new Error(errorMsg);
+          }
+        });
+
       findOne = jest.fn();
       find = jest.fn();
       update = jest.fn();
@@ -44,7 +46,7 @@ describe('PlayerProfileRepository', () => {
     mockDataSource = {
       getRepository: jest.fn(),
     } as unknown as DataSource;
-    
+
     repository = new PlayerProfileRepository(mockDataSource);
     mockBaseRepository = repository as any;
   });
@@ -76,11 +78,11 @@ describe('PlayerProfileRepository', () => {
 
     it('should throw error when query fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to find player profile by username: testuser')
+        new Error('Failed to find player profile by username: testuser'),
       );
 
       await expect(repository.findByUsername('testuser')).rejects.toThrow(
-        'Failed to find player profile by username: testuser'
+        'Failed to find player profile by username: testuser',
       );
     });
   });
@@ -137,11 +139,11 @@ describe('PlayerProfileRepository', () => {
 
     it('should throw error when query fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to find top players by level')
+        new Error('Failed to find top players by level'),
       );
 
       await expect(repository.findTopPlayersByLevel()).rejects.toThrow(
-        'Failed to find top players by level'
+        'Failed to find top players by level',
       );
     });
   });
@@ -152,19 +154,18 @@ describe('PlayerProfileRepository', () => {
 
       await repository.updateLastLogin('player-1');
 
-      expect(mockBaseRepository.update).toHaveBeenCalledWith(
-        'player-1',
-        { lastLogin: expect.any(Date) }
-      );
+      expect(mockBaseRepository.update).toHaveBeenCalledWith('player-1', {
+        lastLogin: expect.any(Date),
+      });
     });
 
     it('should throw error when update fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to update last login for player player-1')
+        new Error('Failed to update last login for player player-1'),
       );
 
       await expect(repository.updateLastLogin('player-1')).rejects.toThrow(
-        'Failed to update last login for player player-1'
+        'Failed to update last login for player player-1',
       );
     });
   });
@@ -183,17 +184,19 @@ describe('PlayerProfileRepository', () => {
 
       expect(mockBaseRepository.createQueryBuilder).toHaveBeenCalled();
       expect(mockQueryBuilder.update).toHaveBeenCalled();
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith('id = :id', { id: 'player-1' });
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith('id = :id', {
+        id: 'player-1',
+      });
       expect(mockQueryBuilder.execute).toHaveBeenCalled();
     });
 
     it('should throw error when increment fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to increment coins for player player-1')
+        new Error('Failed to increment coins for player player-1'),
       );
 
       await expect(repository.incrementCoins('player-1', 100)).rejects.toThrow(
-        'Failed to increment coins for player player-1'
+        'Failed to increment coins for player player-1',
       );
     });
   });

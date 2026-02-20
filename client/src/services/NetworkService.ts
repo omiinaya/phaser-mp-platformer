@@ -15,7 +15,9 @@ export class NetworkService extends EventEmitter {
   constructor(serverUrl?: string) {
     super();
     if (!serverUrl && !process.env.SERVER_URL) {
-      throw new Error('Server URL is required. Pass serverUrl or set SERVER_URL environment variable.');
+      throw new Error(
+        'Server URL is required. Pass serverUrl or set SERVER_URL environment variable.',
+      );
     }
     this.serverUrl = serverUrl || process.env.SERVER_URL!;
   }

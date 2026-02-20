@@ -86,7 +86,7 @@ export class ObjectPool<T> {
    */
   public releaseAll(activeList?: T[]): void {
     if (activeList) {
-      activeList.forEach(obj => this.release(obj));
+      activeList.forEach((obj) => this.release(obj));
     }
     // If no list provided, we cannot know which objects are active.
     // In that case, just clear the active count (assume all objects are returned)
@@ -112,7 +112,7 @@ export class ObjectPool<T> {
    */
   public clear(): void {
     if (this.config.destroy) {
-      this.pool.forEach(obj => this.config.destroy!(obj));
+      this.pool.forEach((obj) => this.config.destroy!(obj));
     }
     this.pool = [];
     this.activeCount = 0;

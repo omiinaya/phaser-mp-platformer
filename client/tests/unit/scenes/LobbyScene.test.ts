@@ -31,7 +31,7 @@ jest.mock('phaser', () => {
   });
 
   return {
-    Scene: jest.fn().mockImplementation(function(this: any) {
+    Scene: jest.fn().mockImplementation(function (this: any) {
       this.cameras = { main: { width: 800, height: 600 } };
       this.add = {
         rectangle: mockAddRect,
@@ -124,7 +124,9 @@ describe('LobbyScene', () => {
   describe('init', () => {
     it('should log initialization data', () => {
       scene.init({ fromMenu: true });
-      expect(logger.info).toHaveBeenCalledWith('LobbyScene init:', { fromMenu: true });
+      expect(logger.info).toHaveBeenCalledWith('LobbyScene init:', {
+        fromMenu: true,
+      });
     });
   });
 
@@ -143,7 +145,7 @@ describe('LobbyScene', () => {
         expect.objectContaining({
           fontSize: '48px',
           color: '#fff',
-        })
+        }),
       );
     });
 
@@ -156,7 +158,7 @@ describe('LobbyScene', () => {
         expect.objectContaining({
           fontSize: '24px',
           color: '#ffff00',
-        })
+        }),
       );
     });
 
@@ -166,7 +168,7 @@ describe('LobbyScene', () => {
         400,
         300,
         'Room Code:',
-        expect.objectContaining({ fontSize: '20px' })
+        expect.objectContaining({ fontSize: '20px' }),
       );
       expect(mockAddText).toHaveBeenCalledWith(
         400,
@@ -175,7 +177,7 @@ describe('LobbyScene', () => {
         expect.objectContaining({
           fontSize: '36px',
           color: '#fff',
-        })
+        }),
       );
     });
 
@@ -185,7 +187,7 @@ describe('LobbyScene', () => {
         expect.any(Number),
         expect.any(Number),
         '...',
-        expect.objectContaining({})
+        expect.objectContaining({}),
       );
     });
 
@@ -195,7 +197,7 @@ describe('LobbyScene', () => {
         400,
         450,
         'Players:',
-        expect.objectContaining({ fontSize: '20px' })
+        expect.objectContaining({ fontSize: '20px' }),
       );
     });
 
@@ -208,7 +210,7 @@ describe('LobbyScene', () => {
         expect.objectContaining({
           fontSize: '32px',
           color: '#555',
-        })
+        }),
       );
     });
 
@@ -216,11 +218,14 @@ describe('LobbyScene', () => {
       scene.create();
       // Find the call for START GAME (text is 3rd arg: x, y, text, style)
       const startButtonCall = mockAddText.mock.calls.find(
-        call => call[2] === 'START GAME'
+        (call) => call[2] === 'START GAME',
       );
       expect(startButtonCall).toBeDefined();
       // Get the returned text object from that call
-      const result = mockAddText.mock.results[mockAddText.mock.calls.indexOf(startButtonCall!)]?.value;
+      const result =
+        mockAddText.mock.results[
+          mockAddText.mock.calls.indexOf(startButtonCall!)
+        ]?.value;
       expect(result?.setAlpha).toHaveBeenCalledWith(0.5);
     });
 
@@ -232,7 +237,7 @@ describe('LobbyScene', () => {
         'Back to Menu',
         expect.objectContaining({
           fontSize: '24px',
-        })
+        }),
       );
     });
 
@@ -259,13 +264,16 @@ describe('LobbyScene', () => {
 
     it('should handle connected event', () => {
       const connectedCallback = mockNetworkService.on.mock.calls.find(
-        (call: any[]) => call[0] === 'connected'
+        (call: any[]) => call[0] === 'connected',
       )?.[1];
 
       if (connectedCallback) {
         connectedCallback({ playerId: 'player-123' });
 
-        expect(logger.info).toHaveBeenCalledWith('Connected with player ID:', 'player-123');
+        expect(logger.info).toHaveBeenCalledWith(
+          'Connected with player ID:',
+          'player-123',
+        );
         expect(mockNetworkService.requestMatchmaking).toHaveBeenCalledWith({
           gameMode: 'platformer',
           maxPlayers: 4,
@@ -275,7 +283,7 @@ describe('LobbyScene', () => {
 
     it('should handle room_created event', () => {
       const roomCreatedCallback = mockNetworkService.on.mock.calls.find(
-        (call: any[]) => call[0] === 'room_created'
+        (call: any[]) => call[0] === 'room_created',
       )?.[1];
 
       if (roomCreatedCallback) {
@@ -293,11 +301,15 @@ describe('LobbyScene', () => {
     it('should handle player_joined event', () => {
       (scene as any).players = ['player1'];
       const playerJoinedCallback = mockNetworkService.on.mock.calls.find(
-        (call: any[]) => call[0] === 'player_joined'
+        (call: any[]) => call[0] === 'player_joined',
       )?.[1];
 
       if (playerJoinedCallback) {
-        playerJoinedCallback({ playerId: 'player2', socketId: 'socket2', roomId: 'ABC123' });
+        playerJoinedCallback({
+          playerId: 'player2',
+          socketId: 'socket2',
+          roomId: 'ABC123',
+        });
 
         expect((scene as any).players).toContain('player2');
         expect((scene as any).players).toHaveLength(2);
@@ -307,11 +319,15 @@ describe('LobbyScene', () => {
     it('should enable start button when 2+ players', () => {
       (scene as any).players = ['player1'];
       const playerJoinedCallback = mockNetworkService.on.mock.calls.find(
-        (call: any[]) => call[0] === 'player_joined'
+        (call: any[]) => call[0] === 'player_joined',
       )?.[1];
 
       if (playerJoinedCallback) {
-        playerJoinedCallback({ playerId: 'player2', socketId: 'socket2', roomId: 'ABC123' });
+        playerJoinedCallback({
+          playerId: 'player2',
+          socketId: 'socket2',
+          roomId: 'ABC123',
+        });
 
         expect(scene.events.emit).toHaveBeenCalledWith('enableStartButton');
       }
@@ -320,7 +336,7 @@ describe('LobbyScene', () => {
     it('should handle player_left event', () => {
       (scene as any).players = ['player1', 'player2'];
       const playerLeftCallback = mockNetworkService.on.mock.calls.find(
-        (call: any[]) => call[0] === 'player_left'
+        (call: any[]) => call[0] === 'player_left',
       )?.[1];
 
       if (playerLeftCallback) {
@@ -333,11 +349,17 @@ describe('LobbyScene', () => {
 
     it('should disable start button when less than 2 players', () => {
       (scene as any).players = ['player1', 'player2'];
-      const startBtn = { setAlpha: jest.fn(), setColor: jest.fn(), disableInteractive: jest.fn() };
-      (scene as any).children = { getByName: jest.fn().mockReturnValue(startBtn) };
+      const startBtn = {
+        setAlpha: jest.fn(),
+        setColor: jest.fn(),
+        disableInteractive: jest.fn(),
+      };
+      (scene as any).children = {
+        getByName: jest.fn().mockReturnValue(startBtn),
+      };
 
       const playerLeftCallback = mockNetworkService.on.mock.calls.find(
-        (call: any[]) => call[0] === 'player_left'
+        (call: any[]) => call[0] === 'player_left',
       )?.[1];
 
       if (playerLeftCallback) {
@@ -351,7 +373,7 @@ describe('LobbyScene', () => {
 
     it('should handle error event', () => {
       const errorCallback = mockNetworkService.on.mock.calls.find(
-        (call: any[]) => call[0] === 'error'
+        (call: any[]) => call[0] === 'error',
       )?.[1];
 
       if (errorCallback) {
@@ -360,7 +382,9 @@ describe('LobbyScene', () => {
         // Should update statusText with error message and color
         const statusText = (scene as any).statusText;
         expect(statusText).toBeDefined();
-        expect(statusText.setText).toHaveBeenCalledWith('Error: Connection lost');
+        expect(statusText.setText).toHaveBeenCalledWith(
+          'Error: Connection lost',
+        );
         expect(statusText.setColor).toHaveBeenCalledWith('#ff0000');
       }
     });
@@ -386,7 +410,7 @@ describe('LobbyScene', () => {
         expect.objectContaining({
           fontSize: '16px',
           color: '#4CAF50',
-        })
+        }),
       );
     });
   });
@@ -399,7 +423,7 @@ describe('LobbyScene', () => {
       (scene as any).updatePlayerList();
 
       expect((scene as any).playerListText.setText).toHaveBeenCalledWith(
-        'Waiting for players...'
+        'Waiting for players...',
       );
     });
 
@@ -411,7 +435,7 @@ describe('LobbyScene', () => {
       (scene as any).updatePlayerList();
 
       expect((scene as any).playerListText.setText).toHaveBeenCalledWith(
-        '1. player1\n2. player2 (You)\n3. player3'
+        '1. player1\n2. player2 (You)\n3. player3',
       );
     });
 
@@ -422,7 +446,7 @@ describe('LobbyScene', () => {
       (scene as any).updatePlayerList();
 
       expect((scene as any).playerListText.setText).toHaveBeenCalledWith(
-        '1. verylongplay'
+        '1. verylongplay',
       );
     });
   });
@@ -436,7 +460,7 @@ describe('LobbyScene', () => {
         width / 2,
         520,
         'Player player1 joined',
-        expect.objectContaining({ color: '#4CAF50' })
+        expect.objectContaining({ color: '#4CAF50' }),
       );
     });
 
@@ -448,7 +472,7 @@ describe('LobbyScene', () => {
         width / 2,
         520,
         'Player player1 left',
-        expect.objectContaining({ color: '#f44336' })
+        expect.objectContaining({ color: '#f44336' }),
       );
     });
   });

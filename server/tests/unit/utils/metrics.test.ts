@@ -29,12 +29,16 @@ describe('metrics', () => {
   describe('resetMetrics', () => {
     it('should reset all metrics', async () => {
       // Increment some counters
-      httpRequestTotal.inc({ method: 'GET', route: '/test', status_code: '200' });
+      httpRequestTotal.inc({
+        method: 'GET',
+        route: '/test',
+        status_code: '200',
+      });
       gameRoomsTotal.set(5);
-      
+
       // Reset
       resetMetrics();
-      
+
       // Should be able to get metrics without error
       const metrics = await getMetrics();
       expect(typeof metrics).toBe('string');
@@ -45,25 +49,41 @@ describe('metrics', () => {
     it('should observe a request duration', () => {
       httpRequestDuration.observe(
         { method: 'GET', route: '/api/test', status_code: '200' },
-        0.05
+        0.05,
       );
       // Just ensure it doesn't throw
     });
 
     it('should track multiple observations', () => {
-      httpRequestDuration.observe({ method: 'GET', route: '/api/test', status_code: '200' }, 0.01);
-      httpRequestDuration.observe({ method: 'GET', route: '/api/test', status_code: '200' }, 0.1);
-      httpRequestDuration.observe({ method: 'POST', route: '/api/test', status_code: '201' }, 0.05);
+      httpRequestDuration.observe(
+        { method: 'GET', route: '/api/test', status_code: '200' },
+        0.01,
+      );
+      httpRequestDuration.observe(
+        { method: 'GET', route: '/api/test', status_code: '200' },
+        0.1,
+      );
+      httpRequestDuration.observe(
+        { method: 'POST', route: '/api/test', status_code: '201' },
+        0.05,
+      );
     });
   });
 
   describe('httpRequestTotal', () => {
     it('should increment counter', () => {
-      httpRequestTotal.inc({ method: 'GET', route: '/api/test', status_code: '200' });
+      httpRequestTotal.inc({
+        method: 'GET',
+        route: '/api/test',
+        status_code: '200',
+      });
     });
 
     it('should increment by custom value', () => {
-      httpRequestTotal.inc({ method: 'GET', route: '/api/test', status_code: '200' }, 5);
+      httpRequestTotal.inc(
+        { method: 'GET', route: '/api/test', status_code: '200' },
+        5,
+      );
     });
   });
 
@@ -119,16 +139,22 @@ describe('metrics', () => {
 
   describe('dbQueryDuration', () => {
     it('should observe query duration', () => {
-      dbQueryDuration.observe(
-        { operation: 'SELECT', table: 'players' },
-        0.01
-      );
+      dbQueryDuration.observe({ operation: 'SELECT', table: 'players' }, 0.01);
     });
 
     it('should track different operations', () => {
-      dbQueryDuration.observe({ operation: 'INSERT', table: 'inventory' }, 0.05);
-      dbQueryDuration.observe({ operation: 'UPDATE', table: 'player_stats' }, 0.02);
-      dbQueryDuration.observe({ operation: 'DELETE', table: 'achievements' }, 0.01);
+      dbQueryDuration.observe(
+        { operation: 'INSERT', table: 'inventory' },
+        0.05,
+      );
+      dbQueryDuration.observe(
+        { operation: 'UPDATE', table: 'player_stats' },
+        0.02,
+      );
+      dbQueryDuration.observe(
+        { operation: 'DELETE', table: 'achievements' },
+        0.01,
+      );
     });
   });
 
@@ -155,7 +181,9 @@ describe('metrics', () => {
 
   describe('register', () => {
     it('should have metrics registered', () => {
-      expect(register.getSingleMetric('http_request_duration_seconds')).toBeDefined();
+      expect(
+        register.getSingleMetric('http_request_duration_seconds'),
+      ).toBeDefined();
       expect(register.getSingleMetric('http_requests_total')).toBeDefined();
       expect(register.getSingleMetric('game_rooms_total')).toBeDefined();
     });

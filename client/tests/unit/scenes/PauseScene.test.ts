@@ -62,7 +62,7 @@ jest.mock('phaser', () => {
   });
 
   return {
-    Scene: jest.fn().mockImplementation(function(this: any) {
+    Scene: jest.fn().mockImplementation(function (this: any) {
       this.cameras = { main: { width: 800, height: 600 } };
       this.add = { rectangle: mockAddRectangle, text: mockAddText };
       this.scene = { start: mockSceneStart, stop: mockSceneStop };
@@ -105,9 +105,22 @@ describe('PauseScene', () => {
     (scene as any).eventBus = eventBus;
     (scene as any).selectedIndex = 0;
     (scene as any).menuItems = [
-      { text: { setColor: jest.fn(), setScale: jest.fn() }, action: () => mockSceneService.resumeScene('GameScene') },
-      { text: { setColor: jest.fn(), setScale: jest.fn() }, action: () => mockSceneService.startScene({ target: 'GameScene', stopCurrent: false }) },
-      { text: { setColor: jest.fn(), setScale: jest.fn() }, action: () => process.exit(0) },
+      {
+        text: { setColor: jest.fn(), setScale: jest.fn() },
+        action: () => mockSceneService.resumeScene('GameScene'),
+      },
+      {
+        text: { setColor: jest.fn(), setScale: jest.fn() },
+        action: () =>
+          mockSceneService.startScene({
+            target: 'GameScene',
+            stopCurrent: false,
+          }),
+      },
+      {
+        text: { setColor: jest.fn(), setScale: jest.fn() },
+        action: () => process.exit(0),
+      },
     ];
   });
 
@@ -121,7 +134,7 @@ describe('PauseScene', () => {
         800,
         600,
         expect.any(Number),
-        0.7
+        0.7,
       );
     });
 
@@ -135,7 +148,7 @@ describe('PauseScene', () => {
         expect.objectContaining({
           fontSize: '64px',
           color: '#fff',
-        })
+        }),
       );
     });
 
@@ -144,8 +157,10 @@ describe('PauseScene', () => {
 
       // Should have called add.text at least 3 times for menu items
       const calls = mockAddText.mock.calls;
-      const menuCalls = calls.filter(call => 
-        call[2] && ['Resume', 'Restart Level', 'Main Menu'].includes(call[2] as string)
+      const menuCalls = calls.filter(
+        (call) =>
+          call[2] &&
+          ['Resume', 'Restart Level', 'Main Menu'].includes(call[2] as string),
       );
       expect(menuCalls.length).toBe(3);
     });

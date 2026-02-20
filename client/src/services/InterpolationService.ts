@@ -55,7 +55,10 @@ export class InterpolationService {
    * @param clientTime Current client time (e.g., Date.now()).
    * @returns Interpolated state or null if not enough data.
    */
-  public getInterpolatedState(entityId: string, clientTime: number): any | null {
+  public getInterpolatedState(
+    entityId: string,
+    clientTime: number,
+  ): any | null {
     const snapshots = this.snapshots.get(entityId);
     if (!snapshots || snapshots.length < 2) {
       // Not enough data, return latest snapshot if exists
@@ -90,7 +93,8 @@ export class InterpolationService {
     }
 
     // Linear interpolation factor
-    const t = (renderTime - before.timestamp) / (after.timestamp - before.timestamp);
+    const t =
+      (renderTime - before.timestamp) / (after.timestamp - before.timestamp);
     return this.interpolate(before.state, after.state, t);
   }
 
@@ -116,7 +120,7 @@ export class InterpolationService {
    */
   public pruneOlderThan(timestamp: number): void {
     for (const [entityId, list] of this.snapshots.entries()) {
-      const filtered = list.filter(snap => snap.timestamp >= timestamp);
+      const filtered = list.filter((snap) => snap.timestamp >= timestamp);
       this.snapshots.set(entityId, filtered);
       if (filtered.length === 0) {
         this.snapshots.delete(entityId);

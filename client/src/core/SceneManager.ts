@@ -48,10 +48,13 @@ export class SceneService {
    * @param config Transition configuration.
    */
   public startScene(config: SceneTransitionConfig): void {
-    const { target, data, stopCurrent, sleepCurrent, duration, onComplete } = config;
+    const { target, data, stopCurrent, sleepCurrent, duration, onComplete } =
+      config;
 
     // Handle current scene
-    const currentScene = this.sceneManager.getScenes(true).find(s => s.scene.isActive());
+    const currentScene = this.sceneManager
+      .getScenes(true)
+      .find((s) => s.scene.isActive());
     if (currentScene && stopCurrent) {
       this.sceneManager.stop(currentScene.scene.key);
     } else if (currentScene && sleepCurrent) {
@@ -77,7 +80,9 @@ export class SceneService {
    * @param data Optional data to pass.
    */
   public switchToScene(target: string, data?: any): void {
-    const currentScene = this.sceneManager.getScenes(true).find(s => s.scene.isActive());
+    const currentScene = this.sceneManager
+      .getScenes(true)
+      .find((s) => s.scene.isActive());
     if (currentScene) {
       this.sceneManager.sleep(currentScene.scene.key);
     }
@@ -133,7 +138,7 @@ export class SceneService {
    */
   public getActiveScene(): Phaser.Scene | null {
     const scenes = this.sceneManager.getScenes(true);
-    return scenes.find(s => s.scene.isActive()) || null;
+    return scenes.find((s) => s.scene.isActive()) || null;
   }
 
   /**
@@ -179,7 +184,11 @@ export class SceneService {
    * @param sceneClass The scene class (constructor).
    * @param autoStart Whether to start the scene immediately (default: false).
    */
-  public addScene(sceneKey: string, sceneClass: typeof Phaser.Scene, autoStart = false): void {
+  public addScene(
+    sceneKey: string,
+    sceneClass: typeof Phaser.Scene,
+    autoStart = false,
+  ): void {
     this.sceneManager.add(sceneKey, sceneClass, autoStart);
   }
 

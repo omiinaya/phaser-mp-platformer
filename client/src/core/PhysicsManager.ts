@@ -69,7 +69,10 @@ export class PhysicsManager {
     }
 
     // Set gravity
-    this.physics.world.gravity.set(this.config.gravity!.x, this.config.gravity!.y);
+    this.physics.world.gravity.set(
+      this.config.gravity!.x,
+      this.config.gravity!.y,
+    );
 
     // Debug rendering
     if (this.config.debug) {
@@ -88,13 +91,16 @@ export class PhysicsManager {
 
     // Override debug colors if provided
     if (this.config.debugShowStaticBodyColor !== undefined) {
-      (this.physics.world as any).debugGraphic.defaultStaticColor = this.config.debugShowStaticBodyColor;
+      (this.physics.world as any).debugGraphic.defaultStaticColor =
+        this.config.debugShowStaticBodyColor;
     }
     if (this.config.debugShowBodyColor !== undefined) {
-      (this.physics.world as any).debugGraphic.defaultBodyColor = this.config.debugShowBodyColor;
+      (this.physics.world as any).debugGraphic.defaultBodyColor =
+        this.config.debugShowBodyColor;
     }
     if (this.config.debugShowVelocityColor !== undefined) {
-      (this.physics.world as any).debugGraphic.defaultVelocityColor = this.config.debugShowVelocityColor;
+      (this.physics.world as any).debugGraphic.defaultVelocityColor =
+        this.config.debugShowVelocityColor;
     }
 
     this.physics.world.drawDebug = true;
@@ -125,7 +131,10 @@ export class PhysicsManager {
    * @param obj The game object (sprite, image, etc.).
    * @param staticBody Whether the body should be static (default false).
    */
-  public enableBody(obj: Phaser.GameObjects.GameObject, staticBody = false): void {
+  public enableBody(
+    obj: Phaser.GameObjects.GameObject,
+    staticBody = false,
+  ): void {
     this.physics.add.existing(obj, staticBody);
   }
 
@@ -151,7 +160,7 @@ export class PhysicsManager {
     objA: Phaser.GameObjects.GameObject | Phaser.Physics.Arcade.Group,
     objB: Phaser.GameObjects.GameObject | Phaser.Physics.Arcade.Group,
     callback?: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
-    processCallback?: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback
+    processCallback?: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
   ): void {
     this.physics.add.collider(objA, objB, callback, processCallback);
   }
@@ -167,7 +176,7 @@ export class PhysicsManager {
     objA: Phaser.GameObjects.GameObject | Phaser.Physics.Arcade.Group,
     objB: Phaser.GameObjects.GameObject | Phaser.Physics.Arcade.Group,
     callback?: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
-    processCallback?: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback
+    processCallback?: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
   ): void {
     this.physics.add.overlap(objA, objB, callback, processCallback);
   }
@@ -197,7 +206,7 @@ export class PhysicsManager {
   public setCollisionFilter(
     body: Phaser.Physics.Arcade.Body,
     category: number,
-    mask: number
+    mask: number,
   ): void {
     body.collisionCategory = category;
     body.collisionMask = mask;
@@ -209,7 +218,7 @@ export class PhysicsManager {
    * @returns The created static group.
    */
   public createStaticGroup(
-    config?: Phaser.Types.Physics.Arcade.PhysicsGroupConfig
+    config?: Phaser.Types.Physics.Arcade.PhysicsGroupConfig,
   ): Phaser.Physics.Arcade.StaticGroup {
     return this.physics.add.staticGroup(config);
   }
@@ -220,7 +229,7 @@ export class PhysicsManager {
    * @returns The created group.
    */
   public createGroup(
-    config?: Phaser.Types.Physics.Arcade.PhysicsGroupConfig
+    config?: Phaser.Types.Physics.Arcade.PhysicsGroupConfig,
   ): Phaser.Physics.Arcade.Group {
     return this.physics.add.group(config);
   }
@@ -254,7 +263,13 @@ export class PhysicsManager {
    * @param height World bounds height.
    * @param checkCollision Whether to check collision against bounds.
    */
-  public setBounds(x: number, y: number, width: number, height: number, checkCollision = true): void {
+  public setBounds(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    checkCollision = true,
+  ): void {
     this.physics.world.setBounds(x, y, width, height, checkCollision);
   }
 
@@ -271,7 +286,7 @@ export class PhysicsManager {
     left = true,
     right = true,
     up = true,
-    down = true
+    down = true,
   ): void {
     // Use type assertion to bypass TypeScript signature mismatch
     (body as any).setCollideWorldBounds(true, left, right, up, down);

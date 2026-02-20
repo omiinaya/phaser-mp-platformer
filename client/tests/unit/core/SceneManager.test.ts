@@ -18,7 +18,10 @@ jest.mock('phaser', () => ({
   Scene: jest.fn(),
 }));
 
-import { SceneService, SceneTransitionConfig } from '../../../src/core/SceneManager';
+import {
+  SceneService,
+  SceneTransitionConfig,
+} from '../../../src/core/SceneManager';
 
 describe('SceneService', () => {
   let sceneService: SceneService;
@@ -40,7 +43,10 @@ describe('SceneService', () => {
         target: 'GameScene',
       };
       sceneService.startScene(config);
-      expect(mockSceneManager.start).toHaveBeenCalledWith('GameScene', undefined);
+      expect(mockSceneManager.start).toHaveBeenCalledWith(
+        'GameScene',
+        undefined,
+      );
     });
 
     it('should pass data to target scene', () => {
@@ -49,14 +55,18 @@ describe('SceneService', () => {
         data: { level: 1 },
       };
       sceneService.startScene(config);
-      expect(mockSceneManager.start).toHaveBeenCalledWith('GameScene', { level: 1 });
+      expect(mockSceneManager.start).toHaveBeenCalledWith('GameScene', {
+        level: 1,
+      });
     });
 
     it('should stop current scene when stopCurrent is true', () => {
-      mockSceneManager.getScenes.mockReturnValue([{
-        scene: { key: 'MenuScene', isActive: () => true }
-      }]);
-      
+      mockSceneManager.getScenes.mockReturnValue([
+        {
+          scene: { key: 'MenuScene', isActive: () => true },
+        },
+      ]);
+
       const config: SceneTransitionConfig = {
         target: 'GameScene',
         stopCurrent: true,
@@ -66,10 +76,12 @@ describe('SceneService', () => {
     });
 
     it('should sleep current scene when sleepCurrent is true', () => {
-      mockSceneManager.getScenes.mockReturnValue([{
-        scene: { key: 'MenuScene', isActive: () => true }
-      }]);
-      
+      mockSceneManager.getScenes.mockReturnValue([
+        {
+          scene: { key: 'MenuScene', isActive: () => true },
+        },
+      ]);
+
       const config: SceneTransitionConfig = {
         target: 'GameScene',
         sleepCurrent: true,
@@ -81,34 +93,48 @@ describe('SceneService', () => {
 
   describe('switchToScene', () => {
     it('should sleep current and start new scene', () => {
-      mockSceneManager.getScenes.mockReturnValue([{
-        scene: { key: 'MenuScene', isActive: () => true }
-      }]);
-      
+      mockSceneManager.getScenes.mockReturnValue([
+        {
+          scene: { key: 'MenuScene', isActive: () => true },
+        },
+      ]);
+
       sceneService.switchToScene('GameScene');
       expect(mockSceneManager.sleep).toHaveBeenCalledWith('MenuScene');
-      expect(mockSceneManager.start).toHaveBeenCalledWith('GameScene', undefined);
+      expect(mockSceneManager.start).toHaveBeenCalledWith(
+        'GameScene',
+        undefined,
+      );
     });
 
     it('should pass data to new scene', () => {
-      mockSceneManager.getScenes.mockReturnValue([{
-        scene: { key: 'MenuScene', isActive: () => true }
-      }]);
-      
+      mockSceneManager.getScenes.mockReturnValue([
+        {
+          scene: { key: 'MenuScene', isActive: () => true },
+        },
+      ]);
+
       sceneService.switchToScene('GameScene', { level: 5 });
-      expect(mockSceneManager.start).toHaveBeenCalledWith('GameScene', { level: 5 });
+      expect(mockSceneManager.start).toHaveBeenCalledWith('GameScene', {
+        level: 5,
+      });
     });
   });
 
   describe('resumeScene', () => {
     it('should wake a sleeping scene', () => {
       sceneService.resumeScene('PausedScene');
-      expect(mockSceneManager.wake).toHaveBeenCalledWith('PausedScene', undefined);
+      expect(mockSceneManager.wake).toHaveBeenCalledWith(
+        'PausedScene',
+        undefined,
+      );
     });
 
     it('should pass data when resuming', () => {
       sceneService.resumeScene('PausedScene', { score: 100 });
-      expect(mockSceneManager.wake).toHaveBeenCalledWith('PausedScene', { score: 100 });
+      expect(mockSceneManager.wake).toHaveBeenCalledWith('PausedScene', {
+        score: 100,
+      });
     });
   });
 
@@ -134,7 +160,7 @@ describe('SceneService', () => {
 
     it('should return true for active scene', () => {
       mockSceneManager.getScene.mockReturnValue({
-        scene: { isActive: () => true }
+        scene: { isActive: () => true },
       });
       expect(sceneService.isSceneActive('GameScene')).toBe(true);
     });
@@ -148,7 +174,7 @@ describe('SceneService', () => {
 
     it('should return true for sleeping scene', () => {
       mockSceneManager.getScene.mockReturnValue({
-        scene: { isSleeping: () => true }
+        scene: { isSleeping: () => true },
       });
       expect(sceneService.isSceneSleeping('GameScene')).toBe(true);
     });
@@ -199,13 +225,21 @@ describe('SceneService', () => {
     it('should add a scene', () => {
       const mockSceneClass = jest.fn();
       sceneService.addScene('TestScene', mockSceneClass as any);
-      expect(mockSceneManager.add).toHaveBeenCalledWith('TestScene', mockSceneClass, false);
+      expect(mockSceneManager.add).toHaveBeenCalledWith(
+        'TestScene',
+        mockSceneClass,
+        false,
+      );
     });
 
     it('should auto-start scene when specified', () => {
       const mockSceneClass = jest.fn();
       sceneService.addScene('TestScene', mockSceneClass as any, true);
-      expect(mockSceneManager.add).toHaveBeenCalledWith('TestScene', mockSceneClass, true);
+      expect(mockSceneManager.add).toHaveBeenCalledWith(
+        'TestScene',
+        mockSceneClass,
+        true,
+      );
     });
   });
 

@@ -6,45 +6,45 @@ import { Character } from './Character';
  * Skill targeting mode.
  */
 export enum SkillTarget {
-    Self = 'self',
-    Directional = 'directional',
-    Target = 'target',
-    Area = 'area',
-    Projectile = 'projectile',
+  Self = 'self',
+  Directional = 'directional',
+  Target = 'target',
+  Area = 'area',
+  Projectile = 'projectile',
 }
 
 /**
  * Skill configuration.
  */
 export interface SkillConfig {
-    /** Unique identifier. */
-    id: string;
-    /** Display name. */
-    name: string;
-    /** Description. */
-    description?: string;
-    /** Icon texture key. */
-    icon?: string;
-    /** Cooldown duration in milliseconds. */
-    cooldown: number;
-    /** Mana/energy cost (if any). */
-    cost?: number;
-    /** Cast time in milliseconds (0 for instant). */
-    castTime?: number;
-    /** Range in pixels (0 for melee). */
-    range?: number;
-    /** Targeting mode. */
-    target: SkillTarget;
-    /** Visual effect key to play on cast. */
-    castEffect?: string;
-    /** Sound key to play on cast. */
-    castSound?: string;
-    /** Damage amount (if dealing damage). */
-    damage?: number;
-    /** Healing amount (if healing). */
-    heal?: number;
-    /** Buff/debuff effect ID. */
-    effect?: string;
+  /** Unique identifier. */
+  id: string;
+  /** Display name. */
+  name: string;
+  /** Description. */
+  description?: string;
+  /** Icon texture key. */
+  icon?: string;
+  /** Cooldown duration in milliseconds. */
+  cooldown: number;
+  /** Mana/energy cost (if any). */
+  cost?: number;
+  /** Cast time in milliseconds (0 for instant). */
+  castTime?: number;
+  /** Range in pixels (0 for melee). */
+  range?: number;
+  /** Targeting mode. */
+  target: SkillTarget;
+  /** Visual effect key to play on cast. */
+  castEffect?: string;
+  /** Sound key to play on cast. */
+  castSound?: string;
+  /** Damage amount (if dealing damage). */
+  damage?: number;
+  /** Healing amount (if healing). */
+  heal?: number;
+  /** Buff/debuff effect ID. */
+  effect?: string;
 }
 
 /**
@@ -68,9 +68,9 @@ export abstract class Skill {
   protected owner?: Character;
 
   /**
-     * Creates an instance of Skill.
-     * @param config Skill configuration.
-     */
+   * Creates an instance of Skill.
+   * @param config Skill configuration.
+   */
   constructor(config: SkillConfig) {
     this.config = {
       cost: 0,
@@ -84,17 +84,17 @@ export abstract class Skill {
   }
 
   /**
-     * Assign an owner character to this skill.
-     * @param character The character that owns this skill.
-     */
+   * Assign an owner character to this skill.
+   * @param character The character that owns this skill.
+   */
   public setOwner(character: Character): void {
     this.owner = character;
   }
 
   /**
-     * Update skill state each frame.
-     * @param delta Time delta in milliseconds.
-     */
+   * Update skill state each frame.
+   * @param delta Time delta in milliseconds.
+   */
   public update(delta: number): void {
     if (this.isOnCooldown) {
       this.cooldownRemaining -= delta;
@@ -106,10 +106,10 @@ export abstract class Skill {
   }
 
   /**
-     * Attempt to activate the skill.
-     * @param target Optional target character or position.
-     * @returns True if activation succeeded.
-     */
+   * Attempt to activate the skill.
+   * @param target Optional target character or position.
+   * @returns True if activation succeeded.
+   */
   public activate(target?: any): boolean {
     if (!this.canActivate()) {
       return false;
@@ -126,8 +126,8 @@ export abstract class Skill {
   }
 
   /**
-     * Check if the skill can be activated.
-     */
+   * Check if the skill can be activated.
+   */
   public canActivate(): boolean {
     if (!this.owner) {
       logger.warn('Skill has no owner.');
@@ -145,9 +145,9 @@ export abstract class Skill {
   }
 
   /**
-     * Start the casting process.
-     * @param target Optional target.
-     */
+   * Start the casting process.
+   * @param target Optional target.
+   */
   protected startCast(target?: any): void {
     this.isCasting = true;
     // Play cast animation/effect
@@ -159,19 +159,19 @@ export abstract class Skill {
       });
     }
 
-        // Schedule execution after cast time
-        this.owner!.scene.time.delayedCall(this.config.castTime!, () => {
-          this.isCasting = false;
-          this.execute(target);
-        });
+    // Schedule execution after cast time
+    this.owner!.scene.time.delayedCall(this.config.castTime!, () => {
+      this.isCasting = false;
+      this.execute(target);
+    });
   }
 
   /**
-     * Execute the skill's effect.
-     * Override in subclasses.
-     * @param target Optional target.
-     * @returns True if execution succeeded.
-     */
+   * Execute the skill's effect.
+   * Override in subclasses.
+   * @param target Optional target.
+   * @returns True if execution succeeded.
+   */
   protected execute(target?: any): boolean {
     // Apply cooldown
     this.isOnCooldown = true;
@@ -196,24 +196,24 @@ export abstract class Skill {
   }
 
   /**
-     * Get the cooldown progress as a ratio (0 to 1).
-     */
+   * Get the cooldown progress as a ratio (0 to 1).
+   */
   public getCooldownProgress(): number {
     if (!this.isOnCooldown) return 0;
     return 1 - this.cooldownRemaining / this.config.cooldown;
   }
 
   /**
-     * Reset cooldown (e.g., after death).
-     */
+   * Reset cooldown (e.g., after death).
+   */
   public resetCooldown(): void {
     this.isOnCooldown = false;
     this.cooldownRemaining = 0;
   }
 
   /**
-     * Cancel casting (if applicable).
-     */
+   * Cancel casting (if applicable).
+   */
   public cancelCast(): void {
     if (this.isCasting) {
       this.isCasting = false;
@@ -260,7 +260,7 @@ export class DashSkill extends Skill {
     // Optional: invulnerability during dash
     this.owner.invulnerable = true;
     this.owner.scene.time.delayedCall(200, () => {
-            this.owner!.invulnerable = false;
+      this.owner!.invulnerable = false;
     });
 
     return true;

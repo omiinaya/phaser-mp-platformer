@@ -85,7 +85,11 @@ describe('AssetManager', () => {
         url: 'assets/test.png',
       };
       assetManager.loadAsset(config);
-      expect(mockLoader.image).toHaveBeenCalledWith('test-image', 'assets/test.png', undefined);
+      expect(mockLoader.image).toHaveBeenCalledWith(
+        'test-image',
+        'assets/test.png',
+        undefined,
+      );
     });
 
     it('should call loader.audio for audio type', () => {
@@ -95,7 +99,11 @@ describe('AssetManager', () => {
         url: 'assets/test.mp3',
       };
       assetManager.loadAsset(config);
-      expect(mockLoader.audio).toHaveBeenCalledWith('test-audio', 'assets/test.mp3', undefined);
+      expect(mockLoader.audio).toHaveBeenCalledWith(
+        'test-audio',
+        'assets/test.mp3',
+        undefined,
+      );
     });
 
     it('should call loader.spritesheet for spritesheet type', () => {
@@ -111,7 +119,7 @@ describe('AssetManager', () => {
         'test-sprite',
         'assets/spritesheet.png',
         frameConfig,
-        undefined
+        undefined,
       );
     });
 
@@ -169,12 +177,16 @@ describe('AssetManager', () => {
       jest.spyOn(assetManager as any, 'isLoaded').mockReturnValue(false);
 
       await assetManager.loadLazy('lazy');
-      expect(mockLoader.image).toHaveBeenCalledWith('lazy', 'assets/lazy.png', undefined);
+      expect(mockLoader.image).toHaveBeenCalledWith(
+        'lazy',
+        'assets/lazy.png',
+        undefined,
+      );
     });
 
     it('should reject if lazy asset not registered', async () => {
       await expect(assetManager.loadLazy('unknown')).rejects.toThrow(
-        'No lazy asset registered with key: unknown'
+        'No lazy asset registered with key: unknown',
       );
     });
   });
@@ -191,9 +203,11 @@ describe('AssetManager', () => {
       const promise = assetManager.startLoad();
       // Simulate completion
       setTimeout(() => {
-        mockLoader.on.mock.calls.forEach(([event, handler]: [string, Function]) => {
-          if (event === 'complete') handler();
-        });
+        mockLoader.on.mock.calls.forEach(
+          ([event, handler]: [string, Function]) => {
+            if (event === 'complete') handler();
+          },
+        );
       }, 0);
       await expect(promise).resolves.toBeUndefined();
     });

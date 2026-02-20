@@ -21,7 +21,9 @@ jest.mock('../../../src/persistence/repositories/PlayerProfileRepository');
 jest.mock('../../../src/persistence/repositories/PlayerStatsRepository');
 jest.mock('../../../src/persistence/repositories/PlayerUnlockRepository');
 jest.mock('../../../src/persistence/repositories/InventoryRepository');
-jest.mock('../../../src/persistence/repositories/AchievementProgressRepository');
+jest.mock(
+  '../../../src/persistence/repositories/AchievementProgressRepository',
+);
 jest.mock('../../../src/persistence/repositories/UnlockableRepository');
 
 describe('Players API Integration', () => {
@@ -39,7 +41,9 @@ describe('Players API Integration', () => {
 
   describe('GET /api/players/:playerId/profile', () => {
     it('should return 404 if player not found', async () => {
-      const mockProfileRepo = PlayerProfileRepository as jest.MockedClass<typeof PlayerProfileRepository>;
+      const mockProfileRepo = PlayerProfileRepository as jest.MockedClass<
+        typeof PlayerProfileRepository
+      >;
       mockProfileRepo.prototype.findOne.mockResolvedValue(null);
 
       const response = await request(app).get('/api/players/player1/profile');
@@ -49,7 +53,9 @@ describe('Players API Integration', () => {
 
     it('should return player profile', async () => {
       const mockProfile = { id: 'player1', name: 'Test Player' };
-      const mockProfileRepo = PlayerProfileRepository as jest.MockedClass<typeof PlayerProfileRepository>;
+      const mockProfileRepo = PlayerProfileRepository as jest.MockedClass<
+        typeof PlayerProfileRepository
+      >;
       mockProfileRepo.prototype.findOne.mockResolvedValue(mockProfile as any);
 
       const response = await request(app).get('/api/players/player1/profile');
@@ -60,7 +66,9 @@ describe('Players API Integration', () => {
 
   describe('GET /api/players/:playerId/stats', () => {
     it('should return 404 if stats not found', async () => {
-      const mockStatsRepo = PlayerStatsRepository as jest.MockedClass<typeof PlayerStatsRepository>;
+      const mockStatsRepo = PlayerStatsRepository as jest.MockedClass<
+        typeof PlayerStatsRepository
+      >;
       mockStatsRepo.prototype.findByPlayerId.mockResolvedValue(null);
 
       const response = await request(app).get('/api/players/player1/stats');
@@ -70,8 +78,12 @@ describe('Players API Integration', () => {
 
     it('should return player stats', async () => {
       const mockStats = { playerId: 'player1', kills: 10, deaths: 2 };
-      const mockStatsRepo = PlayerStatsRepository as jest.MockedClass<typeof PlayerStatsRepository>;
-      mockStatsRepo.prototype.findByPlayerId.mockResolvedValue(mockStats as any);
+      const mockStatsRepo = PlayerStatsRepository as jest.MockedClass<
+        typeof PlayerStatsRepository
+      >;
+      mockStatsRepo.prototype.findByPlayerId.mockResolvedValue(
+        mockStats as any,
+      );
 
       const response = await request(app).get('/api/players/player1/stats');
       expect(response.status).toBe(200);
@@ -90,9 +102,15 @@ describe('Players API Integration', () => {
       const mockTransaction = jest.fn().mockImplementation(async (cb) => {
         return cb({ save: jest.fn() });
       });
-      (AppDataSource.transaction as jest.Mock).mockImplementation(mockTransaction);
-      const mockStatsRepo = PlayerStatsRepository as jest.MockedClass<typeof PlayerStatsRepository>;
-      mockStatsRepo.prototype.findByPlayerId.mockResolvedValue({ kills: 5 } as any);
+      (AppDataSource.transaction as jest.Mock).mockImplementation(
+        mockTransaction,
+      );
+      const mockStatsRepo = PlayerStatsRepository as jest.MockedClass<
+        typeof PlayerStatsRepository
+      >;
+      mockStatsRepo.prototype.findByPlayerId.mockResolvedValue({
+        kills: 5,
+      } as any);
 
       const response = await request(app)
         .patch('/api/players/player1/stats')
@@ -102,7 +120,9 @@ describe('Players API Integration', () => {
     });
 
     it('should return 500 on error', async () => {
-      (AppDataSource.transaction as jest.Mock).mockRejectedValue(new Error('DB error'));
+      (AppDataSource.transaction as jest.Mock).mockRejectedValue(
+        new Error('DB error'),
+      );
       const response = await request(app)
         .patch('/api/players/player1/stats')
         .send({ kills: 3 });
@@ -114,7 +134,9 @@ describe('Players API Integration', () => {
   describe('POST /api/players/:playerId/unlocks', () => {
     it('should grant unlock', async () => {
       // Mock the unlockRepo.unlock to succeed
-      const mockUnlockRepo = PlayerUnlockRepository as jest.MockedClass<typeof PlayerUnlockRepository>;
+      const mockUnlockRepo = PlayerUnlockRepository as jest.MockedClass<
+        typeof PlayerUnlockRepository
+      >;
       mockUnlockRepo.prototype.unlock.mockResolvedValue({} as any);
 
       const response = await request(app)
@@ -133,7 +155,9 @@ describe('Players API Integration', () => {
     });
 
     it('should return 500 on failure', async () => {
-      const mockUnlockRepo = PlayerUnlockRepository as jest.MockedClass<typeof PlayerUnlockRepository>;
+      const mockUnlockRepo = PlayerUnlockRepository as jest.MockedClass<
+        typeof PlayerUnlockRepository
+      >;
       mockUnlockRepo.prototype.unlock.mockRejectedValue(new Error('DB error'));
 
       const response = await request(app)

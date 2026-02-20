@@ -120,7 +120,6 @@ export class EntityFactory {
    * @returns The created slime instance.
    */
   public createSlime(x: number, y: number, config?: EnemyAIConfig): Slime {
-    
     const slime = new Slime(this.scene, x, y, config);
     this.scene.add.existing(slime);
     return slime;
@@ -138,7 +137,6 @@ export class EntityFactory {
     y: number,
     config?: EnemyAIConfig,
   ): FlyingEnemy {
-    
     const enemy = new FlyingEnemy(this.scene, x, y, config);
     this.scene.add.existing(enemy);
     return enemy;
@@ -152,7 +150,6 @@ export class EntityFactory {
    * @returns The created archer instance.
    */
   public createArcher(x: number, y: number, config?: EnemyAIConfig): Archer {
-    
     const archer = new Archer(this.scene, x, y, config);
     this.scene.add.existing(archer);
     return archer;

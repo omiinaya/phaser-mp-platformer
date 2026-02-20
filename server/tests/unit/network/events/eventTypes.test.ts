@@ -36,7 +36,7 @@ describe('EventTypes', () => {
       ERROR: 'error',
       WARNING: 'warning',
     };
-    
+
     expect(EventNames.CONNECTION_ACK).toBe('connection_ack');
     expect(EventNames.PING).toBe('ping');
     expect(EventNames.PONG).toBe('pong');
@@ -59,7 +59,7 @@ describe('EventTypes', () => {
       },
       timestamp: Date.now(),
     };
-    
+
     expect(event.sequence).toBe(1);
     expect(event.input.right).toBe(true);
     expect(event.input.jump).toBe(true);
@@ -72,7 +72,7 @@ describe('EventTypes', () => {
       maxPlayers: 4,
       skillLevel: 1500,
     };
-    
+
     expect(event.gameMode).toBe('deathmatch');
     expect(event.region).toBe('us-east');
     expect(event.maxPlayers).toBe(4);
@@ -83,7 +83,7 @@ describe('EventTypes', () => {
       message: 'Hello',
       channel: 'global',
     };
-    
+
     expect(event.message).toBe('Hello');
     expect(event.channel).toBe('global');
   });

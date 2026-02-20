@@ -1,5 +1,8 @@
 import { processQueue } from '../../../src/workers/matchmaking.worker';
-import { MatchmakingRequest, MatchmakingPreferences } from '../../../src/types/matchmaking';
+import {
+  MatchmakingRequest,
+  MatchmakingPreferences,
+} from '../../../src/types/matchmaking';
 
 describe('matchmaking.worker', () => {
   const MAX_PLAYERS = 4;
@@ -19,7 +22,7 @@ describe('matchmaking.worker', () => {
     it('should create a match when exactly max players in group', () => {
       const requests = createRequests(MAX_PLAYERS, 'deathmatch', 'us-east');
       const result = processQueue(requests);
-      
+
       expect(result).toHaveLength(1);
       expect(result[0].matchedRequests).toHaveLength(MAX_PLAYERS);
       expect(result[0].roomId).toBeUndefined();
@@ -39,7 +42,9 @@ describe('matchmaking.worker', () => {
       expect(result).toHaveLength(1);
       expect(result[0].matchedRequests).toHaveLength(MAX_PLAYERS);
       // Verify that the matched requests are from the original array
-      expect(everyRequestIncluded(result[0].matchedRequests, requests)).toBe(true);
+      expect(everyRequestIncluded(result[0].matchedRequests, requests)).toBe(
+        true,
+      );
     });
 
     it('should group requests by gameMode and region', () => {
@@ -110,7 +115,9 @@ describe('matchmaking.worker', () => {
     it('should handle very large queue with many groups', () => {
       const requests = [];
       for (let i = 0; i < 10; i++) {
-        requests.push(...createRequests(MAX_PLAYERS, 'deathmatch', `region-${i}`));
+        requests.push(
+          ...createRequests(MAX_PLAYERS, 'deathmatch', `region-${i}`),
+        );
       }
       const result = processQueue(requests);
 
@@ -119,13 +126,20 @@ describe('matchmaking.worker', () => {
   });
 
   // Helper function to check if every item in subset is in array
-  function everyRequestIncluded(subset: MatchmakingRequest[], array: MatchmakingRequest[]): boolean {
-    return subset.every(item => array.some(arrItem => 
-      arrItem.requestId === item.requestId && 
-      arrItem.playerId === item.playerId &&
-      arrItem.socketId === item.socketId &&
-      JSON.stringify(arrItem.preferences) === JSON.stringify(item.preferences)
-    ));
+  function everyRequestIncluded(
+    subset: MatchmakingRequest[],
+    array: MatchmakingRequest[],
+  ): boolean {
+    return subset.every((item) =>
+      array.some(
+        (arrItem) =>
+          arrItem.requestId === item.requestId &&
+          arrItem.playerId === item.playerId &&
+          arrItem.socketId === item.socketId &&
+          JSON.stringify(arrItem.preferences) ===
+            JSON.stringify(item.preferences),
+      ),
+    );
   }
 
   // Helper to create a valid MatchmakingRequest
@@ -133,7 +147,7 @@ describe('matchmaking.worker', () => {
     requestId: string,
     gameMode: string,
     region: string | null,
-    preferences?: Partial<MatchmakingPreferences>
+    preferences?: Partial<MatchmakingPreferences>,
   ): MatchmakingRequest {
     const now = new Date();
     return {
@@ -150,7 +164,11 @@ describe('matchmaking.worker', () => {
     };
   }
 
-  function createRequests(count: number, gameMode: string, region: string | null): MatchmakingRequest[] {
+  function createRequests(
+    count: number,
+    gameMode: string,
+    region: string | null,
+  ): MatchmakingRequest[] {
     const requests = [];
     for (let i = 0; i < count; i++) {
       requests.push(createRequest(`req-${i}`, gameMode, region));

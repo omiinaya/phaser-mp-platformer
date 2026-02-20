@@ -81,10 +81,22 @@ describe('NetworkService', () => {
       });
 
       await networkService.connect();
-      expect(mockSocket.on).toHaveBeenCalledWith('disconnect', expect.any(Function));
-      expect(mockSocket.on).toHaveBeenCalledWith('reconnect', expect.any(Function));
-      expect(mockSocket.on).toHaveBeenCalledWith('matchmaking_queued', expect.any(Function));
-      expect(mockSocket.on).toHaveBeenCalledWith('matchmaking_success', expect.any(Function));
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        'disconnect',
+        expect.any(Function),
+      );
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        'reconnect',
+        expect.any(Function),
+      );
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        'matchmaking_queued',
+        expect.any(Function),
+      );
+      expect(mockSocket.on).toHaveBeenCalledWith(
+        'matchmaking_success',
+        expect.any(Function),
+      );
     });
 
     it('should include auth token if provided', async () => {
@@ -93,9 +105,12 @@ describe('NetworkService', () => {
       });
 
       await networkService.connect('test-token');
-      expect(io).toHaveBeenCalledWith('http://localhost:3000', expect.objectContaining({
-        auth: { token: 'test-token' },
-      }));
+      expect(io).toHaveBeenCalledWith(
+        'http://localhost:3000',
+        expect.objectContaining({
+          auth: { token: 'test-token' },
+        }),
+      );
     });
   });
 
@@ -183,7 +198,9 @@ describe('NetworkService', () => {
 
       await networkService.connect();
       // First set room ID via event
-      const roomJoinedHandler = mockSocket.on.mock.calls.find((c: any[]) => c[0] === 'room_joined');
+      const roomJoinedHandler = mockSocket.on.mock.calls.find(
+        (c: any[]) => c[0] === 'room_joined',
+      );
       if (roomJoinedHandler) {
         roomJoinedHandler[1]({ roomId: 'room123' });
       }
@@ -200,7 +217,9 @@ describe('NetworkService', () => {
       });
 
       await networkService.connect();
-      const roomJoinedHandler = mockSocket.on.mock.calls.find((c: any[]) => c[0] === 'room_joined');
+      const roomJoinedHandler = mockSocket.on.mock.calls.find(
+        (c: any[]) => c[0] === 'room_joined',
+      );
       if (roomJoinedHandler) {
         roomJoinedHandler[1]({ roomId: 'room123' });
       }
@@ -257,14 +276,23 @@ describe('NetworkService', () => {
     it('should send player input', () => {
       networkService.sendPlayerInput({
         sequence: 1,
-        input: { left: true, right: false, up: false, down: false, jump: false },
+        input: {
+          left: true,
+          right: false,
+          up: false,
+          down: false,
+          jump: false,
+        },
         timestamp: 1000,
       });
 
-      expect(mockSocket.emit).toHaveBeenCalledWith('player_input', expect.objectContaining({
-        sequence: 1,
-        input: expect.objectContaining({ left: true }),
-      }));
+      expect(mockSocket.emit).toHaveBeenCalledWith(
+        'player_input',
+        expect.objectContaining({
+          sequence: 1,
+          input: expect.objectContaining({ left: true }),
+        }),
+      );
     });
 
     it('should send jump', () => {
@@ -279,7 +307,10 @@ describe('NetworkService', () => {
 
     it('should send collect item', () => {
       networkService.sendCollectItem('coin1');
-      expect(mockSocket.emit).toHaveBeenCalledWith('player_collect_item', 'coin1');
+      expect(mockSocket.emit).toHaveBeenCalledWith(
+        'player_collect_item',
+        'coin1',
+      );
     });
 
     it('should send ping', () => {
@@ -334,7 +365,9 @@ describe('NetworkService', () => {
       await networkService.connect();
       networkService.on('game_state_update', callback);
 
-      const handler = mockSocket.on.mock.calls.find((c: any[]) => c[0] === 'game_state_update');
+      const handler = mockSocket.on.mock.calls.find(
+        (c: any[]) => c[0] === 'game_state_update',
+      );
       if (handler) {
         handler[1]({ state: 'playing' });
       }
@@ -351,7 +384,9 @@ describe('NetworkService', () => {
       await networkService.connect();
       networkService.on('player_damaged', callback);
 
-      const handler = mockSocket.on.mock.calls.find((c: any[]) => c[0] === 'player_damaged');
+      const handler = mockSocket.on.mock.calls.find(
+        (c: any[]) => c[0] === 'player_damaged',
+      );
       if (handler) {
         handler[1]({ damage: 10 });
       }
@@ -368,12 +403,17 @@ describe('NetworkService', () => {
       await networkService.connect();
       networkService.on('chat_message', callback);
 
-      const handler = mockSocket.on.mock.calls.find((c: any[]) => c[0] === 'chat_message');
+      const handler = mockSocket.on.mock.calls.find(
+        (c: any[]) => c[0] === 'chat_message',
+      );
       if (handler) {
         handler[1]({ message: 'hi', playerId: 'player1' });
       }
 
-      expect(callback).toHaveBeenCalledWith({ message: 'hi', playerId: 'player1' });
+      expect(callback).toHaveBeenCalledWith({
+        message: 'hi',
+        playerId: 'player1',
+      });
     });
   });
 });

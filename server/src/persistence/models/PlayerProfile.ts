@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
 import { PlayerStats } from './PlayerStats';
 import { PlayerUnlock } from './PlayerUnlock';
 import { Inventory } from './Inventory';
@@ -34,15 +41,15 @@ export class PlayerProfile {
     coins!: number;
 
   // Relations
-  @OneToOne(() => PlayerStats, stats => stats.profile, { cascade: true })
+  @OneToOne(() => PlayerStats, (stats) => stats.profile, { cascade: true })
     stats!: PlayerStats;
 
-  @OneToMany(() => PlayerUnlock, unlock => unlock.profile)
+  @OneToMany(() => PlayerUnlock, (unlock) => unlock.profile)
     unlocks!: PlayerUnlock[];
 
-  @OneToMany(() => Inventory, inventory => inventory.profile)
+  @OneToMany(() => Inventory, (inventory) => inventory.profile)
     inventoryItems!: Inventory[];
 
-  @OneToMany(() => AchievementProgress, progress => progress.profile)
+  @OneToMany(() => AchievementProgress, (progress) => progress.profile)
     achievements!: AchievementProgress[];
 }

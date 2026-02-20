@@ -36,8 +36,12 @@ describe('E2E Basic Game Load', () => {
     const filePath = join(__dirname, '../../client/public/index.html');
     await page.goto(`file://${filePath}`);
     // Wait for Phaser to be loaded (assuming global Phaser)
-    await page.waitForFunction(() => (window as any).Phaser !== undefined, { timeout: 5000 });
-    const hasPhaser = await page.evaluate(() => (window as any).Phaser !== undefined);
+    await page.waitForFunction(() => (window as any).Phaser !== undefined, {
+      timeout: 5000,
+    });
+    const hasPhaser = await page.evaluate(
+      () => (window as any).Phaser !== undefined,
+    );
     expect(hasPhaser).toBe(true);
   });
 });

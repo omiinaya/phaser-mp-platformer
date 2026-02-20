@@ -65,9 +65,18 @@ describe('AudioService', () => {
       audioService.preload();
 
       // Should have loaded multiple sound effects
-      expect(mockScene.load.audio).toHaveBeenCalledWith('jump', expect.any(String));
-      expect(mockScene.load.audio).toHaveBeenCalledWith('coin', expect.any(String));
-      expect(mockScene.load.audio).toHaveBeenCalledWith('enemy_hit', expect.any(String));
+      expect(mockScene.load.audio).toHaveBeenCalledWith(
+        'jump',
+        expect.any(String),
+      );
+      expect(mockScene.load.audio).toHaveBeenCalledWith(
+        'coin',
+        expect.any(String),
+      );
+      expect(mockScene.load.audio).toHaveBeenCalledWith(
+        'enemy_hit',
+        expect.any(String),
+      );
     });
   });
 

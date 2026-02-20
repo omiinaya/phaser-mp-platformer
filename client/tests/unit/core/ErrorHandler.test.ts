@@ -1,4 +1,10 @@
-import { ErrorHandler, ErrorSeverity, initErrorHandler, getErrorHandler, showGameError } from '../../../src/core/ErrorHandler';
+import {
+  ErrorHandler,
+  ErrorSeverity,
+  initErrorHandler,
+  getErrorHandler,
+  showGameError,
+} from '../../../src/core/ErrorHandler';
 
 // Mock phaser
 jest.mock('phaser');
@@ -59,7 +65,13 @@ describe('ErrorHandler', () => {
 
     it('should handle retryable errors', () => {
       const action = jest.fn();
-      errorHandler.showError('Test error', ErrorSeverity.ERROR, true, true, action);
+      errorHandler.showError(
+        'Test error',
+        ErrorSeverity.ERROR,
+        true,
+        true,
+        action,
+      );
       const error = (errorHandler as any).errorQueue[0];
       expect(error.retryable).toBe(true);
       expect(error.action).toBe(action);

@@ -1,6 +1,9 @@
 import { DataSource, Not, IsNull } from 'typeorm';
 import { AchievementRepository } from '../../../src/persistence/repositories/AchievementRepository';
-import { Achievement, AchievementTier } from '../../../src/persistence/models/Achievement';
+import {
+  Achievement,
+  AchievementTier,
+} from '../../../src/persistence/models/Achievement';
 
 // Mock the BaseRepository
 jest.mock('../../../src/persistence/repositories/BaseRepository', () => {
@@ -8,20 +11,22 @@ jest.mock('../../../src/persistence/repositories/BaseRepository', () => {
     BaseRepository: class {
       protected dataSource: DataSource;
       protected target: any;
-      
+
       constructor(dataSource: DataSource, target: any) {
         this.dataSource = dataSource;
         this.target = target;
       }
-      
-      protected safeOperation = jest.fn().mockImplementation(async (operation, errorMsg) => {
-        try {
-          return await operation;
-        } catch (error) {
-          throw new Error(errorMsg);
-        }
-      });
-      
+
+      protected safeOperation = jest
+        .fn()
+        .mockImplementation(async (operation, errorMsg) => {
+          try {
+            return await operation;
+          } catch (error) {
+            throw new Error(errorMsg);
+          }
+        });
+
       findOne = jest.fn();
       find = jest.fn();
     },
@@ -37,7 +42,7 @@ describe('AchievementRepository', () => {
     mockDataSource = {
       getRepository: jest.fn(),
     } as unknown as DataSource;
-    
+
     repository = new AchievementRepository(mockDataSource);
     mockBaseRepository = repository as any;
   });
@@ -48,7 +53,11 @@ describe('AchievementRepository', () => {
 
   describe('findByCode', () => {
     it('should find achievement by code', async () => {
-      const mockAchievement = { id: '1', code: 'FIRST_KILL', name: 'First Kill' };
+      const mockAchievement = {
+        id: '1',
+        code: 'FIRST_KILL',
+        name: 'First Kill',
+      };
       mockBaseRepository.findOne.mockResolvedValue(mockAchievement);
 
       const result = await repository.findByCode('FIRST_KILL');
@@ -69,11 +78,11 @@ describe('AchievementRepository', () => {
 
     it('should throw error when query fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to find achievement by code: FIRST_KILL')
+        new Error('Failed to find achievement by code: FIRST_KILL'),
       );
 
       await expect(repository.findByCode('FIRST_KILL')).rejects.toThrow(
-        'Failed to find achievement by code: FIRST_KILL'
+        'Failed to find achievement by code: FIRST_KILL',
       );
     });
   });
@@ -104,11 +113,11 @@ describe('AchievementRepository', () => {
 
     it('should throw error when query fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to find achievements by tier: GOLD')
+        new Error('Failed to find achievements by tier: GOLD'),
       );
 
       await expect(repository.findByTier(AchievementTier.GOLD)).rejects.toThrow(
-        'Failed to find achievements by tier: GOLD'
+        'Failed to find achievements by tier: GOLD',
       );
     });
   });
@@ -139,11 +148,11 @@ describe('AchievementRepository', () => {
 
     it('should throw error when query fails', async () => {
       mockBaseRepository.safeOperation.mockRejectedValueOnce(
-        new Error('Failed to find achievements with unlockable rewards')
+        new Error('Failed to find achievements with unlockable rewards'),
       );
 
       await expect(repository.findUnlockableRewards()).rejects.toThrow(
-        'Failed to find achievements with unlockable rewards'
+        'Failed to find achievements with unlockable rewards',
       );
     });
   });

@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { PlayerProfile } from './PlayerProfile';
 import { Achievement } from './Achievement';
 
@@ -25,11 +32,11 @@ export class AchievementProgress {
   @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
-  @ManyToOne(() => PlayerProfile, profile => profile.achievements)
+  @ManyToOne(() => PlayerProfile, (profile) => profile.achievements)
   @JoinColumn({ name: 'player_id' })
     profile: PlayerProfile;
 
-  @ManyToOne(() => Achievement, achievement => achievement.progresses)
+  @ManyToOne(() => Achievement, (achievement) => achievement.progresses)
   @JoinColumn({ name: 'achievement_id' })
     achievement: Achievement;
 }

@@ -183,7 +183,7 @@ export class GameLoop {
   public on(
     event: GameLoopEvent,
     callback: (delta: number, time?: number) => void,
-    context?: any
+    context?: any,
   ): void {
     this.events.on(event, callback, context);
   }
@@ -197,7 +197,7 @@ export class GameLoop {
   public off(
     event: GameLoopEvent,
     callback: (delta: number, time?: number) => void,
-    context?: any
+    context?: any,
   ): void {
     this.events.off(event, callback, context);
   }

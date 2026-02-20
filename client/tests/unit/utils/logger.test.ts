@@ -29,7 +29,9 @@ describe('logger', () => {
     });
 
     it('should log warning with args', () => {
-      expect(() => logger.warn('warning message', { key: 'value' })).not.toThrow();
+      expect(() =>
+        logger.warn('warning message', { key: 'value' }),
+      ).not.toThrow();
     });
   });
 
@@ -39,7 +41,9 @@ describe('logger', () => {
     });
 
     it('should log error with args', () => {
-      expect(() => logger.error('error message', { key: 'value' })).not.toThrow();
+      expect(() =>
+        logger.error('error message', { key: 'value' }),
+      ).not.toThrow();
     });
   });
 

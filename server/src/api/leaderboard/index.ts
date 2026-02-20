@@ -33,13 +33,19 @@ router.get('/rank/:playerId', validatePlayerId);
 
 const statsRepo = new PlayerStatsRepository(dataSource);
 const profileRepo = new PlayerProfileRepository(dataSource);
-const leaderboardService = new LeaderboardService(dataSource, statsRepo, profileRepo);
+const leaderboardService = new LeaderboardService(
+  dataSource,
+  statsRepo,
+  profileRepo,
+);
 
 // Get top players by score
 router.get('/top/score', async (req, res) => {
   try {
     const limitParam = req.query.limit;
-    const limit = isValidLimit(limitParam) ? parseInt(limitParam as string) : 10;
+    const limit = isValidLimit(limitParam)
+      ? parseInt(limitParam as string)
+      : 10;
     const useCache = req.query.cache !== 'false';
     const top = await leaderboardService.getTopPlayersByScore(limit, useCache);
     res.json(top);
@@ -53,7 +59,9 @@ router.get('/top/score', async (req, res) => {
 router.get('/top/level', async (req, res) => {
   try {
     const limitParam = req.query.limit;
-    const limit = isValidLimit(limitParam) ? parseInt(limitParam as string) : 10;
+    const limit = isValidLimit(limitParam)
+      ? parseInt(limitParam as string)
+      : 10;
     const top = await leaderboardService.getTopPlayersByLevel(limit);
     res.json(top);
   } catch (error) {
@@ -65,7 +73,9 @@ router.get('/top/level', async (req, res) => {
 // Get player rank by score
 router.get('/rank/:playerId', async (req, res) => {
   try {
-    const rank = await leaderboardService.getPlayerRankByScore(req.params.playerId);
+    const rank = await leaderboardService.getPlayerRankByScore(
+      req.params.playerId,
+    );
     if (rank === -1) {
       return res.status(404).json({ error: 'Player not found' });
     }

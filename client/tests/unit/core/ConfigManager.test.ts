@@ -55,7 +55,10 @@ describe('ConfigManager', () => {
 
     it('should return the full config when no path specified', () => {
       configManager.setConfig('game', { difficulty: 'hard', maxPlayers: 4 });
-      expect(configManager.get('game')).toEqual({ difficulty: 'hard', maxPlayers: 4 });
+      expect(configManager.get('game')).toEqual({
+        difficulty: 'hard',
+        maxPlayers: 4,
+      });
     });
 
     it('should return nested value with dot notation', () => {
@@ -94,7 +97,10 @@ describe('ConfigManager', () => {
     it('should merge data into existing config', () => {
       configManager.setConfig('game', { difficulty: 'easy' });
       configManager.merge('game', { maxPlayers: 4 });
-      expect(configManager.get('game')).toEqual({ difficulty: 'easy', maxPlayers: 4 });
+      expect(configManager.get('game')).toEqual({
+        difficulty: 'easy',
+        maxPlayers: 4,
+      });
     });
 
     it('should create new config if key does not exist', () => {
@@ -152,31 +158,42 @@ describe('ConfigManager', () => {
   describe('loadConfig', () => {
     it('should load config from JSON file', async () => {
       mockScene.cache.json.get.mockReturnValue({ difficulty: 'hard' });
-      mockScene.load.once.mockImplementation((event: string, callback: Function) => {
-        if (event === 'complete') callback();
-      });
+      mockScene.load.once.mockImplementation(
+        (event: string, callback: Function) => {
+          if (event === 'complete') callback();
+        },
+      );
 
       await configManager.loadConfig('game', '/config/game.json');
-      
-      expect(mockScene.load.json).toHaveBeenCalledWith('game', '/config/game.json');
+
+      expect(mockScene.load.json).toHaveBeenCalledWith(
+        'game',
+        '/config/game.json',
+      );
       expect(configManager.get('game')).toEqual({ difficulty: 'hard' });
     });
 
     it('should reject on load error', async () => {
-      mockScene.load.once.mockImplementation((event: string, callback: Function) => {
-        if (event === 'loaderror') callback();
-      });
+      mockScene.load.once.mockImplementation(
+        (event: string, callback: Function) => {
+          if (event === 'loaderror') callback();
+        },
+      );
 
-      await expect(configManager.loadConfig('game', '/config/game.json')).rejects.toThrow('Load error for config: game');
+      await expect(
+        configManager.loadConfig('game', '/config/game.json'),
+      ).rejects.toThrow('Load error for config: game');
     });
   });
 
   describe('loadConfigs', () => {
     it('should load multiple configs', async () => {
       mockScene.cache.json.get.mockReturnValue({});
-      mockScene.load.once.mockImplementation((event: string, callback: Function) => {
-        callback();
-      });
+      mockScene.load.once.mockImplementation(
+        (event: string, callback: Function) => {
+          callback();
+        },
+      );
 
       await configManager.loadConfigs([
         { key: 'game', url: '/config/game.json' },
@@ -209,7 +226,7 @@ describe('ConfigManager', () => {
       configManager.saveToLocalStorage('game');
       expect(localStorage.setItem).toHaveBeenCalledWith(
         'config_game',
-        JSON.stringify({ difficulty: 'hard' })
+        JSON.stringify({ difficulty: 'hard' }),
       );
     });
 
@@ -218,18 +235,22 @@ describe('ConfigManager', () => {
       configManager.saveToLocalStorage('game', 'myGameConfig');
       expect(localStorage.setItem).toHaveBeenCalledWith(
         'myGameConfig',
-        JSON.stringify({ difficulty: 'hard' })
+        JSON.stringify({ difficulty: 'hard' }),
       );
     });
 
     it('should load config from localStorage', () => {
-      (localStorage.getItem as jest.Mock).mockReturnValue(JSON.stringify({ difficulty: 'hard' }));
+      (localStorage.getItem as jest.Mock).mockReturnValue(
+        JSON.stringify({ difficulty: 'hard' }),
+      );
       configManager.loadFromLocalStorage('game');
       expect(configManager.get('game')).toEqual({ difficulty: 'hard' });
     });
 
     it('should load config with custom localStorage key', () => {
-      (localStorage.getItem as jest.Mock).mockReturnValue(JSON.stringify({ difficulty: 'hard' }));
+      (localStorage.getItem as jest.Mock).mockReturnValue(
+        JSON.stringify({ difficulty: 'hard' }),
+      );
       configManager.loadFromLocalStorage('game', 'myGameConfig');
       expect(localStorage.getItem).toHaveBeenCalledWith('myGameConfig');
     });

@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { PlayerProfile } from './PlayerProfile';
 
 @Entity('inventory')
@@ -21,7 +27,7 @@ export class Inventory {
   @Column({ name: 'acquired_at', default: () => 'CURRENT_TIMESTAMP' })
     acquiredAt: Date;
 
-  @ManyToOne(() => PlayerProfile, profile => profile.inventoryItems)
+  @ManyToOne(() => PlayerProfile, (profile) => profile.inventoryItems)
   @JoinColumn({ name: 'player_id' })
     profile: PlayerProfile;
 }

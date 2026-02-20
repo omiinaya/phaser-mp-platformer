@@ -111,7 +111,9 @@ describe('matchmaking.worker - Worker Thread', () => {
       matches: expect.any(Array),
     });
     expect(mockPostMessage.mock.calls[0][0].matches).toHaveLength(1);
-    expect(mockPostMessage.mock.calls[0][0].matches[0].matchedRequests).toHaveLength(4);
+    expect(
+      mockPostMessage.mock.calls[0][0].matches[0].matchedRequests,
+    ).toHaveLength(4);
   });
 
   it('should handle errors and post error message', () => {

@@ -10,14 +10,14 @@ export class PlayerProfileRepository extends BaseRepository<PlayerProfile> {
   async findByUsername(username: string): Promise<PlayerProfile | null> {
     return this.safeOperation(
       this.findOne({ where: { username } }),
-      `Failed to find player profile by username: ${username}`
+      `Failed to find player profile by username: ${username}`,
     );
   }
 
   async findByEmail(email: string): Promise<PlayerProfile | null> {
     return this.safeOperation(
       this.findOne({ where: { email } }),
-      `Failed to find player profile by email: ${email}`
+      `Failed to find player profile by email: ${email}`,
     );
   }
 
@@ -27,14 +27,14 @@ export class PlayerProfileRepository extends BaseRepository<PlayerProfile> {
         order: { level: 'DESC', experience: 'DESC' },
         take: limit,
       }),
-      'Failed to find top players by level'
+      'Failed to find top players by level',
     );
   }
 
   async updateLastLogin(playerId: string): Promise<void> {
     await this.safeOperation(
       this.update(playerId, { lastLogin: new Date() }),
-      `Failed to update last login for player ${playerId}`
+      `Failed to update last login for player ${playerId}`,
     );
   }
 
@@ -45,7 +45,7 @@ export class PlayerProfileRepository extends BaseRepository<PlayerProfile> {
         .set({ coins: () => `coins + ${amount}` })
         .where('id = :id', { id: playerId })
         .execute(),
-      `Failed to increment coins for player ${playerId}`
+      `Failed to increment coins for player ${playerId}`,
     );
   }
 }

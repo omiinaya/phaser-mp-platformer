@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { PlayerProfile } from './PlayerProfile';
 
 @Entity('player_stats')
@@ -33,7 +39,7 @@ export class PlayerStats {
   @Column({ type: 'jsonb', nullable: true })
     extraStats: Record<string, any> | null;
 
-  @OneToOne(() => PlayerProfile, profile => profile.stats)
+  @OneToOne(() => PlayerProfile, (profile) => profile.stats)
   @JoinColumn({ name: 'player_id' })
     profile: PlayerProfile;
 }

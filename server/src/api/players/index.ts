@@ -23,7 +23,9 @@ const isValidItemId = (id: unknown): boolean => {
 };
 
 const isValidQuantity = (qty: unknown): boolean => {
-  return typeof qty === 'number' && Number.isInteger(qty) && qty > 0 && qty <= 1000;
+  return (
+    typeof qty === 'number' && Number.isInteger(qty) && qty > 0 && qty <= 1000
+  );
 };
 
 // Middleware to validate playerId param
@@ -51,14 +53,18 @@ const progressionService = new ProgressionService(
   statsRepo,
   unlockRepo,
   achievementProgressRepo,
-  new (require('../../persistence/repositories/UnlockableRepository').UnlockableRepository)(dataSource)
+  new (require('../../persistence/repositories/UnlockableRepository').UnlockableRepository)(
+    dataSource,
+  ),
 );
 const inventoryService = new InventoryService(dataSource, inventoryRepo);
 
 // Get player profile
 router.get('/:playerId/profile', async (req, res) => {
   try {
-    const profile = await profileRepo.findOne({ where: { id: req.params.playerId } });
+    const profile = await profileRepo.findOne({
+      where: { id: req.params.playerId },
+    });
     if (!profile) {
       return res.status(404).json({ error: 'Player not found' });
     }
@@ -115,7 +121,10 @@ router.post('/:playerId/unlocks', async (req, res) => {
     if (!isValidItemId(unlockableId)) {
       return res.status(400).json({ error: 'Invalid unlockableId' });
     }
-    const success = await progressionService.grantUnlock(req.params.playerId, unlockableId);
+    const success = await progressionService.grantUnlock(
+      req.params.playerId,
+      unlockableId,
+    );
     if (success) {
       res.json({ success: true });
     } else {
@@ -146,9 +155,16 @@ router.post('/:playerId/inventory', async (req, res) => {
       return res.status(400).json({ error: 'Invalid itemId' });
     }
     if (quantity !== undefined && !isValidQuantity(quantity)) {
-      return res.status(400).json({ error: 'Invalid quantity (must be 1-1000)' });
+      return res
+        .status(400)
+        .json({ error: 'Invalid quantity (must be 1-1000)' });
     }
-    const success = await inventoryService.addItem(req.params.playerId, itemId, quantity, metadata);
+    const success = await inventoryService.addItem(
+      req.params.playerId,
+      itemId,
+      quantity,
+      metadata,
+    );
     if (success) {
       res.json({ success: true });
     } else {
@@ -168,9 +184,15 @@ router.delete('/:playerId/inventory', async (req, res) => {
       return res.status(400).json({ error: 'Invalid itemId' });
     }
     if (quantity !== undefined && !isValidQuantity(quantity)) {
-      return res.status(400).json({ error: 'Invalid quantity (must be 1-1000)' });
+      return res
+        .status(400)
+        .json({ error: 'Invalid quantity (must be 1-1000)' });
     }
-    const success = await inventoryService.removeItem(req.params.playerId, itemId, quantity);
+    const success = await inventoryService.removeItem(
+      req.params.playerId,
+      itemId,
+      quantity,
+    );
     if (success) {
       res.json({ success: true });
     } else {
@@ -185,7 +207,9 @@ router.delete('/:playerId/inventory', async (req, res) => {
 // Get player summary
 router.get('/:playerId/summary', async (req, res) => {
   try {
-    const summary = await progressionService.getPlayerSummary(req.params.playerId);
+    const summary = await progressionService.getPlayerSummary(
+      req.params.playerId,
+    );
     res.json(summary);
   } catch (error) {
     logger.error(error);

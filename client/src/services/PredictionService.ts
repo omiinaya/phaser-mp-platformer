@@ -66,7 +66,7 @@ export class PredictionService {
   public reconcile(
     serverState: any,
     entityId: string,
-    applyCorrection: (correctedState: any) => void
+    applyCorrection: (correctedState: any) => void,
   ): void {
     if (!this.config.enableReconciliation) return;
 
@@ -75,7 +75,9 @@ export class PredictionService {
     if (serverSequence === undefined) return;
 
     // Remove inputs that have been acknowledged by server
-    this.inputHistory = this.inputHistory.filter(entry => entry.sequence > serverSequence);
+    this.inputHistory = this.inputHistory.filter(
+      (entry) => entry.sequence > serverSequence,
+    );
 
     // If the server state differs from our predicted state, we need to correct
     // For simplicity, we just snap to server state (more advanced systems would re‑simulate)

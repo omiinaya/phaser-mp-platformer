@@ -3,8 +3,21 @@
 describe('Item Types', () => {
   describe('ItemType', () => {
     it('should have weapon type', () => {
-      type ItemType = 'weapon' | 'armor' | 'consumable' | 'key' | 'collectible' | 'material';
-      const types: ItemType[] = ['weapon', 'armor', 'consumable', 'key', 'collectible', 'material'];
+      type ItemType =
+        | 'weapon'
+        | 'armor'
+        | 'consumable'
+        | 'key'
+        | 'collectible'
+        | 'material';
+      const types: ItemType[] = [
+        'weapon',
+        'armor',
+        'consumable',
+        'key',
+        'collectible',
+        'material',
+      ];
       expect(types).toHaveLength(6);
     });
   });

@@ -37,7 +37,10 @@ describe('TilemapLoader', () => {
   describe('loadTilemap', () => {
     it('should call scene.load.tilemapTiledJSON', () => {
       loader.loadTilemap('level1', 'assets/level1.json');
-      expect(mockScene.load.tilemapTiledJSON).toHaveBeenCalledWith('level1', 'assets/level1.json');
+      expect(mockScene.load.tilemapTiledJSON).toHaveBeenCalledWith(
+        'level1',
+        'assets/level1.json',
+      );
     });
   });
 

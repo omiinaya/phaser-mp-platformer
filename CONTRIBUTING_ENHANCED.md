@@ -52,6 +52,7 @@ npm run dev
 ```
 
 This starts:
+
 - Client: http://localhost:3000
 - Server: http://localhost:4000
 
@@ -101,6 +102,7 @@ git checkout -b fix/bug-description
 ### Code Style
 
 We use:
+
 - **ESLint** for TypeScript linting
 - **Prettier** for code formatting
 
@@ -130,7 +132,7 @@ interface PlayerConfig {
 export class Player {
   /** Current player position */
   public x: number = 0;
-  
+
   /**
    * Move the player in the specified direction
    * @param direction -1 for left, 1 for right
@@ -164,16 +166,19 @@ server/src/
 ### Before Submitting
 
 1. **Run tests**
+
    ```bash
    npm test
    ```
 
 2. **Run linting**
+
    ```bash
    npm run lint
    ```
 
 3. **Check formatting**
+
    ```bash
    npm run format
    ```
@@ -190,20 +195,24 @@ server/src/
 
 ```markdown
 ## Description
+
 Brief description of the changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests pass
 - [ ] Manual testing completed
 
 ## Checklist
+
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
@@ -280,7 +289,7 @@ describe('Player API', () => {
     const response = await request(app)
       .post('/api/players')
       .send({ username: 'test' });
-    
+
     expect(response.status).toBe(201);
   });
 });
@@ -323,9 +332,9 @@ Use JSDoc for all public APIs:
  * @returns Calculated score
  */
 function calculateScore(
-  time: number, 
-  enemiesDefeated: number, 
-  gemsCollected: number
+  time: number,
+  enemiesDefeated: number,
+  gemsCollected: number,
 ): number {
   // ...
 }
@@ -334,6 +343,7 @@ function calculateScore(
 ### README Updates
 
 If your change affects:
+
 - How to run the project → Update README
 - New dependencies → Update prerequisites
 - New features → Update feature list
@@ -359,6 +369,7 @@ What you expected to happen
 If applicable
 
 **Environment**
+
 - OS: [e.g., Windows]
 - Browser: [e.g., Chrome]
 ```
@@ -384,6 +395,7 @@ Screenshots, mockups, etc.
 ## Recognition
 
 Contributors are recognized in:
+
 - CONTRIBUTORS.md file
 - Release notes
 - GitHub profile badges

@@ -67,7 +67,11 @@ describe('Matchmaker', () => {
       },
     } as any;
 
-    matchmaker = new Matchmaker(mockServer, mockConnectionManager, mockRoomManager);
+    matchmaker = new Matchmaker(
+      mockServer,
+      mockConnectionManager,
+      mockRoomManager,
+    );
   });
 
   afterEach(() => {
@@ -112,7 +116,7 @@ describe('Matchmaker', () => {
 
     it('should add player to queue with valid session', () => {
       mockConnectionManager.getSession.mockReturnValue(
-        createMockSession('socket-123', 'player-456')
+        createMockSession('socket-123', 'player-456'),
       );
 
       const requestId = matchmaker.enqueuePlayer(mockSocket, {
@@ -127,13 +131,13 @@ describe('Matchmaker', () => {
       });
       expect(logger.debug).toHaveBeenCalledWith(
         'Player player-456 enqueued for matchmaking',
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
     it('should include region in preferences', () => {
       mockConnectionManager.getSession.mockReturnValue(
-        createMockSession('socket-123', 'player-456')
+        createMockSession('socket-123', 'player-456'),
       );
 
       matchmaker.enqueuePlayer(mockSocket, {
@@ -151,7 +155,7 @@ describe('Matchmaker', () => {
   describe('dequeuePlayer', () => {
     beforeEach(() => {
       mockConnectionManager.getSession.mockReturnValue(
-        createMockSession('socket-123', 'player-456')
+        createMockSession('socket-123', 'player-456'),
       );
       matchmaker.enqueuePlayer(mockSocket, {
         gameMode: 'FFA',
@@ -164,7 +168,7 @@ describe('Matchmaker', () => {
       expect(result).toBe(true);
       expect(matchmaker.getQueueLength()).toBe(0);
       expect(logger.debug).toHaveBeenCalledWith(
-        'Player player-456 dequeued from matchmaking'
+        'Player player-456 dequeued from matchmaking',
       );
     });
 
@@ -187,7 +191,7 @@ describe('Matchmaker', () => {
 
     it('should return queue size', () => {
       mockConnectionManager.getSession.mockReturnValue(
-        createMockSession('socket-123', 'player-456')
+        createMockSession('socket-123', 'player-456'),
       );
       matchmaker.enqueuePlayer(mockSocket, { gameMode: 'FFA', maxPlayers: 4 });
       expect(matchmaker.getQueueLength()).toBe(1);
@@ -201,7 +205,7 @@ describe('Matchmaker', () => {
 
     it('should return request for queued player', () => {
       mockConnectionManager.getSession.mockReturnValue(
-        createMockSession('socket-123', 'player-456')
+        createMockSession('socket-123', 'player-456'),
       );
       matchmaker.enqueuePlayer(mockSocket, { gameMode: 'FFA', maxPlayers: 4 });
 

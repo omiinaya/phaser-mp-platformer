@@ -15,7 +15,7 @@ const buckets = new Map<string, { count: number; resetTime: number }>();
  */
 export function httpRateLimit(
   maxRequests: number = 100,
-  windowMs: number = 15 * 60 * 1000 // 15 minutes
+  windowMs: number = 15 * 60 * 1000, // 15 minutes
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip || req.socket.remoteAddress || 'unknown';
@@ -48,7 +48,9 @@ export function httpRateLimit(
 /**
  * Clean up old buckets periodically (optional).
  */
-export function startCleanupInterval(intervalMs: number = 60 * 60 * 1000): void {
+export function startCleanupInterval(
+  intervalMs: number = 60 * 60 * 1000,
+): void {
   setInterval(() => {
     const now = Date.now();
     for (const [ip, bucket] of buckets.entries()) {

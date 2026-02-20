@@ -65,10 +65,16 @@ describe('LazyAssetLoader', () => {
     });
 
     it('should register a spritesheet asset', () => {
-      loader.registerAsset('enemy', 'spritesheet', 'assets/enemy.png', 'deferred', {
-        frameWidth: 32,
-        frameHeight: 32,
-      });
+      loader.registerAsset(
+        'enemy',
+        'spritesheet',
+        'assets/enemy.png',
+        'deferred',
+        {
+          frameWidth: 32,
+          frameHeight: 32,
+        },
+      );
       expect(loader.isLoaded('enemy')).toBe(false);
     });
 
@@ -78,7 +84,12 @@ describe('LazyAssetLoader', () => {
     });
 
     it('should register a tilemap asset', () => {
-      loader.registerAsset('level1', 'tilemap', 'assets/level1.json', 'critical');
+      loader.registerAsset(
+        'level1',
+        'tilemap',
+        'assets/level1.json',
+        'critical',
+      );
       expect(loader.isLoaded('level1')).toBe(false);
     });
 

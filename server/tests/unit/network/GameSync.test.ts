@@ -54,7 +54,7 @@ describe('GameSync', () => {
     it('should start the synchronization loop', () => {
       const startSpy = jest.spyOn(gameSync as any, 'tick');
       gameSync.start();
-      
+
       // Wait for at least one tick
       return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -68,7 +68,7 @@ describe('GameSync', () => {
     it('should stop the synchronization loop', () => {
       gameSync.start();
       gameSync.stop();
-      
+
       // The tick should not be running after stop
       // This is tested implicitly as the test completes without errors
     });
@@ -119,7 +119,7 @@ describe('GameSync', () => {
         moveX: 1,
         jump: false,
       });
-      
+
       const state = gameSync.getRoomState('test-room');
       expect(state).toBeDefined();
     });
@@ -127,7 +127,7 @@ describe('GameSync', () => {
     it('should reject invalid input', () => {
       gameSync.resetRoomState('test-room');
       gameSync.applyPlayerInput('test-room', 'player1', null as any);
-      
+
       // Invalid input should be rejected (no crash)
     });
 
@@ -147,12 +147,12 @@ describe('GameSync', () => {
         velocity: { x: 0, y: 0 },
         isOnGround: true,
       };
-      
+
       gameSync.applyPlayerInput('test-room', 'player1', {
         moveX: 1,
         jump: true,
       });
-      
+
       expect(state!.entities['player1']).toBeDefined();
     });
 
@@ -173,7 +173,7 @@ describe('GameSync', () => {
         isOnGround: false,
         lastUpdated: Date.now(),
       };
-      
+
       // State should be retrievable
       expect(state).toBeDefined();
     });
@@ -186,7 +186,7 @@ describe('GameSync', () => {
         isOnGround: true,
         lastUpdated: Date.now(),
       };
-      
+
       // State should be retrievable
       expect(state).toBeDefined();
     });
@@ -204,7 +204,7 @@ describe('GameSync', () => {
         velocity: { x: -10, y: 0 },
         isOnGround: true,
       };
-      
+
       expect(Object.keys(state!.entities).length).toBe(2);
     });
   });
@@ -226,7 +226,7 @@ describe('GameSync', () => {
     it('should process active rooms on tick', () => {
       const tickSpy = jest.spyOn(gameSync as any, 'tick');
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           expect(tickSpy).toHaveBeenCalled();
@@ -239,7 +239,7 @@ describe('GameSync', () => {
     it('should handle empty active rooms list', () => {
       mockRoomManager.getActiveRooms.mockReturnValue([]);
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           gameSync.stop();
@@ -258,10 +258,10 @@ describe('GameSync', () => {
         velocity: { x: 10, y: 0 },
         isOnGround: true,
       };
-      
+
       // Trigger update by calling tick
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           const updatedState = gameSync.getRoomState('test-room');
@@ -279,9 +279,9 @@ describe('GameSync', () => {
         position: { x: 100, y: 100 },
         isOnGround: true,
       };
-      
+
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           gameSync.stop();
@@ -298,10 +298,10 @@ describe('GameSync', () => {
         velocity: { x: 10, y: 0 },
         isOnGround: true,
       };
-      
+
       // Trigger update by calling tick directly
       (gameSync as any).tick();
-      
+
       const updatedState = gameSync.getRoomState('test-room');
       expect(updatedState).toBeDefined();
     });
@@ -316,15 +316,15 @@ describe('GameSync', () => {
         velocity: { x: 0, y: 0 },
         isOnGround: true,
       };
-      
+
       state!.events.push({
         type: 'player_input',
         playerId: 'player1',
         input: { moveX: 1, jump: false },
       });
-      
+
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           gameSync.stop();
@@ -346,16 +346,16 @@ describe('GameSync', () => {
         velocity: { x: 0, y: 0 },
         health: 50,
       };
-      
+
       state!.events.push({
         type: 'collision',
         entityId1: 'player1',
         entityId2: 'enemy1',
         damage: 10,
       });
-      
+
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           gameSync.stop();
@@ -371,16 +371,16 @@ describe('GameSync', () => {
         position: { x: 100, y: 100 },
         health: 5,
       };
-      
+
       state!.events.push({
         type: 'collision',
         entityId1: 'player1',
         entityId2: 'enemy1',
         damage: 10,
       });
-      
+
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           gameSync.stop();
@@ -392,14 +392,14 @@ describe('GameSync', () => {
     it('should handle unknown event type', () => {
       gameSync.resetRoomState('test-room');
       const state = gameSync.getRoomState('test-room');
-      
+
       state!.events.push({
         type: 'unknown_event',
         someData: 'test',
       });
-      
+
       gameSync.start();
-      
+
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           gameSync.stop();
@@ -412,17 +412,17 @@ describe('GameSync', () => {
   describe('computeDelta', () => {
     it('should compute delta between states', () => {
       gameSync.resetRoomState('test-room');
-      
+
       // Access computeDelta method
       const delta = (gameSync as any).computeDelta('test-room');
-      
+
       expect(delta).toBeDefined();
       expect(delta.roomId).toBe('test-room');
     });
 
     it('should return full snapshot for non-existent room', () => {
       const delta = (gameSync as any).computeDelta('non-existent');
-      
+
       expect(delta.full).toBe(true);
     });
 
@@ -434,16 +434,16 @@ describe('GameSync', () => {
         velocity: { x: 10, y: 0 },
         isOnGround: true,
       };
-      
+
       // First delta - should be full
       const delta1 = (gameSync as any).computeDelta('test-room');
-      
+
       // Update entity
       state!.entities['player1'].position.x = 101;
-      
+
       // Second delta - should be delta
       const delta2 = (gameSync as any).computeDelta('test-room');
-      
+
       expect(delta2.full).toBe(false);
     });
   });
@@ -474,7 +474,14 @@ describe('GameSync', () => {
     it('should apply gravity to entities affected by gravity', () => {
       // Add test-room to active rooms
       mockRoomManager.getActiveRooms.mockReturnValue([
-        { roomId: 'test-room', players: [{ playerId: 'player1', socketId: 'socket1' }], gameMode: 'deathmatch', maxPlayers: 4, createdAt: Date.now(), isActive: true } as any,
+        {
+          roomId: 'test-room',
+          players: [{ playerId: 'player1', socketId: 'socket1' }],
+          gameMode: 'deathmatch',
+          maxPlayers: 4,
+          createdAt: Date.now(),
+          isActive: true,
+        } as any,
       ]);
 
       gameSync.resetRoomState('test-room');
@@ -496,7 +503,14 @@ describe('GameSync', () => {
     it('should process entities without velocity in physics', () => {
       // Add test-room to active rooms
       mockRoomManager.getActiveRooms.mockReturnValue([
-        { roomId: 'test-room', players: [{ playerId: 'player1', socketId: 'socket1' }], gameMode: 'deathmatch', maxPlayers: 4, createdAt: Date.now(), isActive: true } as any,
+        {
+          roomId: 'test-room',
+          players: [{ playerId: 'player1', socketId: 'socket1' }],
+          gameMode: 'deathmatch',
+          maxPlayers: 4,
+          createdAt: Date.now(),
+          isActive: true,
+        } as any,
       ]);
 
       gameSync.resetRoomState('test-room');
@@ -513,7 +527,14 @@ describe('GameSync', () => {
     it('should process out of bounds check', () => {
       // Add test-room to active rooms
       mockRoomManager.getActiveRooms.mockReturnValue([
-        { roomId: 'test-room', players: [{ playerId: 'player1', socketId: 'socket1' }], gameMode: 'deathmatch', maxPlayers: 4, createdAt: Date.now(), isActive: true } as any,
+        {
+          roomId: 'test-room',
+          players: [{ playerId: 'player1', socketId: 'socket1' }],
+          gameMode: 'deathmatch',
+          maxPlayers: 4,
+          createdAt: Date.now(),
+          isActive: true,
+        } as any,
       ]);
 
       gameSync.resetRoomState('test-room');
@@ -552,7 +573,9 @@ describe('GameSync', () => {
       });
 
       // Event should be added (actual deletion happens in tick)
-      const destroyEvent = state!.events.find((e: any) => e.type === 'entity_destroyed' && e.reason === 'destroyed');
+      const destroyEvent = state!.events.find(
+        (e: any) => e.type === 'entity_destroyed' && e.reason === 'destroyed',
+      );
       expect(destroyEvent).toBeDefined();
     });
 

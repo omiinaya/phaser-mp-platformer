@@ -323,7 +323,9 @@ describe('PerformanceProfiler', () => {
     it('should generate top profiles report', () => {
       PerformanceProfiler.start('slow');
       // Simulate some work
-      for (let i = 0; i < 1000000; i++) { /* busy-wait */ }
+      for (let i = 0; i < 1000000; i++) {
+        /* busy-wait */
+      }
       PerformanceProfiler.end('slow');
 
       PerformanceProfiler.start('fast');

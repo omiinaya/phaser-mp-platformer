@@ -33,7 +33,9 @@ describe('ObjectPool', () => {
     obj.destroyCalled = true;
   };
 
-  const createConfig = (overrides?: Partial<ObjectPoolConfig<MockObject>>): ObjectPoolConfig<MockObject> => ({
+  const createConfig = (
+    overrides?: Partial<ObjectPoolConfig<MockObject>>,
+  ): ObjectPoolConfig<MockObject> => ({
     initialSize: 3,
     maxSize: 10,
     create: createFactory,
@@ -78,7 +80,7 @@ describe('ObjectPool', () => {
       pool = new ObjectPool(createConfig({ initialSize: 1 }));
       pool.acquire(); // Takes the only idle object
       expect(pool.getIdleCount()).toBe(0);
-      
+
       const obj = pool.acquire(); // Should create new
       expect(obj).toBeDefined();
       expect(pool.getActiveCount()).toBe(2);
@@ -87,10 +89,10 @@ describe('ObjectPool', () => {
     it('should track active count correctly', () => {
       pool = new ObjectPool(createConfig({ initialSize: 5 }));
       expect(pool.getActiveCount()).toBe(0);
-      
+
       pool.acquire();
       expect(pool.getActiveCount()).toBe(1);
-      
+
       pool.acquire();
       expect(pool.getActiveCount()).toBe(2);
     });
@@ -115,14 +117,14 @@ describe('ObjectPool', () => {
 
     it('should track active count correctly when releasing', () => {
       pool = new ObjectPool(createConfig({ initialSize: 1, maxSize: 2 }));
-      
+
       const obj1 = pool.acquire();
       expect(pool.getActiveCount()).toBe(1);
-      
+
       const _obj2 = pool.acquire();
       expect(_obj2).toBeDefined();
       expect(pool.getActiveCount()).toBe(2);
-      
+
       pool.release(obj1);
       expect(pool.getActiveCount()).toBe(1);
     });
@@ -151,10 +153,10 @@ describe('ObjectPool', () => {
     it('should return correct idle count', () => {
       pool = new ObjectPool(createConfig({ initialSize: 5 }));
       expect(pool.getIdleCount()).toBe(5);
-      
+
       pool.acquire();
       expect(pool.getIdleCount()).toBe(4);
-      
+
       pool.acquire();
       expect(pool.getIdleCount()).toBe(3);
     });
@@ -164,7 +166,7 @@ describe('ObjectPool', () => {
     it('should return correct active count', () => {
       pool = new ObjectPool(createConfig({ initialSize: 5 }));
       expect(pool.getActiveCount()).toBe(0);
-      
+
       pool.acquire();
       expect(pool.getActiveCount()).toBe(1);
     });
@@ -191,7 +193,7 @@ describe('ObjectPool', () => {
     it('should add additional objects to the pool', () => {
       pool = new ObjectPool(createConfig({ initialSize: 2, maxSize: 10 }));
       expect(pool.getIdleCount()).toBe(2);
-      
+
       pool.preallocate(5);
       expect(pool.getIdleCount()).toBe(7);
     });

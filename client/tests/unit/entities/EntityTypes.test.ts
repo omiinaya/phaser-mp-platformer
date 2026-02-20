@@ -4,8 +4,21 @@
 describe('Entity Type Definitions', () => {
   describe('Enemy Types', () => {
     it('should define EnemyState type with all valid states', () => {
-      type EnemyState = 'idle' | 'patrol' | 'chase' | 'attack' | 'flee' | 'dead';
-      const states: EnemyState[] = ['idle', 'patrol', 'chase', 'attack', 'flee', 'dead'];
+      type EnemyState =
+        | 'idle'
+        | 'patrol'
+        | 'chase'
+        | 'attack'
+        | 'flee'
+        | 'dead';
+      const states: EnemyState[] = [
+        'idle',
+        'patrol',
+        'chase',
+        'attack',
+        'flee',
+        'dead',
+      ];
       expect(states).toHaveLength(6);
     });
 
@@ -121,8 +134,19 @@ describe('Entity Type Definitions', () => {
 
   describe('PowerUp Types', () => {
     it('should define PowerUpType union type', () => {
-      type PowerUpType = 'double_jump' | 'shield' | 'speed_boost' | 'health_boost' | 'damage_boost';
-      const types: PowerUpType[] = ['double_jump', 'shield', 'speed_boost', 'health_boost', 'damage_boost'];
+      type PowerUpType =
+        | 'double_jump'
+        | 'shield'
+        | 'speed_boost'
+        | 'health_boost'
+        | 'damage_boost';
+      const types: PowerUpType[] = [
+        'double_jump',
+        'shield',
+        'speed_boost',
+        'health_boost',
+        'damage_boost',
+      ];
       expect(types).toHaveLength(5);
     });
 

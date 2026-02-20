@@ -297,7 +297,7 @@ describe('ObjectLifecycleTracker', () => {
     // Since no objects are tracked as old, should log "No obvious memory leaks"
     // The logger adds timestamp prefix, so we check if the message is included
     expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining('No obvious memory leaks detected.')
+      expect.stringContaining('No obvious memory leaks detected.'),
     );
 
     consoleSpy.mockRestore();

@@ -25,20 +25,20 @@ describe('httpRateLimit', () => {
     const module = require('../../../../src/network/middleware/httpRateLimit');
     httpRateLimit = module.httpRateLimit;
     startCleanupInterval = module.startCleanupInterval;
-    
+
     mockReq = {
       ip: '127.0.0.1',
       socket: {
         remoteAddress: '127.0.0.1',
       } as any,
     };
-    
+
     mockRes = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),
       setHeader: jest.fn().mockReturnThis(),
     };
-    
+
     nextFn = jest.fn();
   });
 
@@ -50,32 +50,41 @@ describe('httpRateLimit', () => {
     it('should call next for first request within limit', () => {
       const middleware = httpRateLimit(100, 60000);
       middleware(mockReq as Request, mockRes as Response, nextFn);
-      
+
       expect(nextFn).toHaveBeenCalled();
       expect(mockRes.setHeader).toHaveBeenCalledWith('X-RateLimit-Limit', 100);
-      expect(mockRes.setHeader).toHaveBeenCalledWith('X-RateLimit-Remaining', 99);
+      expect(mockRes.setHeader).toHaveBeenCalledWith(
+        'X-RateLimit-Remaining',
+        99,
+      );
     });
 
     it('should set rate limit headers', () => {
       const middleware = httpRateLimit(50, 60000);
       middleware(mockReq as Request, mockRes as Response, nextFn);
-      
+
       expect(mockRes.setHeader).toHaveBeenCalledWith('X-RateLimit-Limit', 50);
-      expect(mockRes.setHeader).toHaveBeenCalledWith('X-RateLimit-Remaining', 49);
-      expect(mockRes.setHeader).toHaveBeenCalledWith('X-RateLimit-Reset', expect.any(Number));
+      expect(mockRes.setHeader).toHaveBeenCalledWith(
+        'X-RateLimit-Remaining',
+        49,
+      );
+      expect(mockRes.setHeader).toHaveBeenCalledWith(
+        'X-RateLimit-Reset',
+        expect.any(Number),
+      );
     });
 
     it('should block requests exceeding rate limit', () => {
       const middleware = httpRateLimit(2, 60000);
-      
+
       // First request
       middleware(mockReq as Request, mockRes as Response, nextFn);
       expect(nextFn).toHaveBeenCalledTimes(1);
-      
+
       // Second request
       middleware(mockReq as Request, mockRes as Response, nextFn);
       expect(nextFn).toHaveBeenCalledTimes(2);
-      
+
       // Third request should be blocked
       middleware(mockReq as Request, mockRes as Response, nextFn);
       expect(mockRes.status).toHaveBeenCalledWith(429);
@@ -89,7 +98,7 @@ describe('httpRateLimit', () => {
     it('should use custom maxRequests and window', () => {
       const middleware = httpRateLimit(10, 30000);
       middleware(mockReq as Request, mockRes as Response, nextFn);
-      
+
       expect(mockRes.setHeader).toHaveBeenCalledWith('X-RateLimit-Limit', 10);
     });
 
@@ -100,10 +109,10 @@ describe('httpRateLimit', () => {
           remoteAddress: undefined,
         } as any,
       };
-      
+
       const middleware = httpRateLimit(100, 60000);
       middleware(mockReq as Request, mockRes as Response, nextFn);
-      
+
       expect(nextFn).toHaveBeenCalled();
     });
   });
@@ -130,7 +139,7 @@ describe('httpRateLimit', () => {
       expect(mockRes.status).toHaveBeenCalledWith(429);
 
       // Wait for window to expire and reset
-      return new Promise<void>(resolve => {
+      return new Promise<void>((resolve) => {
         setTimeout(() => {
           const nextFn2 = jest.fn();
           const mockRes2 = {
@@ -139,7 +148,11 @@ describe('httpRateLimit', () => {
             setHeader: jest.fn().mockReturnThis(),
           };
 
-          middleware(mockReq as Request, mockRes2 as unknown as Response, nextFn2);
+          middleware(
+            mockReq as Request,
+            mockRes2 as unknown as Response,
+            nextFn2,
+          );
           expect(nextFn2).toHaveBeenCalled();
           resolve();
         }, 150);
@@ -152,12 +165,20 @@ describe('httpRateLimit', () => {
       const middleware = httpRateLimit(2, 60000);
 
       // First IP
-      Object.defineProperty(mockReq, 'ip', { value: '192.168.1.1', writable: true, configurable: true });
+      Object.defineProperty(mockReq, 'ip', {
+        value: '192.168.1.1',
+        writable: true,
+        configurable: true,
+      });
       middleware(mockReq as Request, mockRes as Response, nextFn);
       middleware(mockReq as Request, mockRes as Response, nextFn);
 
       // Second IP should have its own bucket
-      Object.defineProperty(mockReq, 'ip', { value: '192.168.1.2', writable: true, configurable: true });
+      Object.defineProperty(mockReq, 'ip', {
+        value: '192.168.1.2',
+        writable: true,
+        configurable: true,
+      });
       const nextFn2 = jest.fn();
       middleware(mockReq as Request, mockRes as Response, nextFn2);
       expect(nextFn2).toHaveBeenCalled();

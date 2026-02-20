@@ -51,7 +51,7 @@ describe('PlayerUnlockRepository', () => {
     mockDelete = jest.fn();
     mockCreate = jest.fn((entity) => entity);
 
-    (BaseRepository as any).mockImplementation(function(this: any) {
+    (BaseRepository as any).mockImplementation(function (this: any) {
       this.find = mockFind;
       this.findOne = mockFindOne;
       this.save = mockSave;
@@ -71,14 +71,25 @@ describe('PlayerUnlockRepository', () => {
   describe('findByPlayerId', () => {
     it('should return player unlocks with relations', async () => {
       const mockUnlocks = [
-        { playerId: 'player1', unlockableId: 'unlock1', unlockable: { id: 'unlock1', name: 'Unlock 1' } },
-        { playerId: 'player1', unlockableId: 'unlock2', unlockable: { id: 'unlock2', name: 'Unlock 2' } },
+        {
+          playerId: 'player1',
+          unlockableId: 'unlock1',
+          unlockable: { id: 'unlock1', name: 'Unlock 1' },
+        },
+        {
+          playerId: 'player1',
+          unlockableId: 'unlock2',
+          unlockable: { id: 'unlock2', name: 'Unlock 2' },
+        },
       ];
       mockFind.mockResolvedValue(mockUnlocks);
 
       const result = await repository.findByPlayerId('player1');
 
-      expect(mockFind).toHaveBeenCalledWith({ where: { playerId: 'player1' }, relations: ['unlockable'] });
+      expect(mockFind).toHaveBeenCalledWith({
+        where: { playerId: 'player1' },
+        relations: ['unlockable'],
+      });
       expect(result).toEqual(mockUnlocks);
     });
 
@@ -97,7 +108,9 @@ describe('PlayerUnlockRepository', () => {
 
       const result = await repository.hasUnlocked('player1', 'unlock1');
 
-      expect(mockCount).toHaveBeenCalledWith({ where: { playerId: 'player1', unlockableId: 'unlock1' } });
+      expect(mockCount).toHaveBeenCalledWith({
+        where: { playerId: 'player1', unlockableId: 'unlock1' },
+      });
       expect(result).toBe(true);
     });
 
@@ -113,27 +126,41 @@ describe('PlayerUnlockRepository', () => {
   describe('unlock', () => {
     it('should create new unlock when it does not exist', async () => {
       mockFindOne.mockResolvedValue(null);
-      const mockUnlock = { playerId: 'player1', unlockableId: 'unlock1', unlockedAt: new Date(), notified: false };
+      const mockUnlock = {
+        playerId: 'player1',
+        unlockableId: 'unlock1',
+        unlockedAt: new Date(),
+        notified: false,
+      };
       mockSave.mockResolvedValue(mockUnlock);
 
       const result = await repository.unlock('player1', 'unlock1');
 
-      expect(mockFindOne).toHaveBeenCalledWith({ where: { playerId: 'player1', unlockableId: 'unlock1' } });
+      expect(mockFindOne).toHaveBeenCalledWith({
+        where: { playerId: 'player1', unlockableId: 'unlock1' },
+      });
       expect(mockCreate).toHaveBeenCalledWith({
         playerId: 'player1',
         unlockableId: 'unlock1',
         unlockedAt: expect.any(Date),
         notified: false,
       });
-      expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({
-        playerId: 'player1',
-        unlockableId: 'unlock1',
-      }));
+      expect(mockSave).toHaveBeenCalledWith(
+        expect.objectContaining({
+          playerId: 'player1',
+          unlockableId: 'unlock1',
+        }),
+      );
       expect(result).toEqual(mockUnlock);
     });
 
     it('should return existing unlock if already unlocked', async () => {
-      const existingUnlock = { playerId: 'player1', unlockableId: 'unlock1', unlockedAt: new Date(), notified: true };
+      const existingUnlock = {
+        playerId: 'player1',
+        unlockableId: 'unlock1',
+        unlockedAt: new Date(),
+        notified: true,
+      };
       mockFindOne.mockResolvedValue(existingUnlock);
 
       const result = await repository.unlock('player1', 'unlock1');
@@ -147,7 +174,9 @@ describe('PlayerUnlockRepository', () => {
       const error = new Error('Save failed');
       mockSave.mockRejectedValue(error);
 
-      await expect(repository.unlock('player1', 'unlock1')).rejects.toThrow('Save failed');
+      await expect(repository.unlock('player1', 'unlock1')).rejects.toThrow(
+        'Save failed',
+      );
     });
   });
 
@@ -159,7 +188,7 @@ describe('PlayerUnlockRepository', () => {
 
       expect(mockUpdate).toHaveBeenCalledWith(
         { playerId: 'player1', unlockableId: 'unlock1' },
-        { notified: true }
+        { notified: true },
       );
     });
 
@@ -167,7 +196,9 @@ describe('PlayerUnlockRepository', () => {
       const error = new Error('Update failed');
       mockUpdate.mockRejectedValue(error);
 
-      await expect(repository.markAsNotified('player1', 'unlock1')).rejects.toThrow('Update failed');
+      await expect(
+        repository.markAsNotified('player1', 'unlock1'),
+      ).rejects.toThrow('Update failed');
     });
   });
 
@@ -177,7 +208,9 @@ describe('PlayerUnlockRepository', () => {
 
       const result = await repository.countUnlocksByPlayer('player1');
 
-      expect(mockCount).toHaveBeenCalledWith({ where: { playerId: 'player1' } });
+      expect(mockCount).toHaveBeenCalledWith({
+        where: { playerId: 'player1' },
+      });
       expect(result).toBe(5);
     });
 

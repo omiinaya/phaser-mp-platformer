@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import { AchievementProgress } from './AchievementProgress';
 
 export enum AchievementTier {
@@ -23,7 +29,11 @@ export class Achievement {
   @Column({ type: 'text', nullable: true })
     description: string | null = null;
 
-  @Column({ type: 'enum', enum: AchievementTier, default: AchievementTier.BRONZE })
+  @Column({
+    type: 'enum',
+    enum: AchievementTier,
+    default: AchievementTier.BRONZE,
+  })
     tier!: AchievementTier;
 
   @Column({ name: 'required_value', default: 1 })
@@ -41,6 +51,6 @@ export class Achievement {
   @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;
 
-  @OneToMany(() => AchievementProgress, progress => progress.achievement)
+  @OneToMany(() => AchievementProgress, (progress) => progress.achievement)
     progresses!: AchievementProgress[];
 }

@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import { PlayerUnlock } from './PlayerUnlock';
 
 export enum UnlockableType {
@@ -38,6 +44,6 @@ export class Unlockable {
   @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 
-  @OneToMany(() => PlayerUnlock, unlock => unlock.unlockable)
+  @OneToMany(() => PlayerUnlock, (unlock) => unlock.unlockable)
     playerUnlocks: PlayerUnlock[];
 }

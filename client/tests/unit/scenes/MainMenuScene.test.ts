@@ -41,7 +41,7 @@ jest.mock('phaser', () => {
   });
 
   return {
-    Scene: jest.fn().mockImplementation(function(this: any) {
+    Scene: jest.fn().mockImplementation(function (this: any) {
       this.cameras = { main: { width: 800, height: 600 } };
       this.add = { text: mockAddText };
       this.scene = { start: mockSceneStart };
@@ -88,7 +88,7 @@ describe('MainMenuScene', () => {
         expect.objectContaining({
           fontSize: '48px',
           color: '#fff',
-        })
+        }),
       );
       // Check setOrigin was called on the returned object
       const textMock = mockAddText.mock.results[0]?.value;
@@ -100,7 +100,7 @@ describe('MainMenuScene', () => {
 
       // Find call with 'Start Game' text (text is 3rd arg: x, y, text, style)
       const startButtonCalls = mockAddText.mock.calls.filter(
-        call => call[2] && call[2] === 'Start Game'
+        (call) => call[2] && call[2] === 'Start Game',
       );
       expect(startButtonCalls.length).toBeGreaterThan(0);
     });
@@ -109,7 +109,7 @@ describe('MainMenuScene', () => {
       scene.create();
 
       const levelSelectCalls = mockAddText.mock.calls.filter(
-        call => call[2] && call[2] === 'Level Select'
+        (call) => call[2] && call[2] === 'Level Select',
       );
       expect(levelSelectCalls.length).toBeGreaterThan(0);
     });
@@ -172,15 +172,15 @@ describe('MainMenuScene', () => {
 
       // All text objects created for buttons should be interactive
       const setInteractiveCalls = mockAddText.mock.calls
-        .map(call => call[0] as any)
+        .map((call) => call[0] as any)
         .filter((text: any) => text !== undefined) // just check some interaction
         .map(() => true);
-      
+
       // At least some buttons should have setInteractive called on them
       // This is a weak test; ideally we check the returned mock objects
-      const returnedObjects = mockAddText.mock.results.map(r => r.value);
-      const interactiveCalls = returnedObjects.flatMap(obj => 
-        obj?.setInteractive ? [obj.setInteractive] : []
+      const returnedObjects = mockAddText.mock.results.map((r) => r.value);
+      const interactiveCalls = returnedObjects.flatMap((obj) =>
+        obj?.setInteractive ? [obj.setInteractive] : [],
       );
       expect(interactiveCalls.length).toBeGreaterThan(0);
     });

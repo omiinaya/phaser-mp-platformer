@@ -55,8 +55,10 @@ export class ConfigManager {
    * @param configs Array of {key, url} objects.
    * @returns Promise that resolves when all configs are loaded.
    */
-  public loadConfigs(configs: Array<{ key: string; url: string }>): Promise<void[]> {
-    return Promise.all(configs.map(c => this.loadConfig(c.key, c.url)));
+  public loadConfigs(
+    configs: Array<{ key: string; url: string }>,
+  ): Promise<void[]> {
+    return Promise.all(configs.map((c) => this.loadConfig(c.key, c.url)));
   }
 
   /**

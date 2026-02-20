@@ -31,7 +31,7 @@ jest.mock('phaser', () => {
   mockSceneStop = jest.fn();
 
   return {
-    Scene: jest.fn().mockImplementation(function(this: any) {
+    Scene: jest.fn().mockImplementation(function (this: any) {
       this.scene = { start: mockSceneStart, stop: mockSceneStop };
       this.assetManager = undefined;
     }),
@@ -74,7 +74,7 @@ describe('PreloadScene', () => {
         expect.arrayContaining([
           expect.objectContaining({ key: 'logo', type: 'image' }),
           expect.objectContaining({ key: 'bgm', type: 'audio' }),
-        ])
+        ]),
       );
     });
 
@@ -97,7 +97,8 @@ describe('PreloadScene', () => {
 
       const assetManagerInstance = (AssetManager as any).mock.results[0]?.value;
       // Simulate successful load
-      const startLoadPromise = (assetManagerInstance.startLoad as jest.Mock).mock.results[0]?.value;
+      const startLoadPromise = (assetManagerInstance.startLoad as jest.Mock)
+        .mock.results[0]?.value;
 
       // Resolve the promise if it exists
       if (startLoadPromise && typeof startLoadPromise.then === 'function') {
@@ -112,14 +113,20 @@ describe('PreloadScene', () => {
 
       const assetManagerInstance = (AssetManager as any).mock.results[0]?.value;
       // Simulate failed load
-      const startLoadPromise = (assetManagerInstance.startLoad as jest.Mock).mock.results[0]?.value;
+      const startLoadPromise = (assetManagerInstance.startLoad as jest.Mock)
+        .mock.results[0]?.value;
       const error = new Error('Load failed');
-      
+
       if (startLoadPromise && typeof startLoadPromise.then === 'function') {
         // Simulate rejection
-        startLoadPromise.then(() => {}).catch((e: Error) => {
-          expect(logger.error).toHaveBeenCalledWith('Failed to load assets:', e);
-        });
+        startLoadPromise
+          .then(() => {})
+          .catch((e: Error) => {
+            expect(logger.error).toHaveBeenCalledWith(
+              'Failed to load assets:',
+              e,
+            );
+          });
         // Manually trigger catch by simulating rejection
         (startLoadPromise as any)._reject?.(error);
       }

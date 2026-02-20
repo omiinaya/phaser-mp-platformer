@@ -10,7 +10,8 @@ export class MatchmakingWorker {
   private worker: Worker | null = null;
   private busy = false;
   private queue: MatchmakingRequest[] = [];
-  private resolveCallback: ((results: MatchmakingResult[]) => void) | null = null;
+  private resolveCallback: ((results: MatchmakingResult[]) => void) | null =
+    null;
 
   constructor() {
     this.worker = new Worker('./dist/workers/matchmaking.worker.js', {
@@ -40,7 +41,10 @@ export class MatchmakingWorker {
     });
   }
 
-  private handleWorkerMessage(message: { matches?: MatchmakingResult[]; error?: string }): void {
+  private handleWorkerMessage(message: {
+    matches?: MatchmakingResult[];
+    error?: string;
+  }): void {
     if (message.error) {
       logger.error('Matchmaking worker error:', message.error);
       this.resolveCallback?.([]);

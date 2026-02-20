@@ -7,7 +7,7 @@ const logDir = 'logs';
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.errors({ stack: true }),
-  winston.format.json()
+  winston.format.json(),
 );
 
 // Create a Winston logger instance
@@ -24,7 +24,7 @@ const winstonLogger = winston.createLogger({
           return `${timestamp} [${level}] ${message} ${
             Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''
           }`;
-        })
+        }),
       ),
     }),
     // Daily rotate file transport for errors

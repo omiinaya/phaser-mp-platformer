@@ -6,7 +6,9 @@ import { logger } from '../utils/logger';
 
 // Validate required environment variables at startup
 if (!process.env.REDIS_URL) {
-  throw new Error('REDIS_URL environment variable is required for leaderboard service');
+  throw new Error(
+    'REDIS_URL environment variable is required for leaderboard service',
+  );
 }
 
 /**
@@ -28,12 +30,14 @@ export class LeaderboardService {
     private dataSource: DataSource,
     private statsRepo: PlayerStatsRepository,
     private profileRepo: PlayerProfileRepository,
-    redisUrl?: string
+    redisUrl?: string,
   ) {
     this.redisClient = createClient({
       url: redisUrl || process.env.REDIS_URL,
     });
-    this.redisClient.on('error', (err) => logger.error('Redis Client Error', err));
+    this.redisClient.on('error', (err) =>
+      logger.error('Redis Client Error', err),
+    );
     this.redisClient.connect();
   }
 
@@ -44,7 +48,10 @@ export class LeaderboardService {
    * @param useCache - Whether to use cached results (default: true).
    * @returns Promise resolving to array of player leaderboard entries.
    */
-  async getTopPlayersByScore(limit: number = 10, useCache: boolean = true): Promise<any[]> {
+  async getTopPlayersByScore(
+    limit: number = 10,
+    useCache: boolean = true,
+  ): Promise<any[]> {
     const cacheKey = `leaderboard:top_score:${limit}`;
     if (useCache) {
       const cached = await this.redisClient.get(cacheKey);
@@ -52,7 +59,9 @@ export class LeaderboardService {
         try {
           return JSON.parse(cached);
         } catch (error) {
-          logger.warn('Failed to parse cached leaderboard data, refetching from DB');
+          logger.warn(
+            'Failed to parse cached leaderboard data, refetching from DB',
+          );
           // Continue to fetch from database
         }
       }
@@ -61,7 +70,9 @@ export class LeaderboardService {
     const stats = await this.statsRepo.findTopPlayersByScore(limit);
     const result = await Promise.all(
       stats.map(async (stat) => {
-        const profile = await this.profileRepo.findOne({ where: { id: stat.playerId } });
+        const profile = await this.profileRepo.findOne({
+          where: { id: stat.playerId },
+        });
         return {
           playerId: stat.playerId,
           username: profile?.username || 'Unknown',
@@ -70,7 +81,7 @@ export class LeaderboardService {
           deaths: stat.deaths,
           playTimeSeconds: stat.playTimeSeconds,
         };
-      })
+      }),
     );
 
     if (useCache) {
@@ -86,7 +97,10 @@ export class LeaderboardService {
    * @param useCache - Whether to use cached results (default: true).
    * @returns Promise resolving to array of player level entries.
    */
-  async getTopPlayersByLevel(limit: number = 10, useCache: boolean = true): Promise<any[]> {
+  async getTopPlayersByLevel(
+    limit: number = 10,
+    useCache: boolean = true,
+  ): Promise<any[]> {
     const cacheKey = `leaderboard:top_level:${limit}`;
     if (useCache) {
       const cached = await this.redisClient.get(cacheKey);
@@ -94,14 +108,16 @@ export class LeaderboardService {
         try {
           return JSON.parse(cached);
         } catch (error) {
-          logger.warn('Failed to parse cached leaderboard data, refetching from DB');
+          logger.warn(
+            'Failed to parse cached leaderboard data, refetching from DB',
+          );
           // Continue to fetch from database
         }
       }
     }
 
     const profiles = await this.profileRepo.findTopPlayersByLevel(limit);
-    const result = profiles.map(profile => ({
+    const result = profiles.map((profile) => ({
       playerId: profile.id,
       username: profile.username,
       level: profile.level,
@@ -134,7 +150,8 @@ export class LeaderboardService {
   async getPlayerRankByScore(playerId: string): Promise<number> {
     const stats = await this.statsRepo.findByPlayerId(playerId);
     if (!stats) return -1;
-    const rank = await this.statsRepo.createQueryBuilder('ps')
+    const rank = await this.statsRepo
+      .createQueryBuilder('ps')
       .where('ps.score > :score', { score: stats.score })
       .getCount();
     return rank + 1;

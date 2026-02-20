@@ -31,32 +31,32 @@ describe('Leaderboard API Integration', () => {
       get: jest.fn((path, handler) => {}),
       post: jest.fn((path, handler) => {}),
     };
-    
+
     app = express();
     app.use(express.json());
-    
+
     // Mock the leaderboard routes
     app.get('/api/leaderboard/top/score', (req, res) => {
       res.json([
         { id: 'player1', name: 'Player 1', score: 1000 },
-        { id: 'player2', name: 'Player 2', score: 900 }
+        { id: 'player2', name: 'Player 2', score: 900 },
       ]);
     });
-    
+
     app.get('/api/leaderboard/top/level', (req, res) => {
       res.json([
         { id: 'player1', name: 'Player 1', level: 10 },
-        { id: 'player2', name: 'Player 2', level: 9 }
+        { id: 'player2', name: 'Player 2', level: 9 },
       ]);
     });
-    
+
     app.get('/api/leaderboard/rank/:playerId', (req, res) => {
       if (req.params.playerId === 'unknown') {
         return res.status(404).json({ error: 'Player not found' });
       }
       res.json({ rank: 5 });
     });
-    
+
     app.post('/api/leaderboard/refresh', (req, res) => {
       res.json({ success: true });
     });

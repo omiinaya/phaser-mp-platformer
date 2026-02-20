@@ -1,5 +1,8 @@
 import { DataSource } from 'typeorm';
-import { Unlockable, UnlockableType } from '../../../src/persistence/repositories/UnlockableRepository';
+import {
+  Unlockable,
+  UnlockableType,
+} from '../../../src/persistence/repositories/UnlockableRepository';
 
 // Mock the logger
 jest.mock('../../../src/utils/logger', () => ({
@@ -36,7 +39,7 @@ describe('UnlockableRepository', () => {
     mockFind = jest.fn();
     mockCreateQueryBuilder = jest.fn();
 
-    (BaseRepository as any).mockImplementation(function(this: any) {
+    (BaseRepository as any).mockImplementation(function (this: any) {
       this.find = mockFind;
       this.createQueryBuilder = mockCreateQueryBuilder;
       this.safeOperation = jest.fn().mockImplementation(async (op) => await op);
@@ -57,7 +60,9 @@ describe('UnlockableRepository', () => {
 
       const result = await repository.findByType(UnlockableType.SKIN);
 
-      expect(mockFind).toHaveBeenCalledWith({ where: { type: UnlockableType.SKIN } });
+      expect(mockFind).toHaveBeenCalledWith({
+        where: { type: UnlockableType.SKIN },
+      });
       expect(result).toEqual(mockUnlockables);
     });
 
@@ -128,14 +133,17 @@ describe('UnlockableRepository', () => {
 
       const result = await repository.findUnlockablesByAchievement('ach1');
 
-      expect(mockFind).toHaveBeenCalledWith({ where: { requiredAchievementId: 'ach1' } });
+      expect(mockFind).toHaveBeenCalledWith({
+        where: { requiredAchievementId: 'ach1' },
+      });
       expect(result).toEqual(mockUnlockables);
     });
 
     it('should handle no unlockables for given achievement', async () => {
       mockFind.mockResolvedValue([]);
 
-      const result = await repository.findUnlockablesByAchievement('nonexistent');
+      const result =
+        await repository.findUnlockablesByAchievement('nonexistent');
 
       expect(result).toEqual([]);
     });

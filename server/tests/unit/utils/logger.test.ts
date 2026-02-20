@@ -22,7 +22,9 @@ describe('logger', () => {
     });
 
     it('should log warning with args', () => {
-      expect(() => logger.warn('warning message', { key: 'value' })).not.toThrow();
+      expect(() =>
+        logger.warn('warning message', { key: 'value' }),
+      ).not.toThrow();
     });
   });
 

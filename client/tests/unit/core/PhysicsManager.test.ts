@@ -1,4 +1,8 @@
-import { PhysicsManager, ArcadePhysicsConfig, CollisionGroup } from '../../../src/core/PhysicsManager';
+import {
+  PhysicsManager,
+  ArcadePhysicsConfig,
+  CollisionGroup,
+} from '../../../src/core/PhysicsManager';
 
 // Mock Phaser
 jest.mock('phaser', () => ({
@@ -137,7 +141,12 @@ describe('PhysicsManager', () => {
       const mockObjB = {} as any;
       const callback = jest.fn();
       physicsManager.setCollision(mockObjA, mockObjB, callback);
-      expect(mockPhysics.add.collider).toHaveBeenCalledWith(mockObjA, mockObjB, callback, undefined);
+      expect(mockPhysics.add.collider).toHaveBeenCalledWith(
+        mockObjA,
+        mockObjB,
+        callback,
+        undefined,
+      );
     });
 
     it('should set collision with process callback', () => {
@@ -146,8 +155,18 @@ describe('PhysicsManager', () => {
       const mockObjB = {} as any;
       const callback = jest.fn();
       const processCallback = jest.fn();
-      physicsManager.setCollision(mockObjA, mockObjB, callback, processCallback);
-      expect(mockPhysics.add.collider).toHaveBeenCalledWith(mockObjA, mockObjB, callback, processCallback);
+      physicsManager.setCollision(
+        mockObjA,
+        mockObjB,
+        callback,
+        processCallback,
+      );
+      expect(mockPhysics.add.collider).toHaveBeenCalledWith(
+        mockObjA,
+        mockObjB,
+        callback,
+        processCallback,
+      );
     });
   });
 
@@ -158,7 +177,12 @@ describe('PhysicsManager', () => {
       const mockObjB = {} as any;
       const callback = jest.fn();
       physicsManager.setOverlap(mockObjA, mockObjB, callback);
-      expect(mockPhysics.add.overlap).toHaveBeenCalledWith(mockObjA, mockObjB, callback, undefined);
+      expect(mockPhysics.add.overlap).toHaveBeenCalledWith(
+        mockObjA,
+        mockObjB,
+        callback,
+        undefined,
+      );
     });
   });
 
@@ -248,7 +272,13 @@ describe('PhysicsManager', () => {
         setCollideWorldBounds: jest.fn(),
       } as any;
       physicsManager.setBodyCollisionWithBounds(mockBody);
-      expect(mockBody.setCollideWorldBounds).toHaveBeenCalledWith(true, true, true, true, true);
+      expect(mockBody.setCollideWorldBounds).toHaveBeenCalledWith(
+        true,
+        true,
+        true,
+        true,
+        true,
+      );
     });
 
     it('should set body collision with custom bounds', () => {
@@ -256,8 +286,20 @@ describe('PhysicsManager', () => {
       const mockBody = {
         setCollideWorldBounds: jest.fn(),
       } as any;
-      physicsManager.setBodyCollisionWithBounds(mockBody, false, true, true, false);
-      expect(mockBody.setCollideWorldBounds).toHaveBeenCalledWith(true, false, true, true, false);
+      physicsManager.setBodyCollisionWithBounds(
+        mockBody,
+        false,
+        true,
+        true,
+        false,
+      );
+      expect(mockBody.setCollideWorldBounds).toHaveBeenCalledWith(
+        true,
+        false,
+        true,
+        true,
+        false,
+      );
     });
   });
 });

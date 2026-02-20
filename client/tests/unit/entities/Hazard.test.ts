@@ -4,7 +4,13 @@ describe('Hazard Types', () => {
   describe('HazardType', () => {
     it('should have spike type', () => {
       type HazardType = 'spike' | 'lava' | 'saw_blade' | 'fire' | 'acid';
-      const types: HazardType[] = ['spike', 'lava', 'saw_blade', 'fire', 'acid'];
+      const types: HazardType[] = [
+        'spike',
+        'lava',
+        'saw_blade',
+        'fire',
+        'acid',
+      ];
       expect(types).toHaveLength(5);
     });
   });

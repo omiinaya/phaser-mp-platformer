@@ -4,7 +4,13 @@ describe('Boss Types', () => {
   describe('BossPhase', () => {
     it('should have all boss phases', () => {
       type BossPhase = 'idle' | 'phase1' | 'phase2' | 'phase3' | 'dying';
-      const phases: BossPhase[] = ['idle', 'phase1', 'phase2', 'phase3', 'dying'];
+      const phases: BossPhase[] = [
+        'idle',
+        'phase1',
+        'phase2',
+        'phase3',
+        'dying',
+      ];
       expect(phases).toHaveLength(5);
     });
   });

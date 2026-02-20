@@ -51,7 +51,7 @@ describe('InventoryRepository', () => {
     mockCreate = jest.fn((entity) => entity);
 
     // Mock BaseRepository constructor
-    (BaseRepository as any).mockImplementation(function(this: any) {
+    (BaseRepository as any).mockImplementation(function (this: any) {
       this.find = mockFind;
       this.findOne = mockFindOne;
       this.save = mockSave;
@@ -94,7 +94,9 @@ describe('InventoryRepository', () => {
       const error = new Error('Database error');
       mockFind.mockRejectedValue(error);
 
-      await expect(repository.findByPlayerId('player1')).rejects.toThrow('Database error');
+      await expect(repository.findByPlayerId('player1')).rejects.toThrow(
+        'Database error',
+      );
     });
   });
 
@@ -105,7 +107,9 @@ describe('InventoryRepository', () => {
 
       const result = await repository.findByItemId('player1', 'item1');
 
-      expect(mockFindOne).toHaveBeenCalledWith({ where: { playerId: 'player1', itemId: 'item1' } });
+      expect(mockFindOne).toHaveBeenCalledWith({
+        where: { playerId: 'player1', itemId: 'item1' },
+      });
       expect(result).toEqual(mockItem);
     });
 
@@ -121,19 +125,30 @@ describe('InventoryRepository', () => {
       const error = new Error('Database error');
       mockFindOne.mockRejectedValue(error);
 
-      await expect(repository.findByItemId('player1', 'item1')).rejects.toThrow('Database error');
+      await expect(repository.findByItemId('player1', 'item1')).rejects.toThrow(
+        'Database error',
+      );
     });
   });
 
   describe('addItem', () => {
     it('should add new item when it does not exist', async () => {
       mockFindOne.mockResolvedValue(null);
-      const mockSavedItem = { playerId: 'player1', itemId: 'item1', quantity: 3, metadata: { rarity: 'rare' } };
+      const mockSavedItem = {
+        playerId: 'player1',
+        itemId: 'item1',
+        quantity: 3,
+        metadata: { rarity: 'rare' },
+      };
       mockSave.mockResolvedValue(mockSavedItem);
 
-      const result = await repository.addItem('player1', 'item1', 3, { rarity: 'rare' });
+      const result = await repository.addItem('player1', 'item1', 3, {
+        rarity: 'rare',
+      });
 
-      expect(mockFindOne).toHaveBeenCalledWith({ where: { playerId: 'player1', itemId: 'item1' } });
+      expect(mockFindOne).toHaveBeenCalledWith({
+        where: { playerId: 'player1', itemId: 'item1' },
+      });
       expect(mockCreate).toHaveBeenCalledWith({
         playerId: 'player1',
         itemId: 'item1',
@@ -141,21 +156,34 @@ describe('InventoryRepository', () => {
         metadata: { rarity: 'rare' },
         acquiredAt: expect.any(Date),
       });
-      expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({
-        playerId: 'player1',
-        itemId: 'item1',
-        quantity: 3,
-      }));
+      expect(mockSave).toHaveBeenCalledWith(
+        expect.objectContaining({
+          playerId: 'player1',
+          itemId: 'item1',
+          quantity: 3,
+        }),
+      );
       expect(result).toEqual(mockSavedItem);
     });
 
     it('should update existing item by increasing quantity', async () => {
-      const existingItem = { playerId: 'player1', itemId: 'item1', quantity: 5, metadata: { rarity: 'common' } };
+      const existingItem = {
+        playerId: 'player1',
+        itemId: 'item1',
+        quantity: 5,
+        metadata: { rarity: 'common' },
+      };
       mockFindOne.mockResolvedValue(existingItem);
-      const updatedItem = { ...existingItem, quantity: 8, metadata: { rarity: 'rare' } };
+      const updatedItem = {
+        ...existingItem,
+        quantity: 8,
+        metadata: { rarity: 'rare' },
+      };
       mockSave.mockResolvedValue(updatedItem);
 
-      const result = await repository.addItem('player1', 'item1', 3, { rarity: 'rare' });
+      const result = await repository.addItem('player1', 'item1', 3, {
+        rarity: 'rare',
+      });
 
       expect(result).toEqual(updatedItem);
       expect(existingItem.quantity).toBe(8);
@@ -163,7 +191,11 @@ describe('InventoryRepository', () => {
     });
 
     it('should update existing item without metadata', async () => {
-      const existingItem = { playerId: 'player1', itemId: 'item1', quantity: 5 };
+      const existingItem = {
+        playerId: 'player1',
+        itemId: 'item1',
+        quantity: 5,
+      };
       mockFindOne.mockResolvedValue(existingItem);
       const updatedItem = { ...existingItem, quantity: 7 };
       mockSave.mockResolvedValue(updatedItem);
@@ -179,7 +211,9 @@ describe('InventoryRepository', () => {
       const error = new Error('Save failed');
       mockSave.mockRejectedValue(error);
 
-      await expect(repository.addItem('player1', 'item1', 1)).rejects.toThrow('Save failed');
+      await expect(repository.addItem('player1', 'item1', 1)).rejects.toThrow(
+        'Save failed',
+      );
     });
   });
 
@@ -202,7 +236,10 @@ describe('InventoryRepository', () => {
       const result = await repository.removeItem('player1', 'item1', 2);
 
       expect(result).toBe(true);
-      expect(mockDelete).toHaveBeenCalledWith({ playerId: 'player1', itemId: 'item1' });
+      expect(mockDelete).toHaveBeenCalledWith({
+        playerId: 'player1',
+        itemId: 'item1',
+      });
       expect(mockSave).not.toHaveBeenCalled();
     });
 
@@ -214,7 +251,10 @@ describe('InventoryRepository', () => {
       const result = await repository.removeItem('player1', 'item1', 5);
 
       expect(result).toBe(true);
-      expect(mockDelete).toHaveBeenCalledWith({ playerId: 'player1', itemId: 'item1' });
+      expect(mockDelete).toHaveBeenCalledWith({
+        playerId: 'player1',
+        itemId: 'item1',
+      });
     });
 
     it('should decrement quantity when removal quantity is less than item quantity', async () => {
@@ -237,7 +277,9 @@ describe('InventoryRepository', () => {
       const error = new Error('Delete failed');
       mockDelete.mockRejectedValue(error);
 
-      await expect(repository.removeItem('player1', 'item1', 1)).rejects.toThrow('Delete failed');
+      await expect(
+        repository.removeItem('player1', 'item1', 1),
+      ).rejects.toThrow('Delete failed');
     });
 
     it('should handle errors during save when decrementing', async () => {
@@ -246,7 +288,9 @@ describe('InventoryRepository', () => {
       const error = new Error('Save failed');
       mockSave.mockRejectedValue(error);
 
-      await expect(repository.removeItem('player1', 'item1', 3)).rejects.toThrow('Save failed');
+      await expect(
+        repository.removeItem('player1', 'item1', 3),
+      ).rejects.toThrow('Save failed');
     });
   });
 
@@ -283,7 +327,9 @@ describe('InventoryRepository', () => {
         getRawOne: jest.fn().mockRejectedValue(new Error('Query failed')),
       });
 
-      await expect(repository.getTotalItemCount('player1')).rejects.toThrow('Query failed');
+      await expect(repository.getTotalItemCount('player1')).rejects.toThrow(
+        'Query failed',
+      );
     });
   });
 });

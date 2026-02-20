@@ -5,21 +5,27 @@ import { logger } from '../../utils/logger';
  * Rate limiting middleware.
  * Limits number of events per socket per second.
  */
-const rateLimitBuckets = new Map<string, { count: number; resetTime: number }>();
+const rateLimitBuckets = new Map<
+  string,
+  { count: number; resetTime: number }
+>();
 
 // Cleanup old buckets every 5 minutes to prevent memory leak
-setInterval(() => {
-  const now = Date.now();
-  for (const [socketId, bucket] of rateLimitBuckets.entries()) {
-    if (now >= bucket.resetTime) {
-      rateLimitBuckets.delete(socketId);
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [socketId, bucket] of rateLimitBuckets.entries()) {
+      if (now >= bucket.resetTime) {
+        rateLimitBuckets.delete(socketId);
+      }
     }
-  }
-}, 5 * 60 * 1000);
+  },
+  5 * 60 * 1000,
+);
 
 export function rateLimit(
   maxEventsPerSecond: number = 30,
-  windowMs: number = 1000
+  windowMs: number = 1000,
 ) {
   return (socket: Socket, next: (err?: Error) => void) => {
     const socketId = socket.id;
@@ -44,14 +50,19 @@ export function rateLimit(
 /**
  * Input validation middleware for player_input events.
  */
-export function validatePlayerInput(socket: Socket, next: (err?: Error) => void) {
+export function validatePlayerInput(
+  socket: Socket,
+  next: (err?: Error) => void,
+) {
   const originalOn = socket.on.bind(socket);
 
   socket.on = (event: string, listener: (...args: any[]) => void) => {
     if (event === 'player_input') {
       const validatedListener = (data: any) => {
         if (!isValidPlayerInput(data)) {
-          logger.warn(`Invalid player_input from ${socket.id}: ${JSON.stringify(data)}`);
+          logger.warn(
+            `Invalid player_input from ${socket.id}: ${JSON.stringify(data)}`,
+          );
           socket.emit('error', { message: 'Invalid input' });
           return;
         }
@@ -70,11 +81,13 @@ function isValidPlayerInput(data: any): boolean {
   if (typeof data.sequence !== 'number') return false;
   if (!data.input || typeof data.input !== 'object') return false;
   const { left, right, up, down, jump } = data.input;
-  if (typeof left !== 'boolean' ||
-      typeof right !== 'boolean' ||
-      typeof up !== 'boolean' ||
-      typeof down !== 'boolean' ||
-      typeof jump !== 'boolean') {
+  if (
+    typeof left !== 'boolean' ||
+    typeof right !== 'boolean' ||
+    typeof up !== 'boolean' ||
+    typeof down !== 'boolean' ||
+    typeof jump !== 'boolean'
+  ) {
     return false;
   }
   if (data.input.skill !== undefined && typeof data.input.skill !== 'string') {

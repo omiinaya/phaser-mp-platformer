@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { PlayerProfile } from './PlayerProfile';
 import { Unlockable } from './Unlockable';
 
@@ -19,11 +26,11 @@ export class PlayerUnlock {
   @Column({ default: false })
     notified: boolean;
 
-  @ManyToOne(() => PlayerProfile, profile => profile.unlocks)
+  @ManyToOne(() => PlayerProfile, (profile) => profile.unlocks)
   @JoinColumn({ name: 'player_id' })
     profile: PlayerProfile;
 
-  @ManyToOne(() => Unlockable, unlockable => unlockable.playerUnlocks)
+  @ManyToOne(() => Unlockable, (unlockable) => unlockable.playerUnlocks)
   @JoinColumn({ name: 'unlockable_id' })
     unlockable: Unlockable;
 }

@@ -1,6 +1,6 @@
 // Mock Phaser
 jest.mock('phaser', () => ({
-  Scene: jest.fn().mockImplementation(function(this: any) {
+  Scene: jest.fn().mockImplementation(function (this: any) {
     this.scene = { start: jest.fn() };
     this.preload = jest.fn();
     this.create = jest.fn();

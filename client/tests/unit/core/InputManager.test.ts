@@ -1,4 +1,8 @@
-import { InputManager, InputConfig, InputAction } from '../../../src/core/InputManager';
+import {
+  InputManager,
+  InputConfig,
+  InputAction,
+} from '../../../src/core/InputManager';
 
 // Mock phaser
 jest.mock('phaser');

@@ -1,5 +1,8 @@
 import { Socket } from 'socket.io';
-import { authenticateSocket, requireAuth } from '../../../src/network/middleware/authMiddleware';
+import {
+  authenticateSocket,
+  requireAuth,
+} from '../../../src/network/middleware/authMiddleware';
 
 jest.mock('../../../src/utils/logger', () => ({
   logger: {
@@ -55,12 +58,12 @@ describe('authMiddleware', () => {
     it('should authenticate user with valid token', () => {
       const originalEnv = process.env.JWT_SECRET;
       process.env.JWT_SECRET = 'test-secret';
-      
+
       mockSocket.handshake.auth.token = 'valid-token';
-      
+
       // Mock jwt.verify to return a valid decoded token
       jest.spyOn(require('jsonwebtoken'), 'verify').mockImplementation(() => ({
-        userId: 'user-123'
+        userId: 'user-123',
       }));
 
       authenticateSocket(mockSocket as Socket, nextFn);
@@ -68,7 +71,7 @@ describe('authMiddleware', () => {
       expect(mockSocket.data.userId).toBe('user-123');
       expect(mockSocket.data.isGuest).toBe(false);
       expect(nextFn).toHaveBeenCalledWith();
-      
+
       process.env.JWT_SECRET = originalEnv;
     });
 
@@ -94,7 +97,7 @@ describe('authMiddleware', () => {
       authenticateSocket(mockSocket as Socket, nextFn);
 
       expect(nextFn).toHaveBeenCalledWith(expect.any(Error));
-      
+
       process.env.JWT_SECRET = originalEnv;
     });
   });

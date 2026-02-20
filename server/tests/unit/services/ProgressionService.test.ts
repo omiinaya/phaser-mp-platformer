@@ -57,7 +57,7 @@ describe('ProgressionService', () => {
       mockStatsRepo as any,
       mockUnlockRepo as any,
       mockAchievementProgressRepo as any,
-      mockUnlockableRepo as any
+      mockUnlockableRepo as any,
     );
   });
 
@@ -71,7 +71,7 @@ describe('ProgressionService', () => {
       });
 
       await expect(service.initializePlayer('player1')).rejects.toThrow(
-        'Player profile player1 not found'
+        'Player profile player1 not found',
       );
     });
 
@@ -91,7 +91,9 @@ describe('ProgressionService', () => {
       await service.initializePlayer('player1');
 
       expect(mockStatsRepo.findByPlayerId).toHaveBeenCalledWith('player1');
-      expect(mockStatsRepo.create).toHaveBeenCalledWith({ playerId: 'player1' });
+      expect(mockStatsRepo.create).toHaveBeenCalledWith({
+        playerId: 'player1',
+      });
       expect(mockSave).toHaveBeenCalledWith(mockStats);
     });
 
@@ -125,7 +127,7 @@ describe('ProgressionService', () => {
       });
 
       await expect(
-        service.updateStats('player1', { kills: 5 })
+        service.updateStats('player1', { kills: 5 }),
       ).rejects.toThrow('Player stats player1 not found');
     });
 
@@ -173,11 +175,11 @@ describe('ProgressionService', () => {
         });
       });
 
-      await service.updateStats('player1', { 
-        deaths: 1, 
-        playTimeSeconds: 600, 
-        gamesPlayed: 1, 
-        gamesWon: 1 
+      await service.updateStats('player1', {
+        deaths: 1,
+        playTimeSeconds: 600,
+        gamesPlayed: 1,
+        gamesWon: 1,
       });
 
       expect(mockStats.deaths).toBe(3);
@@ -269,7 +271,9 @@ describe('ProgressionService', () => {
       mockUnlockableRepo.manager.findOne.mockResolvedValue(null);
 
       await service.incrementAchievementProgress('player1', 'achieve1', 1);
-      expect(mockAchievementProgressRepo.incrementProgress).not.toHaveBeenCalled();
+      expect(
+        mockAchievementProgressRepo.incrementProgress,
+      ).not.toHaveBeenCalled();
     });
 
     it('should increment progress', async () => {
@@ -277,11 +281,9 @@ describe('ProgressionService', () => {
       mockUnlockableRepo.manager.findOne.mockResolvedValue(mockAchievement);
 
       await service.incrementAchievementProgress('player1', 'achieve1', 5);
-      expect(mockAchievementProgressRepo.incrementProgress).toHaveBeenCalledWith(
-        'player1',
-        'ach1',
-        5
-      );
+      expect(
+        mockAchievementProgressRepo.incrementProgress,
+      ).toHaveBeenCalledWith('player1', 'ach1', 5);
     });
   });
 
@@ -290,18 +292,24 @@ describe('ProgressionService', () => {
       const mockProfile = { id: 'player1', level: 5 };
       const mockStats = { kills: 10 };
       const mockUnlocks = [{ unlockableId: 'unlock1', unlockedAt: new Date() }];
-      const mockAchievements = [{ achievementId: 'ach1', progress: 50, completed: false }];
+      const mockAchievements = [
+        { achievementId: 'ach1', progress: 50, completed: false },
+      ];
       mockProfileRepo.findOne.mockResolvedValue(mockProfile);
       mockStatsRepo.findByPlayerId.mockResolvedValue(mockStats);
       mockUnlockRepo.findByPlayerId.mockResolvedValue(mockUnlocks);
-      mockAchievementProgressRepo.findByPlayerId.mockResolvedValue(mockAchievements);
+      mockAchievementProgressRepo.findByPlayerId.mockResolvedValue(
+        mockAchievements,
+      );
 
       const summary = await service.getPlayerSummary('player1');
       expect(summary).toEqual({
         profile: mockProfile,
         stats: mockStats,
         unlocks: [{ id: 'unlock1', unlockedAt: mockUnlocks[0].unlockedAt }],
-        achievements: [{ achievementId: 'ach1', progress: 50, completed: false }],
+        achievements: [
+          { achievementId: 'ach1', progress: 50, completed: false },
+        ],
       });
     });
   });

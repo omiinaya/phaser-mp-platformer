@@ -5,18 +5,21 @@ Thank you for your interest in contributing!
 ## Development Setup
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/omiinaya/zero-re.git
    cd zero-re
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    npm run install:all
    ```
 
 3. Run the setup script (optional):
+
    ```bash
    ./scripts/setup.sh
    ```
@@ -45,7 +48,7 @@ npm test
 # Client tests
 npm run test:client
 
-# Server tests  
+# Server tests
 npm run test:server
 
 # Unit tests only
@@ -77,6 +80,7 @@ npm run test:coverage
 ## Reporting Issues
 
 Use GitHub issues to report bugs or request features. Include:
+
 - Clear description
 - Steps to reproduce
 - Environment details (Node.js version, OS, etc.)

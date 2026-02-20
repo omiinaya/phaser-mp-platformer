@@ -1,7 +1,10 @@
 import { Server, Socket } from 'socket.io';
 import { ConnectionManager } from './ConnectionManager';
 import { RoomManager } from './RoomManager';
-import { MatchmakingRequest, MatchmakingPreferences } from '../types/matchmaking';
+import {
+  MatchmakingRequest,
+  MatchmakingPreferences,
+} from '../types/matchmaking';
 import { logger } from '../utils/logger';
 import { MatchmakingWorker } from '../workers/MatchmakingWorker';
 
@@ -20,7 +23,7 @@ export class Matchmaker {
   constructor(
     io: Server,
     connectionManager: ConnectionManager,
-    roomManager: RoomManager
+    roomManager: RoomManager,
   ) {
     this.io = io;
     this.connectionManager = connectionManager;
@@ -38,7 +41,7 @@ export class Matchmaker {
     }
     this.matchmakingInterval = setInterval(
       () => this.processQueue(),
-      this.MATCHMAKING_TICK_MS
+      this.MATCHMAKING_TICK_MS,
     );
     logger.info('Matchmaking loop started');
   }
@@ -60,7 +63,7 @@ export class Matchmaker {
    */
   public enqueuePlayer(
     socket: Socket,
-    preferences: MatchmakingPreferences
+    preferences: MatchmakingPreferences,
   ): string {
     const session = this.connectionManager.getSession(socket.id);
     if (!session) {
@@ -116,7 +119,9 @@ export class Matchmaker {
       for (const match of matches) {
         this.createMatch(match.matchedRequests);
         // Remove matched requests from queue
-        match.matchedRequests.forEach((req) => this.dequeuePlayer(req.socketId));
+        match.matchedRequests.forEach((req) =>
+          this.dequeuePlayer(req.socketId),
+        );
       }
     } catch (error) {
       logger.error('Matchmaking worker failed:', error);
@@ -148,7 +153,7 @@ export class Matchmaker {
    * Group requests by gameMode and region.
    */
   private groupByGameMode(
-    requests: MatchmakingRequest[]
+    requests: MatchmakingRequest[],
   ): Map<string, MatchmakingRequest[]> {
     const map = new Map<string, MatchmakingRequest[]>();
     for (const req of requests) {
@@ -198,7 +203,9 @@ export class Matchmaker {
       gameMode: requests[0].preferences.gameMode,
     });
 
-    logger.info(`Match created: room ${roomId} with ${playerInfos.length} players`);
+    logger.info(
+      `Match created: room ${roomId} with ${playerInfos.length} players`,
+    );
   }
 
   /**

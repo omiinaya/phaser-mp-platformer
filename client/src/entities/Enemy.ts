@@ -7,9 +7,7 @@ import {
   AttackPatternType,
   AttackConfig,
 } from './AttackPatternManager';
-import {
-  getGlobalProjectilePool,
-} from '../core/ProjectilePool';
+import { getGlobalProjectilePool } from '../core/ProjectilePool';
 
 /**
  * Enemy behavior state.

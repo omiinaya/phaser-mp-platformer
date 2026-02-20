@@ -55,7 +55,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       const result = inventory.addItem(mockItem, 1);
       expect(result).toBe(true);
       expect(inventory.getOccupiedSlots()).toBe(1);
@@ -73,7 +73,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const result = inventory.addItem(mockItem, 3);
       expect(result).toBe(true);
@@ -92,7 +92,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       // Fill up the inventory
       for (let i = 0; i < 10; i++) {
         const item = { ...mockItem, id: `item-${i}` } as unknown as Item;
@@ -117,7 +117,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem);
       expect(inventory.getOccupiedSlots()).toBe(1);
     });
@@ -136,7 +136,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const result = inventory.removeItem(mockItem.id, 2);
       expect(result).toBeGreaterThan(0);
@@ -155,7 +155,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const result = inventory.removeItem(mockItem.id, 5);
       expect(result).toBe(5);
@@ -179,7 +179,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       inventory.removeItem(mockItem.id);
       expect(inventory.getItemQuantity(mockItem.id)).toBe(4);
@@ -199,7 +199,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 1);
       expect(inventory.hasItem(mockItem.id)).toBe(true);
     });
@@ -220,7 +220,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 3);
       expect(inventory.hasItem(mockItem.id, 2)).toBe(true);
       expect(inventory.hasItem(mockItem.id, 5)).toBe(false);
@@ -240,7 +240,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       expect(inventory.getItemQuantity(mockItem.id)).toBe(5);
     });
@@ -267,7 +267,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 1);
       expect(inventory.getEmptySlots()).toBe(9);
     });
@@ -286,7 +286,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       inventory.clear();
       expect(inventory.getOccupiedSlots()).toBe(0);
@@ -311,7 +311,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       const mockItem2 = {
         id: 'potion-1',
         name: 'Health Potion',
@@ -323,7 +323,7 @@ describe('Inventory', () => {
         value: 5,
         metadata: { healAmount: 10 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem1, 5);
       inventory.addItem(mockItem2, 3);
       const items = inventory.getAllItemIds();
@@ -346,7 +346,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const slot = inventory.getSlot(0);
       expect(slot).toBeDefined();
@@ -382,7 +382,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       const mockItem2 = {
         id: 'potion-1',
         name: 'Health Potion',
@@ -394,7 +394,7 @@ describe('Inventory', () => {
         value: 5,
         metadata: { healAmount: 10 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem1, 3);
       inventory.addItem(mockItem2, 2);
       const result = inventory.swapSlots(0, 1);
@@ -413,7 +413,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 1);
       const result = inventory.swapSlots(100, 0);
       expect(result).toBe(false);
@@ -431,7 +431,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 1);
       const result = inventory.swapSlots(0, 100);
       expect(result).toBe(false);
@@ -449,7 +449,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 1);
       const result = inventory.swapSlots(0, 0);
       expect(result).toBe(false);
@@ -469,7 +469,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const result = inventory.clearSlot(0);
       expect(result).toBe(true);
@@ -502,7 +502,7 @@ describe('Inventory', () => {
         texture: { key: 'items' },
         config: {},
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const result = inventory.dropItem(0, { x: 100, y: 200 });
       expect(result).toBeDefined();
@@ -525,7 +525,7 @@ describe('Inventory', () => {
         texture: { key: 'items' },
         config: {},
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const result = inventory.dropItem(0, { x: 100, y: 200 }, 2);
       expect(result?.quantity).toBe(2);
@@ -587,14 +587,15 @@ describe('Inventory', () => {
         config: {},
         texture: { key: 'items' },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const data = inventory.serialize();
-      
+
       const newInventory = new Inventory(mockScene, 10);
-      const getItemById = (id: string) => id === 'sword-1' ? mockItem : undefined;
+      const getItemById = (id: string) =>
+        id === 'sword-1' ? mockItem : undefined;
       newInventory.deserialize(data, getItemById);
-      
+
       expect(newInventory.getItemQuantity('sword-1')).toBe(5);
     });
   });
@@ -612,7 +613,7 @@ describe('Inventory', () => {
         value: 10,
         metadata: { damage: 5 },
       } as unknown as Item;
-      
+
       inventory.addItem(mockItem, 5);
       const data = inventory.getAllInventoryData();
       expect(data).toHaveLength(10);

@@ -4,7 +4,12 @@ describe('Platform Types', () => {
   describe('PlatformMovement', () => {
     it('should have all movement types', () => {
       type PlatformMovement = 'static' | 'horizontal' | 'vertical' | 'circular';
-      const movements: PlatformMovement[] = ['static', 'horizontal', 'vertical', 'circular'];
+      const movements: PlatformMovement[] = [
+        'static',
+        'horizontal',
+        'vertical',
+        'circular',
+      ];
       expect(movements).toHaveLength(4);
     });
   });

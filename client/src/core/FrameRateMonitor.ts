@@ -65,7 +65,9 @@ export class FrameRateMonitor {
     // Calculate FPS based on accumulated samples
     if (this.samples.length > 0) {
       const totalFrames = this.samples.reduce((a, b) => a + b, 0);
-      const windowDuration = (this.sampleTimes[this.sampleTimes.length - 1] - this.sampleTimes[0]) || 1;
+      const windowDuration =
+        this.sampleTimes[this.sampleTimes.length - 1] - this.sampleTimes[0] ||
+        1;
       this.currentFps = totalFrames / (windowDuration / 1000);
     } else {
       this.currentFps = 0;
@@ -92,7 +94,7 @@ export class FrameRateMonitor {
     this.sampleTimes.push(now);
 
     // Keep only samples within the time window
-    const windowStart = now - (this.config.sampleWindow! * 1000);
+    const windowStart = now - this.config.sampleWindow! * 1000;
     while (this.sampleTimes.length > 0 && this.sampleTimes[0] < windowStart) {
       this.sampleTimes.shift();
       this.samples.shift();

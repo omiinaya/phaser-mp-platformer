@@ -3,7 +3,12 @@ import { ConnectionManager } from '../ConnectionManager';
 import { Matchmaker } from '../Matchmaker';
 import { RoomManager } from '../RoomManager';
 import { GameSync } from '../GameSync';
-import { EventNames, PlayerInputEvent, MatchmakingRequestEvent, ChatMessageEvent } from './eventTypes';
+import {
+  EventNames,
+  PlayerInputEvent,
+  MatchmakingRequestEvent,
+  ChatMessageEvent,
+} from './eventTypes';
 import { logger } from '../../utils/logger';
 
 /**
@@ -14,7 +19,7 @@ export class EventHandler {
     private connectionManager: ConnectionManager,
     private matchmaker: Matchmaker,
     private roomManager: RoomManager,
-    private gameSync: GameSync
+    private gameSync: GameSync,
   ) {}
 
   /**
@@ -23,37 +28,35 @@ export class EventHandler {
   public registerSocket(socket: Socket): void {
     // Matchmaking events
     socket.on(EventNames.MATCHMAKING_REQUEST, (data: MatchmakingRequestEvent) =>
-      this.handleMatchmakingRequest(socket, data)
+      this.handleMatchmakingRequest(socket, data),
     );
     socket.on(EventNames.MATCHMAKING_CANCEL, () =>
-      this.handleMatchmakingCancel(socket)
+      this.handleMatchmakingCancel(socket),
     );
 
     // Room events
     socket.on('join_room', (roomId: string) =>
-      this.handleJoinRoom(socket, roomId)
+      this.handleJoinRoom(socket, roomId),
     );
     socket.on('leave_room', (roomId: string) =>
-      this.handleLeaveRoom(socket, roomId)
+      this.handleLeaveRoom(socket, roomId),
     );
 
     // Gameplay events
     socket.on(EventNames.PLAYER_INPUT, (data: PlayerInputEvent) =>
-      this.handlePlayerInput(socket, data)
+      this.handlePlayerInput(socket, data),
     );
-    socket.on(EventNames.PLAYER_JUMP, () =>
-      this.handlePlayerJump(socket)
-    );
+    socket.on(EventNames.PLAYER_JUMP, () => this.handlePlayerJump(socket));
     socket.on(EventNames.PLAYER_SKILL, (skillId: string) =>
-      this.handlePlayerSkill(socket, skillId)
+      this.handlePlayerSkill(socket, skillId),
     );
     socket.on(EventNames.PLAYER_COLLECT_ITEM, (itemId: string) =>
-      this.handleCollectItem(socket, itemId)
+      this.handleCollectItem(socket, itemId),
     );
 
     // Chat events
     socket.on(EventNames.CHAT_MESSAGE, (data: ChatMessageEvent) =>
-      this.handleChatMessage(socket, data)
+      this.handleChatMessage(socket, data),
     );
 
     // Ping
@@ -62,7 +65,10 @@ export class EventHandler {
 
   // ========== Matchmaking ==========
 
-  private handleMatchmakingRequest(socket: Socket, data: MatchmakingRequestEvent): void {
+  private handleMatchmakingRequest(
+    socket: Socket,
+    data: MatchmakingRequestEvent,
+  ): void {
     try {
       const requestId = this.matchmaker.enqueuePlayer(socket, data);
       logger.info(`Matchmaking request from ${socket.id}: ${requestId}`);
@@ -97,7 +103,7 @@ export class EventHandler {
     const success = this.roomManager.addPlayer(
       roomId,
       session.playerId,
-      socket.id
+      socket.id,
     );
     if (success) {
       socket.join(roomId);
@@ -183,7 +189,9 @@ export class EventHandler {
         ...data,
       });
     } else if (data.channel === 'whisper' && data.targetPlayerId) {
-      const targetSession = this.connectionManager.getSessionByPlayerId(data.targetPlayerId);
+      const targetSession = this.connectionManager.getSessionByPlayerId(
+        data.targetPlayerId,
+      );
       if (targetSession) {
         const targetSocket = socket.nsp.sockets.get(targetSession.socketId);
         if (targetSocket) {

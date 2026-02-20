@@ -20,7 +20,10 @@ class TestRepository extends BaseRepository<TestEntity> {
     super(dataSource, TestEntity);
   }
 
-  async testSafeOperation<T>(operation: Promise<T>, errorMessage: string): Promise<T> {
+  async testSafeOperation<T>(
+    operation: Promise<T>,
+    errorMessage: string,
+  ): Promise<T> {
     return this.safeOperation(operation, errorMessage) as Promise<T>;
   }
 }
@@ -56,9 +59,12 @@ describe('BaseRepository', () => {
     it('should return result when operation succeeds', async () => {
       const expectedResult = { id: '1', name: 'Test' };
       const operation = Promise.resolve(expectedResult);
-      
-      const result = await testRepository.testSafeOperation(operation, 'Error message');
-      
+
+      const result = await testRepository.testSafeOperation(
+        operation,
+        'Error message',
+      );
+
       expect(result).toEqual(expectedResult);
       expect(logger.error).not.toHaveBeenCalled();
     });
@@ -66,50 +72,60 @@ describe('BaseRepository', () => {
     it('should log error and rethrow when operation fails', async () => {
       const error = new Error('Database error');
       const operation = Promise.reject(error);
-      
-      await expect(testRepository.testSafeOperation(operation, 'Custom error message'))
-        .rejects.toThrow('Database error');
-      
-      expect(logger.error).toHaveBeenCalledWith('Custom error message: Error: Database error');
+
+      await expect(
+        testRepository.testSafeOperation(operation, 'Custom error message'),
+      ).rejects.toThrow('Database error');
+
+      expect(logger.error).toHaveBeenCalledWith(
+        'Custom error message: Error: Database error',
+      );
     });
 
     it('should handle async operations with complex errors', async () => {
       const complexError = new Error('Complex database error');
       (complexError as any).code = '23505'; // Postgres unique constraint violation
-      
+
       const operation = Promise.reject(complexError);
-      
-      await expect(testRepository.testSafeOperation(operation, 'Database operation failed'))
-        .rejects.toThrow(complexError);
-      
+
+      await expect(
+        testRepository.testSafeOperation(
+          operation,
+          'Database operation failed',
+        ),
+      ).rejects.toThrow(complexError);
+
       expect(logger.error).toHaveBeenCalledWith(
-        'Database operation failed: Error: Complex database error'
+        'Database operation failed: Error: Complex database error',
       );
     });
 
     it('should handle string errors', async () => {
       const stringError = 'String error';
       const operation = Promise.reject(stringError);
-      
-      await expect(testRepository.testSafeOperation(operation, 'Operation failed'))
-        .rejects.toBe(stringError);
+
+      await expect(
+        testRepository.testSafeOperation(operation, 'Operation failed'),
+      ).rejects.toBe(stringError);
     });
 
     it('should handle null error message', async () => {
       const operation = Promise.reject(null);
-      
-      await expect(testRepository.testSafeOperation(operation, 'Operation failed'))
-        .rejects.toBeNull();
-      
+
+      await expect(
+        testRepository.testSafeOperation(operation, 'Operation failed'),
+      ).rejects.toBeNull();
+
       expect(logger.error).toHaveBeenCalledWith('Operation failed: null');
     });
 
     it('should handle undefined error message', async () => {
       const operation = Promise.reject(undefined);
-      
-      await expect(testRepository.testSafeOperation(operation, 'Operation failed'))
-        .rejects.toBeUndefined();
-      
+
+      await expect(
+        testRepository.testSafeOperation(operation, 'Operation failed'),
+      ).rejects.toBeUndefined();
+
       expect(logger.error).toHaveBeenCalledWith('Operation failed: undefined');
     });
 
@@ -120,7 +136,10 @@ describe('BaseRepository', () => {
         { input: Promise.resolve(true), expected: true },
         { input: Promise.resolve(null), expected: null },
         { input: Promise.resolve([1, 2, 3]), expected: [1, 2, 3] },
-        { input: Promise.resolve({ key: 'value' }), expected: { key: 'value' } },
+        {
+          input: Promise.resolve({ key: 'value' }),
+          expected: { key: 'value' },
+        },
       ];
 
       for (const { input, expected } of testCases) {
@@ -132,30 +151,33 @@ describe('BaseRepository', () => {
     it('should handle error objects with stack traces', async () => {
       const errorWithStack = new Error('Error with stack');
       errorWithStack.stack = 'Stack trace here';
-      
+
       const operation = Promise.reject(errorWithStack);
-      
-      await expect(testRepository.testSafeOperation(operation, 'Failed'))
-        .rejects.toThrow(errorWithStack);
-      
+
+      await expect(
+        testRepository.testSafeOperation(operation, 'Failed'),
+      ).rejects.toThrow(errorWithStack);
+
       expect(logger.error).toHaveBeenCalledWith(
-        expect.stringContaining('Failed: Error: Error with stack')
+        expect.stringContaining('Failed: Error: Error with stack'),
       );
     });
 
     it('should work with repository methods using safeOperation', async () => {
       // Test that safeOperation can wrap actual repository operations
-      const mockOperation = jest.fn().mockResolvedValue({ id: '1', name: 'Test' });
-      
+      const mockOperation = jest
+        .fn()
+        .mockResolvedValue({ id: '1', name: 'Test' });
+
       const wrapperMethod = async () => {
         return testRepository.testSafeOperation(
           mockOperation(),
-          'Repository operation failed'
+          'Repository operation failed',
         );
       };
-      
+
       const result = await wrapperMethod();
-      
+
       expect(result).toEqual({ id: '1', name: 'Test' });
       expect(mockOperation).toHaveBeenCalled();
     });
@@ -167,14 +189,17 @@ describe('BaseRepository', () => {
           this.name = 'CustomError';
         }
       }
-      
+
       const customError = new CustomError('Custom error message');
       const operation = Promise.reject(customError);
-      
-      await expect(testRepository.testSafeOperation(operation, 'Wrapped error'))
-        .rejects.toBeInstanceOf(CustomError);
-      
-      expect(logger.error).toHaveBeenCalledWith('Wrapped error: CustomError: Custom error message');
+
+      await expect(
+        testRepository.testSafeOperation(operation, 'Wrapped error'),
+      ).rejects.toBeInstanceOf(CustomError);
+
+      expect(logger.error).toHaveBeenCalledWith(
+        'Wrapped error: CustomError: Custom error message',
+      );
     });
   });
 

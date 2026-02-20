@@ -3,8 +3,25 @@
 describe('PowerUp Types', () => {
   describe('PowerUpType', () => {
     it('should have all power-up types', () => {
-      type PowerUpType = 'double_jump' | 'dash' | 'wall_jump' | 'glide' | 'shield' | 'speed_boost' | 'health_boost' | 'damage_boost';
-      const types: PowerUpType[] = ['double_jump', 'dash', 'wall_jump', 'glide', 'shield', 'speed_boost', 'health_boost', 'damage_boost'];
+      type PowerUpType =
+        | 'double_jump'
+        | 'dash'
+        | 'wall_jump'
+        | 'glide'
+        | 'shield'
+        | 'speed_boost'
+        | 'health_boost'
+        | 'damage_boost';
+      const types: PowerUpType[] = [
+        'double_jump',
+        'dash',
+        'wall_jump',
+        'glide',
+        'shield',
+        'speed_boost',
+        'health_boost',
+        'damage_boost',
+      ];
       expect(types).toHaveLength(8);
     });
   });
