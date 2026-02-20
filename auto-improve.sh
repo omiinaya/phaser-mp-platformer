@@ -36,20 +36,23 @@ while true; do
   # Run tests
   echo "[$TIMESTAMP] Running tests..."
   TEST_OUTPUT=$(npm test 2>&1 || true)
-  # Check for actual test failures (Test Suites: X failed, Tests: Y failed)
-  # Filter out lines with "0 failed" and the worker warning "failed to exit"
-  FAILED_SUITES=$(echo "$TEST_OUTPUT" | grep "Test Suites:" | grep -oE '[0-9]+ failed' | grep -v "0 failed" | head -1)
-  FAILED_TESTS=$(echo "$TEST_OUTPUT" | grep "Tests:" | grep -oE '[0-9]+ failed' | grep -v "0 failed" | head -1)
   
-  if [ -n "$FAILED_SUITES" ] || [ -n "$FAILED_TESTS" ]; then
-    echo "[$TIMESTAMP] ❌ Test failures detected - manual intervention required"
+  # Save output to file for analysis
+  echo "$TEST_OUTPUT" > /tmp/last-test-output.txt
+  
+  # Check for actual test failures (Test Suites: X failed, Tests: Y failed)
+  # Look for non-zero failure counts
+  FAILED_SUITES=$(echo "$TEST_OUTPUT" | grep "Test Suites:" | grep -oE '[0-9]+ failed' | head -1)
+  FAILED_TESTS=$(echo "$TEST_OUTPUT" | grep "Tests:" | grep -oE '[0-9]+ failed' | head -1)
+  
+  if [ -n "$FAILED_SUITES" ] && [ "$FAILED_SUITES" != "0 failed" ]; then
+    echo "[$TIMESTAMP] ❌ Test suite failures: $FAILED_SUITES"
+    echo "$TEST_OUTPUT" | tail -20
+  elif [ -n "$FAILED_TESTS" ] && [ "$FAILED_TESTS" != "0 failed" ]; then
+    echo "[$TIMESTAMP] ❌ Test failures: $FAILED_TESTS"
     echo "$TEST_OUTPUT" | tail -20
   else
-    # Extract test counts
-    CLIENT_TESTS=$(echo "$TEST_OUTPUT" | grep "client" -A 5 | grep -oP "\d+ passed" | head -1 | cut -d' ' -f1 || echo "624")
-    SERVER_TESTS=$(echo "$TEST_OUTPUT" | grep "server" -A 5 | grep -oP "\d+ passed" | head -1 | cut -d' ' -f1 || echo "445")
-    TOTAL_TESTS=$((CLIENT_TESTS + SERVER_TESTS))
-    echo "[$TIMESTAMP] ✅ All tests passing (Total: $TOTAL_TESTS, Client: $CLIENT_TESTS, Server: $SERVER_TESTS)"
+    echo "[$TIMESTAMP] ✅ All tests passing (1069+ tests expected)"
   fi
 
   # Check for any changes to commit
