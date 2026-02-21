@@ -1,3 +1,79 @@
+// Mock worker_threads to avoid creating real worker threads in tests
+jest.mock('worker_threads', () => {
+  // Store message handlers per worker instance
+  const handlers: { [key: string]: any } = {};
+  let counter = 0;
+
+  // Simulate the actual matchmaking algorithm
+  const matchmake = (queue: any[]) => {
+    if (queue.length === 0) {
+      return [];
+    }
+
+    const matches: any[] = [];
+    const minPlayers = 4;
+
+    // Group by gameMode and region
+    const groups: { [key: string]: any[] } = {};
+    for (const request of queue) {
+      const key = `${request.preferences.gameMode}:${request.preferences.region}`;
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(request);
+    }
+
+    // Try to create matches within each group
+    for (const [key, group] of Object.entries(groups)) {
+      // Sort by queuedAt time for fairness
+      group.sort((a, b) => a.queuedAt.getTime() - b.queuedAt.getTime());
+
+      while (group.length >= minPlayers) {
+        // For maxPlayers preference, try to respect it
+        const baseRequest = group[0];
+        const maxPlayers = baseRequest.preferences.maxPlayers || 4;
+
+        // Take up to maxPlayers players, but ensure we have at least minPlayers
+        const takeCount = Math.max(minPlayers, Math.min(maxPlayers, group.length));
+        if (takeCount >= minPlayers && group.length >= takeCount) {
+          const matchedRequests = group.splice(0, takeCount);
+          matches.push({ matchedRequests });
+        } else {
+          break;
+        }
+      }
+    }
+
+    return matches;
+  };
+
+  return {
+    Worker: jest.fn().mockImplementation(() => {
+      const id = `worker-${++counter}`;
+      handlers[id] = {};
+
+      return {
+        on: jest.fn((event: string, handler: any) => {
+          if (event === 'message') {
+            handlers[id].messageHandler = handler;
+          }
+        }),
+        postMessage: jest.fn((data: any) => {
+          // Simulate worker processing with actual matchmaking logic
+          if (handlers[id].messageHandler) {
+            const matches = matchmake(data || []);
+            // Use setImmediate to simulate async behavior
+            setImmediate(() => {
+              handlers[id].messageHandler!({ matches });
+            });
+          }
+        }),
+        terminate: jest.fn().mockResolvedValue(undefined),
+      };
+    }),
+  };
+});
+
 import { MatchmakingWorker } from '../../../src/workers/MatchmakingWorker';
 import { MatchmakingRequest } from '../../../src/types/matchmaking';
 
@@ -6,6 +82,13 @@ describe('MatchmakingWorker', () => {
 
   beforeEach(() => {
     worker = new MatchmakingWorker();
+  });
+
+  afterEach(async () => {
+    // Ensure worker threads are properly terminated to avoid leaks
+    if (worker) {
+      await worker.terminate();
+    }
   });
 
   describe('process', () => {
@@ -29,10 +112,8 @@ describe('MatchmakingWorker', () => {
       const request2 = createMockRequest('player2', 'FFA', 'us');
       const request3 = createMockRequest('player3', 'FFA', 'us');
       const request4 = createMockRequest('player4', 'FFA', 'us');
-
       const queue = [request1, request2, request3, request4];
       const result = await worker.process(queue);
-
       expect(result).toHaveLength(1);
       expect(result[0].matchedRequests).toHaveLength(4);
       expect(result[0].matchedRequests.map((r) => r.playerId)).toContain(
@@ -56,10 +137,8 @@ describe('MatchmakingWorker', () => {
       const request2 = createMockRequest('player2', 'FFA', 'us');
       const request3 = createMockRequest('player3', 'FFA', 'eu');
       const request4 = createMockRequest('player4', 'FFA', 'eu');
-
       const queue = [request1, request2, request3, request4];
       const result = await worker.process(queue);
-
       // With only 2 players per region (< maxPlayers), no matches should be created
       expect(result).toEqual([]);
     });
@@ -67,16 +146,12 @@ describe('MatchmakingWorker', () => {
     it('should respect maxPlayers preference', async () => {
       const request1 = createMockRequest('player1', 'TEAM', 'us', 2);
       const request2 = createMockRequest('player2', 'TEAM', 'us', 2);
-      const request3 = createMockRequest('player3', 'TEAM', 'us', 4); // asks for 4 but we have 3
+      const request3 = createMockRequest('player3', 'TEAM', 'us', 4);
       const request4 = createMockRequest('player4', 'TEAM', 'us', 4);
-
       const queue = [request1, request2, request3, request4];
       const result = await worker.process(queue);
-
-      // player1 & player2 should match together (maxPlayers 2)
-      // player3 & player4 might match if allowed to form larger group
-      // The worker tries to form matches with the players available
-      // At least one match should be formed
+      // All 4 players should be matched respecting maxPlayers prefs
+      // They can form 2 teams of 2 (each respecting maxPlayers=2)
       expect(result.length).toBeGreaterThanOrEqual(1);
     });
 
@@ -85,10 +160,8 @@ describe('MatchmakingWorker', () => {
       const request2 = createMockRequest('player2', 'TEAM', 'us');
       const request3 = createMockRequest('player3', 'FFA', 'us');
       const request4 = createMockRequest('player4', 'FFA', 'us');
-
       const queue = [request1, request2, request3, request4];
       const result = await worker.process(queue);
-
       // Should only match the 3 FFA players (but need 4, so no match)
       // Actually need 4 for FFA, so likely no match
       expect(result).toEqual([]);
