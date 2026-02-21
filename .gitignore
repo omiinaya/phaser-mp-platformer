@@ -37,3 +37,6 @@ Thumbs.db
 
 # CI daemon logs
 .ci-daemon.log
+
+# TypeScript
+*.tsbuildinfo
