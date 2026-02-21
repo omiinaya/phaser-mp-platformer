@@ -28,7 +28,8 @@ while true; do
     TEST_STATUS=$?
     
     # Count failures in output
-    FAILURES=$(echo "$TEST_OUTPUT" | grep -oE '[0-9]+ failed' | head -1)
+    # Count failures in output - only match 'Tests: X failed' pattern to avoid worker warning false positives
+FAILURES=$(echo "$TEST_OUTPUT" | grep -E '^Tests:' | grep -oE '[0-9]+ failed' | grep -oE '[0-9]+' | head -1)
     
     if [ $LINT_STATUS -eq 0 ] && [ $TEST_STATUS -eq 0 ] && [ -z "$FAILURES" ]; then
         log "✓ All checks passed - S+ maintained"
