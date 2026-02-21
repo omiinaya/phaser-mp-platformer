@@ -7,7 +7,7 @@
     "dev": "webpack serve --mode development --open",
     "build": "webpack --mode production",
     "build:analyze": "webpack --mode production --env analyze=true",
-    "test": "jest",
+    "test": "jest --forceExit",
     "test:unit": "jest --testPathPattern=unit",
     "test:e2e": "jest --testPathPattern=e2e",
     "test:coverage": "jest --coverage",
