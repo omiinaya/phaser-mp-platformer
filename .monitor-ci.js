@@ -36,8 +36,8 @@ function checkStatus() {
   // Only rely on exit code; avoid false positives from unrelated "failed" strings (e.g., worker warnings)
   const testPass = tests.success;
   // Extract passed test count from the summary line, avoiding worker warning false positives
-const testCountMatch = tests.output.match(/^Tests:\s+(\d+)\s+passed/m);
-const testCount = testCountMatch?.[1] || '?';
+  const testCountMatch = tests.output.match(/^Tests:\s+(\d+)\s+passed/m);
+  const testCount = testCountMatch?.[1] || '?';
 
   return {
     lintPass,
